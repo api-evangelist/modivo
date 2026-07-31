@@ -1,8 +1,18 @@
 aid: modivo
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/modivo.png
 name: MODIVO
-description: 'MODIVO is a company surfaced as a portfolio company of softbank-vision-fund and added to
-  the API Evangelist network as a stub for enrichment. Sector: consumer. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: 'MODIVO is a Polish multibrand online fashion retailer operating one of the largest fashion e-commerce platforms in Central and Eastern Europe, offering more than 300,000 products from over 1,700 brands across women''s, men''s, and children''s clothing, footwear, accessories, and beauty. Part of the MODIVO Group (alongside eobuwie.pl), the company is a consumer-technology portfolio company of SoftBank Vision Fund and also runs MODIVO Platform (a commerce technology offering) and MODIVO Advertising (a retail-media network). As of this enrichment pass MODIVO publishes no public developer portal, API documentation, or machine-readable API surface.'
 url: https://raw.githubusercontent.com/api-evangelist/modivo/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,13 +22,28 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
 - Consumer
+- Fashion
+- E-Commerce
+- Retail
+- Marketplace
+- Retail Media
 apis: []
+common:
+- type: DomainSecurity
+  url: security/modivo-domain-security.yml
+- type: Website
+  url: https://modivo.pl/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-20'
+  status: minimal
+  artifacts_added: 1
+  pass: local-v1
