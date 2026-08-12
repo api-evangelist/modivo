@@ -1,0 +1,51 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://modivo.pl/ , https://modivo.mirakl.net/ , https://advertising.modivo.com/ — searched for a
+  developer pricing, plans, or API tier page on every MODIVO property on 2026-08-12
+plan_count: 0
+note: >-
+  MODIVO sells clothes and advertising, not API access. There is no developer program, no API pricing
+  page, no API tier, no quota and no metered API product on any MODIVO property. The storefront REST
+  and GraphQL surfaces are the retailer's own commerce APIs, exposed publicly as a side effect of the
+  Adobe Commerce deployment and offered under no commercial terms at all — they are governed by the
+  shop terms of service at https://modivo.pl/b/regulamin-sklepu, not by an API agreement. This is a
+  genuine zero, recorded rather than omitted.
+plans: []
+commercial_surfaces:
+- name: MODIVO Marketplace (seller)
+  monetization: commission on sales
+  self_serve: false
+  published_price: false
+  detail: >-
+    MODIVO's marketplace is a closed, application-and-approval channel: sellers apply, are vetted for
+    brand fit, and are onboarded onto the Mirakl tenant. Third-party integration vendors describe a
+    no-setup-fee, no-monthly-fee, commission-only model, but MODIVO does not publish a rate card on
+    any of its own properties, so no numbers are recorded here. API access to modivo.mirakl.net is a
+    consequence of being an approved seller, not a purchasable plan.
+  evidence:
+  - url: https://modivo.mirakl.net/
+    status: 302
+    note: redirects to Mirakl SSO
+  - url: https://modivo.mirakl.net/api/documentation
+    status: 401
+- name: MODIVO Ads (retail media)
+  monetization: advertising spend
+  self_serve: true
+  published_price: false
+  detail: >-
+    MODIVO Ads is a self-service retail-media panel where fashion brands and marketplace merchants set
+    up sponsored-offer campaigns across MODIVO and eobuwie and set their own budgets. Access is
+    contractual, not a published tier, and no API is exposed for it.
+  evidence:
+  - url: https://advertising.modivo.com/
+    status: 200
+  - url: https://advertising.modivo.com/modivo-ads
+    status: 200
+  - url: https://advertising.modivo.com/openapi.json
+    status: 404
+- name: MODIVO club
+  monetization: consumer loyalty programme
+  detail: >-
+    A consumer loyalty programme surfaced on the GraphQL API (club and loyalty fields) but not sold to
+    developers.

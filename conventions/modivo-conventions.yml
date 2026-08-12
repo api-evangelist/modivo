@@ -1,0 +1,182 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  openapi/modivo-commerce-rest-api-openapi.yml, graphql/modivo-storefront.graphql, and live
+  unauthenticated response headers observed on https://modivo.pl/rest/V1/directory/countries and
+  https://modivo.pl/graphql on 2026-08-12
+note: >-
+  MODIVO publishes no developer guide, so every convention below is derived from the provider's own
+  generated contracts or observed on the wire. Where a convention is absent that absence is stated
+  explicitly rather than omitted.
+auth:
+  style: bearer-token
+  header: 'Authorization: Bearer <token>'
+  scheme_name: api_key
+  detail: >-
+    The generated Swagger declares a single apiKey scheme in the header. In an Adobe Commerce
+    deployment that header is Authorization and the value is a bearer token. Two token types exist:
+    a customer token from POST /V1/integration/customer/token (REST) or generateCustomerToken
+    (GraphQL), and an admin/integration token from POST /V1/integration/admin/token. Anonymous access
+    is permitted on directory, product-render, guest-cart and CMS/catalog GraphQL fields.
+  oauth2: false
+  detail_oauth: >-
+    No oauth2 or openIdConnect security scheme is declared and no OAuth metadata is served at any
+    well-known path, so scopes/ is intentionally absent from this repo.
+  see: authentication/modivo-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  detail: >-
+    No idempotency mechanism exists on either surface. The string "idempot" does not appear anywhere
+    in either generated Swagger document or in the 770-type GraphQL schema, and no Idempotency-Key
+    header is accepted. Order placement (PUT /V1/guest-carts/{cartId}/order, POST
+    /V1/orderManagement/placeOrder, placeOrder mutation) is therefore NOT safe to blindly retry — a
+    retried order-placement call can create a duplicate order. Callers must dedupe client-side,
+    keyed on the masked cart id, and must treat a timeout as an unknown outcome to be resolved by
+    reading order state rather than by retrying.
+  no_pointer_reason: >-
+    Because there is no idempotency support, this repo deliberately does NOT wire a type Idempotency
+    pointer in apis.yml.
+pagination:
+  rest:
+    style: search-criteria-query-params
+    params:
+    - 'searchCriteria[pageSize]'
+    - 'searchCriteria[currentPage]'
+    - 'searchCriteria[sortOrders][n][field]'
+    - 'searchCriteria[sortOrders][n][direction]'
+    - 'searchCriteria[filterGroups][n][filters][m][field]'
+    - 'searchCriteria[filterGroups][n][filters][m][value]'
+    - 'searchCriteria[filterGroups][n][filters][m][conditionType]'
+    - 'searchCriteria[requestName]'
+    response_fields:
+    - items
+    - search_criteria
+    - total_count
+    detail: >-
+      The Adobe Commerce bracket-notation search criteria. Filters inside one filterGroup are OR-ed;
+      separate filterGroups are AND-ed. Used on GET /V1/search and GET /V1/products-render-info.
+      Offset-based, not cursor-based, so a paged read over a mutating collection can skip or repeat
+      rows.
+  graphql:
+    style: page-based
+    params:
+    - pageSize
+    - currentPage
+    response_fields:
+    - items
+    - total_count
+    - page_info.page_size
+    - page_info.current_page
+    - page_info.total_pages
+    detail: >-
+      GraphQL list fields (products, categoryList, customerOrders, wishlist, reviews) take pageSize
+      and currentPage and return a page_info object. Relay-style cursors are not used.
+field_selection:
+  expansion: false
+  sparse_fieldsets: false
+  detail: >-
+    The REST surface has no expand/fields parameter — responses are fixed-shape and returned in
+    full, with provider extensions nested under extension_attributes. Field selection on this
+    provider is the GraphQL surface: that is the reason to prefer GraphQL for reads, since the REST
+    product-render endpoint returns the entire render payload regardless of what the caller needs.
+metadata:
+  custom_fields: extension_attributes / custom_attributes
+  detail: >-
+    Two distinct mechanisms, easy to confuse. `custom_attributes` is the EAV bag (an array of
+    {attribute_code, value}) used on customers, addresses and products. `extension_attributes` is the
+    typed extension object where MODIVO's own additions live — duty calculation, in-store sales data,
+    marketplace attributes, applied rule discounts. A client that ignores extension_attributes will
+    silently drop MODIVO-specific data.
+request_tracing:
+  supported: true
+  method: probed
+  headers_returned:
+  - name: x-request-id
+    example_shape: uuid
+    surface: graphql
+  - name: x-correlation-id
+    example_shape: uuid
+    surface: graphql
+  - name: x-causation-id
+    example_shape: uuid
+    surface: graphql
+  - name: x-correlation-origin
+    surface: graphql
+    note: Returned as N/A on anonymous calls.
+  - name: x-causation-origin
+    surface: graphql
+    note: Returned as N/A on anonymous calls.
+  - name: x-magento-cache-id
+    surface: graphql
+    note: Cache key for the GraphQL response; identifies the cache variant, not the request.
+  - name: x-route
+    surface: graphql
+    note: Observed value 'graphql'.
+  - name: cf-ray
+    surface: both
+    note: Cloudflare edge request identifier; present on every response including REST.
+  detail: >-
+    The GraphQL surface returns a full correlation/causation/request identifier triple on every
+    response — an unusually good tracing signal for a provider with no developer program. Quote these
+    three values in any support conversation. The REST surface returns none of them; on REST the only
+    identifier available is the Cloudflare cf-ray.
+versioning:
+  scheme: path-version
+  current: V1
+  detail: >-
+    REST paths are prefixed /rest/{store}/V1/... where {store} is the store view code — `all` and
+    `default` both resolve and return the same schema. V1 is the only version present. The generated
+    document reports info.version 2.4, which is the Adobe Commerce platform version, not an API
+    version. GraphQL is unversioned; the schema evolves in place and deprecations are carried on
+    fields via the @deprecated directive.
+  see: lifecycle/modivo-lifecycle.yml
+error_envelope:
+  rest: Magento error-response object (message, code, parameters[], errors[], trace)
+  graphql: standard GraphQL errors[] with extensions.category and extensions.code
+  rfc9457: false
+  see: errors/modivo-problem-types.yml
+rate_limit_signaling:
+  headers_returned: []
+  documented: false
+  detail: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header was observed on any anonymous response from
+    either surface, and no limit is documented anywhere. Both hosts sit behind Cloudflare, which is
+    the practical throttle. Callers get no runtime budget signal at all and must self-throttle.
+  see: rate-limits/modivo-rate-limits.yml
+caching:
+  headers_returned:
+  - 'cache-control: no-store (REST)'
+  - 'cache-control: max-age=0, must-revalidate, no-cache, no-store (GraphQL)'
+  - x-magento-cache-id
+  - cf-cache-status
+  detail: >-
+    Both surfaces declare themselves uncacheable at the HTTP layer. GraphQL responses carry an
+    x-magento-cache-id identifying the cache variant computed by the platform's internal full-page
+    cache. No ETag or Last-Modified is returned, so conditional requests are not available.
+security_headers:
+  observed:
+  - 'strict-transport-security: max-age=31536000; includeSubDomains'
+  - 'x-frame-options: SAMEORIGIN'
+  - 'x-content-type-options: nosniff (GraphQL only)'
+  - 'x-xss-protection: 1; mode=block (GraphQL only)'
+  detail: >-
+    HSTS is set on both surfaces. The GraphQL endpoint additionally sets nosniff and the legacy XSS
+    filter; the REST surface sets neither.
+cors:
+  detail: >-
+    The GraphQL endpoint returns `access-control-allow-credentials: true` and varies on Origin,
+    Access-Control-Request-Headers and Store — it is designed to be called from browser clients with
+    credentials, and the `Store` request header selects the store view.
+store_selection:
+  header: Store
+  detail: >-
+    A `Store` request header selects the store view on the GraphQL surface (the response varies on
+    it). On REST the store view is a path segment: /rest/{store}/V1/.... This is how MODIVO serves
+    its per-country storefronts from one deployment.
+undocumented_surfaces:
+  detail: >-
+    modivo.pl/robots.txt discloses three internal API prefixes the storefront uses but does not
+    document — /m-api/, /t-api/ and /n-api/ — plus /auth/read-auth-tokens. None serves a spec
+    (/m-api/openapi.json, /t-api/openapi.json and /n-api/openapi.json all 404). They are recorded
+    here as observed, undocumented internal surfaces; no pointer is wired for them.

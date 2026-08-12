@@ -1,0 +1,315 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  mcp/modivo-mcp.yml (candidate tool set), graphql/modivo-storefront.graphql (introspected
+  2026-08-12, 770 types / 111 query fields / 134 mutation fields),
+  openapi/modivo-commerce-rest-api-openapi.yml (57 operations / 48 paths)
+note: >-
+  MODIVO runs no MCP server, so the left-hand column is the CANDIDATE tool set in mcp/modivo-mcp.yml,
+  not a published one. The crosswalk is emitted anyway because the condition that makes it valuable is
+  met and is unusually stark here: MODIVO exposes BOTH a REST contract and a GraphQL contract from the
+  same commerce core, and they are nowhere near equivalent. The REST surface is a checkout machine —
+  guest cart, shipping, payment, order — with almost no catalog and no account. The GraphQL surface is
+  the whole storefront. An integrator who finds the Swagger document first and stops there will
+  conclude MODIVO has no product search, no category tree, no order history, no wishlist and no
+  returns. All five exist, on GraphQL. That asymmetry is the finding this file records.
+surfaces:
+  openapi:
+    path: openapi/modivo-commerce-rest-api-openapi.yml
+    live: https://modivo.pl/rest/all/schema?services=all
+    gated: false
+    operations: 57
+    note: Anonymous read on directory, product-render and guest-cart; bearer token for everything else.
+  graphql:
+    path: graphql/modivo-storefront.graphql
+    live: https://modivo.pl/graphql
+    gated: false
+    introspection: open
+    query_fields: 111
+    mutation_fields: 134
+    note: >-
+      Introspection answers anonymously, so the input schema for every GraphQL-backed tool is fully
+      knowable — the usual reason for low-confidence crosswalk rows does not apply here.
+  mcp:
+    url: null
+    gated: null
+    note: No MCP server exists. Tools below are candidates from mcp/modivo-mcp.yml.
+crosswalk:
+- tool: search_products
+  category: catalog
+  rest: []
+  graphql:
+  - Query.products
+  binding: graphql-only
+  confidence: high
+  note: >-
+    No REST equivalent. The published Swagger has GET /V1/search, but that is the Magento generic
+    search-engine endpoint returning framework-search documents, not a product search — it is
+    ACL-protected and returns 401 anonymously. Real product search is GraphQL.
+- tool: get_product
+  category: catalog
+  rest:
+  - GetV1Productsrenderinfo
+  graphql:
+  - Query.products
+  binding: partial
+  confidence: medium
+  note: >-
+    Both can return a product, but they are not interchangeable. products-render-info returns the
+    storefront rendering projection (images, buttons, formatted prices, MSRP, WEEE) for a list of ids;
+    GraphQL returns the full product entity including attributes, options and omnibus price history.
+- tool: browse_categories
+  category: catalog
+  rest: []
+  graphql:
+  - Query.categoryList
+  - Query.category
+  - Query.categories
+  binding: graphql-only
+  confidence: high
+- tool: get_product_render_info
+  category: catalog
+  rest:
+  - GetV1Productsrenderinfo
+  graphql: []
+  binding: rest-only
+  confidence: high
+  note: The rendering projection has no GraphQL counterpart.
+- tool: create_cart
+  category: cart
+  rest:
+  - PostV1Guestcarts
+  graphql:
+  - Mutation.createEmptyCart
+  - Mutation.createGuestCart
+  binding: equivalent
+  confidence: high
+- tool: add_to_cart
+  category: cart
+  rest:
+  - PostV1GuestcartsCartIdItems
+  graphql:
+  - Mutation.addProductsToCart
+  - Mutation.addSimpleProductsToCart
+  - Mutation.addConfigurableProductsToCart
+  - Mutation.addBundleProductsToCart
+  - Mutation.addMarketplaceProductsToCart
+  binding: equivalent
+  confidence: high
+  note: >-
+    GraphQL splits by product type and adds addMarketplaceProductsToCart, which is MODIVO-specific and
+    has NO REST counterpart — marketplace lines can only be added over GraphQL.
+- tool: get_cart
+  category: cart
+  rest:
+  - GetV1GuestcartsCartId
+  - GetV1GuestcartsCartIdItems
+  graphql:
+  - Query.cart
+  - Query.customerCart
+  binding: equivalent
+  confidence: high
+- tool: get_cart_totals
+  category: cart
+  rest:
+  - GetV1GuestcartsCartIdTotals
+  - PutV1GuestcartsCartIdCollecttotals
+  - PostV1GuestcartsCartIdTotalsinformation
+  graphql:
+  - Query.cart (prices)
+  binding: equivalent
+  confidence: high
+- tool: apply_coupon
+  category: cart
+  rest:
+  - PutV1GuestcartsCartIdCouponsCouponCode
+  - GetV1GuestcartsCartIdCoupons
+  - DeleteV1GuestcartsCartIdCoupons
+  graphql:
+  - Mutation.applyCouponToCart
+  - Mutation.applyCouponToCartWithCouponInfo
+  binding: equivalent
+  confidence: high
+  note: applyCouponToCartWithCouponInfo is a MODIVO addition with no REST counterpart.
+- tool: estimate_shipping
+  category: checkout
+  rest:
+  - PostV1GuestcartsCartIdEstimateshippingmethods
+  - GetV1GuestcartsCartIdShippingmethods
+  graphql:
+  - Mutation.estimateShippingMethods
+  - Mutation.estimateTotals
+  binding: equivalent
+  confidence: high
+- tool: set_shipping_information
+  category: checkout
+  rest:
+  - PostV1GuestcartsCartIdShippinginformation
+  graphql:
+  - Mutation.setShippingAddressesOnCart
+  - Mutation.setShippingMethodsOnCart
+  binding: partial
+  confidence: high
+  note: >-
+    One REST call does what two GraphQL mutations do, and returns payment methods and totals in the
+    same response. This is the one place REST is the more efficient surface.
+- tool: list_payment_methods
+  category: checkout
+  rest:
+  - GetV1GuestcartsCartIdPaymentmethods
+  - GetV1GuestcartsCartIdSelectedpaymentmethod
+  - PutV1GuestcartsCartIdSelectedpaymentmethod
+  graphql:
+  - Mutation.setPaymentMethodOnCart
+  binding: equivalent
+  confidence: high
+- tool: place_order
+  category: checkout
+  rest:
+  - PutV1GuestcartsCartIdOrder
+  - PostV1GuestcartsCartIdPaymentinformation
+  - PostV1GuestcartsCartIdSetpaymentinformation
+  graphql:
+  - Mutation.placeOrder
+  - Mutation.completeOrder
+  binding: equivalent
+  confidence: high
+  note: NOT IDEMPOTENT on either surface. See conventions/modivo-conventions.yml.
+- tool: find_pickup_locations
+  category: fulfilment
+  rest:
+  - GetV1InventoryInstorepickupPickuplocations
+  graphql:
+  - Query.getStorePickupPlacesByCart
+  - Query.getMarketplaceStorePickupPlacesByCart
+  binding: partial
+  confidence: medium
+  note: >-
+    REST searches the pickup-location index by area and product; GraphQL resolves pickup places
+    already valid for a specific cart, including a separate marketplace variant.
+- tool: find_parcel_shops
+  category: fulfilment
+  rest: []
+  graphql:
+  - Query.dpdParcelShopPoints
+  - Query.dpdParcelShopCities
+  - Query.dpdSearch
+  - Query.inpostCities
+  - Query.asyncShippingPoints
+  binding: graphql-only
+  confidence: high
+  note: >-
+    Carrier pickup-point lookup is entirely GraphQL. This is core to Polish e-commerce delivery and
+    completely invisible from the REST contract.
+- tool: get_customer_orders
+  category: account
+  rest: []
+  graphql:
+  - Query.customerOrders
+  - Query.customerOrdersExt
+  - Query.customerOrderExt
+  - Query.guestOrder
+  - Query.guestOrderByToken
+  binding: graphql-only
+  confidence: high
+- tool: get_return_orders
+  category: account
+  rest: []
+  graphql:
+  - Query.customerReturnOrders
+  - Query.customerReturnReasons
+  - Query.customerReturnCarriers
+  - Mutation.addReturn
+  binding: graphql-only
+  confidence: high
+- tool: list_countries
+  category: reference
+  rest:
+  - GetV1DirectoryCountries
+  - GetV1DirectoryCountriesCountryId
+  - GetV1DirectoryCurrency
+  graphql:
+  - Query.countries
+  - Query.country
+  - Query.currency
+  binding: equivalent
+  confidence: high
+  note: The only domain where both surfaces are fully anonymous and fully equivalent.
+- tool: get_cms_page
+  category: content
+  rest: []
+  graphql:
+  - Query.cmsPage
+  - Query.cmsBlocks
+  - Query.getStaticBlock
+  - Query.appContentElements
+  binding: graphql-only
+  confidence: high
+graphql_only:
+- field: Query.products / Query.categoryList
+  reason: Catalog search and browse have no REST counterpart on this deployment.
+- field: Query.customerOrders / customerReturnOrders
+  reason: Order history and returns are GraphQL-only.
+- field: Mutation.addProductsToWishlist / Query.compareList
+  reason: Wishlist and compare lists exist only on GraphQL.
+- field: Mutation.addProductReview / Query.customerProductReviews
+  reason: Reviews are GraphQL-only.
+- field: Query.dpdParcelShopPoints / inpostCities
+  reason: Carrier parcel-shop lookup is GraphQL-only.
+- field: Mutation.addMarketplaceProductsToCart
+  reason: Marketplace cart lines can only be added over GraphQL.
+- field: Query.gdprAgreements / Mutation.createGdprAgreementDecision
+  reason: Consent and GDPR decision capture is GraphQL-only.
+- field: Query.customerConsentCategories / customerConsentProviders
+  reason: Consent taxonomy is GraphQL-only.
+- field: Query.appDeepLink / getSearchLinkFromDeepLink
+  reason: Mobile-app deep-link resolution is GraphQL-only.
+- field: Mutation.availabilityNotificationSignUp
+  reason: Back-in-stock notification is GraphQL-only.
+- field: Mutation.createKlarnaSession / getVirtualBankAccount
+  reason: Klarna and PayU virtual-account payment paths are GraphQL-only.
+- field: Mutation.generateCustomerTokenWithApple / generateAuthenticatedThrudToken
+  reason: Social and MODIVO-internal token minting are GraphQL-only.
+rest_only:
+- operationId: GetV1Productsrenderinfo
+  reason: The storefront rendering projection has no GraphQL counterpart.
+- operationId: PostV1JwtObtain
+  reason: MODIVO's eob JWT issuing service. Internal.
+- operationId: GetV1TrustmateDisplayapi
+  reason: Trustmate review-widget display integration. No GraphQL equivalent.
+- operationId: PostV1OrderManagementPlaceOrder
+  reason: >-
+    Marketplace order ingestion. Structurally different from the storefront placeOrder mutation — it
+    accepts a fully-formed multi-seller order rather than converting a quote.
+- operationId: PostV1MyreturnwebhookAddreturnnumbertoorder
+  reason: Inbound webhook receiver for the returns provider.
+- operationId: PostV1IntegrationAdminToken
+  reason: Admin integration token exchange. No GraphQL equivalent by design.
+- operationId: GetV1PaymentsconfigLocation and the payments-config/payments-sdk family
+  reason: >-
+    PayPal Payment Services SDK and button configuration (Apple Pay, Google Pay, smart buttons, hosted
+    fields) is REST-only; GraphQL has getPaymentConfig/getPaymentSDK but they are not the same shape.
+- operationId: GetV1ApplepayAuth
+  reason: Apple Pay merchant-validation callback. REST-only.
+- operationId: GetV1Search
+  reason: >-
+    Magento's generic search-engine endpoint. ACL-protected — returns 401 anonymously — and returns
+    framework search documents, not products. Not usable as product search.
+- operationId: The gift-message family (4 operations)
+  reason: Guest-cart gift messages are REST-only in this deployment.
+coverage:
+  tools_total: 19
+  mapped_to_rest: 12
+  mapped_to_graphql: 17
+  equivalent_both: 8
+  graphql_only_tools: 6
+  rest_only_tools: 1
+  rest_operations_total: 57
+  rest_operations_unmapped: 30
+  graphql_query_fields_total: 111
+  graphql_mutation_fields_total: 134
+  summary: >-
+    Of 57 REST operations, roughly half are payment-provider configuration and internal seams that no
+    agent tool would use. Of the 19 candidate tools, 8 can be served from either surface, 6 can ONLY
+    be served from GraphQL, and 1 only from REST. The correct default for any MODIVO integration is
+    GraphQL, with REST used for the shipping-information round trip and the product-render projection.

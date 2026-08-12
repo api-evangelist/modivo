@@ -1,0 +1,99 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  openapi/modivo-commerce-rest-api-openapi.yml and
+  openapi/modivo-eobuwie-commerce-rest-api-openapi.yml; plus probes for an AsyncAPI document on every
+  MODIVO host
+asyncapi_published: false
+asyncapi_probe:
+- url: https://modivo.pl/asyncapi.yaml
+  status: 404
+- url: https://modivo.pl/asyncapi.json
+  status: 404
+- url: https://modivo.pl/.well-known/api-catalog
+  status: 404
+outbound_events: []
+note: >-
+  MODIVO publishes NO outbound event surface — no AsyncAPI document, no event catalog, no webhook
+  subscription API, and no way for a consumer to register a callback URL. There is nothing here to
+  subscribe to. What the contracts DO expose is the mirror image: inbound webhook RECEIVERS, HTTP
+  endpoints MODIVO stands up so that its own external partners can push state back into the commerce
+  platform. They are catalogued below because they are real, published, callable webhook endpoints
+  with declared payload schemas — but they are a direction of travel most webhook artifacts do not
+  cover, and they must not be read as events a third party can receive.
+direction: inbound-receiver-only
+inbound_receivers:
+- name: My Returns — add return number to order
+  operationId: PostV1MyreturnwebhookAddreturnnumbertoorder
+  method: POST
+  path: /V1/my-return-webhook/add-return-number-to-order
+  host: https://modivo.pl/rest/all
+  tag: modivoMyReturnsWebhookWebhookV1
+  description: >-
+    Receives a return identifier from MODIVO's returns provider and attaches the return number to the
+    corresponding order.
+  payload:
+    media_types:
+    - application/json
+    - application/xml
+    required:
+    - id
+    - hash
+    fields:
+    - name: id
+      type: string
+      note: The return identifier supplied by the returns provider.
+    - name: hash
+      type: string
+      note: >-
+        A shared verification value accompanying the id. The specification does not describe how it
+        is computed, so the authentication model for this receiver is not publicly documented. Treat
+        it as the shared secret that authorises the call.
+  responses:
+    '200': string
+    '500': error-response
+    default: error-response
+- name: eobuwie My Returns — add return number to order
+  operationId: eobMyReturnsWebhookWebhookV1AddReturnNumberToOrderPost
+  method: POST
+  path: /V1/my-return-webhook/add-return-number-to-order
+  host: https://eobuwie.com.pl/rest/all
+  tag: eobMyReturnsWebhookWebhookV1
+  description: The eobuwie deployment's equivalent of the MODIVO returns receiver, same payload shape.
+adjacent_machine_callbacks:
+  note: >-
+    Two more endpoints behave like machine-to-machine callbacks rather than storefront operations, and
+    are recorded here because an integrator will find them in the same place.
+  endpoints:
+  - name: Marketplace place order
+    operationId: PostV1OrderManagementPlaceOrder
+    method: POST
+    path: /V1/orderManagement/placeOrder
+    host: https://modivo.pl/rest/all
+    description: >-
+      Accepts a complete marketplace order — billing and shipping addresses, customer, payment
+      including bank-transfer details, and one suborder per seller with its own delivery method, notes
+      and items. This is the seam between MODIVO's marketplace layer and the commerce platform.
+    payload_schema: marketplace-place-order-data-order-interface
+    warning: >-
+      No idempotency key. A retried call can create a duplicate order. See
+      conventions/modivo-conventions.yml.
+  - name: eobuwie chatbot order status
+    operationId: chatbotOrderRestApiOrderRestApiServiceV1GetStatusPost
+    method: POST
+    path: /V1/chatbot/order/status
+    host: https://eobuwie.com.pl/rest/all
+    description: >-
+      Order-status lookup built for a conversational agent. Notable as the closest thing MODIVO ships
+      to an agent-facing API — it exists only on the eobuwie deployment, not on modivo.pl.
+  - name: eobuwie chatbot order cancellation request
+    operationId: chatbotOrderRestApiOrderRestApiServiceV1RequestCancellationPost
+    method: POST
+    path: /V1/chatbot/order/request-cancellation
+    host: https://eobuwie.com.pl/rest/all
+    description: Cancellation request raised on behalf of a customer by the same conversational agent.
+consumer_guidance: >-
+  If you need to react to MODIVO commerce state changes, there is no push option. Poll the GraphQL
+  surface (customerOrders, customerReturnOrders) with a customer token, or — as an approved
+  marketplace seller — use the Mirakl tenant's own order APIs, which are gated behind Mirakl SSO and
+  outside this repo.

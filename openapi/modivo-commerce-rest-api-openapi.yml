@@ -1,0 +1,5390 @@
+openapi: 3.0.3
+info:
+  title: MODIVO Commerce REST API
+  version: '2.4'
+  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment
+    and self-described at https://modivo.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement,
+    marketplace order placement, customer account management, product render info, search, directory data, gift messages,
+    in-store pickup locations, PayPal/Braintree payment services, and MODIVO-specific extensions (MODIVO My Returns webhook,
+    eobuwie JWT service, Trustmate review integration). Anonymous access is limited to unauthenticated storefront operations;
+    the remainder requires a Magento integration or customer bearer token. Mechanically converted from the provider's own
+    Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  x-source: https://modivo.pl/rest/all/schema?services=all
+servers:
+- url: https://modivo.pl/rest/all
+tags:
+- name: directoryCurrencyInformationAcquirerV1
+  description: Currency information acquirer interface
+- name: directoryCountryInformationAcquirerV1
+  description: Country information acquirer interface
+- name: customerAccountManagementV1
+  description: Interface for managing customers accounts.
+- name: searchV1
+  description: Search API for all requests
+- name: catalogProductRenderListV1
+  description: Interface which provides product renders information for products.
+- name: quoteGuestCartRepositoryV1
+  description: Cart Repository interface for guest carts.
+- name: quoteGuestCartManagementV1
+  description: Cart Management interface for guest carts.
+- name: quoteGuestShippingMethodManagementV1
+  description: Shipping method management interface for guest carts.
+- name: quoteGuestShipmentEstimationV1
+  description: Interface GuestShipmentEstimationInterface
+- name: quoteGuestCartItemRepositoryV1
+  description: Cart Item repository interface for guest carts.
+- name: quoteGuestPaymentMethodManagementV1
+  description: Payment method management interface for guest carts.
+- name: quoteGuestBillingAddressManagementV1
+  description: Billing address management interface for guest carts.
+- name: quoteGuestCouponManagementV1
+  description: Coupon management interface for guest carts.
+- name: quoteGuestCartTotalManagementV1
+  description: Bundled API to collect totals for cart based on shipping/payment methods and additional data.
+- name: quoteGuestCartTotalRepositoryV1
+  description: Cart totals repository interface for guest carts.
+- name: checkoutGuestShippingInformationManagementV1
+  description: Interface for managing guest shipping address information
+- name: checkoutGuestTotalsInformationManagementV1
+  description: Interface for guest quote totals calculation
+- name: checkoutGuestPaymentInformationManagementV1
+  description: Interface for managing guest payment information
+- name: integrationAdminTokenServiceV1
+  description: Interface providing token generation for Admins
+- name: integrationCustomerTokenServiceV1
+  description: Interface providing token generation for Customers
+- name: giftMessageGuestCartRepositoryV1
+  description: Interface GuestCartRepositoryInterface
+- name: giftMessageGuestItemRepositoryV1
+  description: Interface GuestItemRepositoryInterface
+- name: inventoryInStorePickupApiGetPickupLocationsV1
+  description: Get Pickup Locations filtered by provided Search Request. Pickup Location entities are Immutable object and
+    can not be changed after creation. All modification of Pickup Location must be done through @see \Magento\InventoryApi\Api\SourceRepositoryInterface
+- name: paymentServicesPaypalPaymentConfigRequestV1
+  description: ''
+- name: paymentServicesPaypalPaymentOrderRequestV1
+  description: An interface for the REST WebAPI request to create an order
+- name: paymentServicesPaypalPaymentSdkRequestV1
+  description: An interface for the REST WebAPI to get payment sdk urls
+- name: paymentServicesPaypalCompleteOrderV1
+  description: ''
+- name: eobJWTHttpServiceV1
+  description: Interface HttpServiceInterface
+- name: eobTrustmateIntegrationDisplayApiV1
+  description: ''
+- name: marketplacePlaceOrderOrderManagementV1
+  description: ''
+- name: modivoMyReturnsWebhookWebhookV1
+  description: ''
+- name: payPalBraintreeAuthV1
+  description: Interface AuthInterface
+paths:
+  /V1/directory/currency:
+    get:
+      tags:
+      - directoryCurrencyInformationAcquirerV1
+      description: Get currency information for the store.
+      operationId: GetV1DirectoryCurrency
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id001
+                $ref: '#/components/schemas/directory-data-currency-information-interface'
+            application/xml:
+              schema: *id001
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id002
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id002
+  /V1/directory/countries:
+    get:
+      tags:
+      - directoryCountryInformationAcquirerV1
+      description: Get all countries and regions information for the store.
+      operationId: GetV1DirectoryCountries
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id003
+                type: array
+                items:
+                  $ref: '#/components/schemas/directory-data-country-information-interface'
+            application/xml:
+              schema: *id003
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id004
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id004
+  /V1/directory/countries/{countryId}:
+    get:
+      tags:
+      - directoryCountryInformationAcquirerV1
+      description: Get country and region information for the store.
+      operationId: GetV1DirectoryCountriesCountryId
+      parameters:
+      - name: countryId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id005
+                $ref: '#/components/schemas/directory-data-country-information-interface'
+            application/xml:
+              schema: *id005
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id006
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id006
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id007
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id007
+  /V1/customers:
+    post:
+      tags:
+      - customerAccountManagementV1
+      description: Create customer account. Perform necessary business operations like sending email.
+      operationId: PostV1Customers
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id008
+              required:
+              - customer
+              properties:
+                customer:
+                  $ref: '#/components/schemas/customer-data-customer-interface'
+                password:
+                  type: string
+                redirectUrl:
+                  type: string
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id008
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id009
+                $ref: '#/components/schemas/customer-data-customer-interface'
+            application/xml:
+              schema: *id009
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id010
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id010
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id011
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id011
+  /V1/customers/{customerId}/password/resetLinkToken/{resetPasswordLinkToken}:
+    get:
+      tags:
+      - customerAccountManagementV1
+      description: Check if password reset token is valid.
+      operationId: GetV1CustomersCustomerIdPasswordResetLinkTokenResetPasswordLinkToken
+      parameters:
+      - name: customerId
+        in: path
+        description: If null is given then a customer will be matched by the RP token.
+        required: true
+        schema:
+          type: integer
+      - name: resetPasswordLinkToken
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id012
+                type: boolean
+                description: True if the token is valid
+            application/xml:
+              schema: *id012
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id013
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id013
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id014
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id014
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id015
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id015
+  /V1/customers/password:
+    put:
+      tags:
+      - customerAccountManagementV1
+      description: Send an email to the customer with a password reset link.
+      operationId: PutV1CustomersPassword
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id016
+              required:
+              - email
+              - template
+              properties:
+                email:
+                  type: string
+                template:
+                  type: string
+                websiteId:
+                  type: integer
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id016
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id017
+                type: boolean
+                description: true on success
+            application/xml:
+              schema: *id017
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id018
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id018
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id019
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id019
+  /V1/customers/resetPassword:
+    post:
+      tags:
+      - customerAccountManagementV1
+      description: Reset customer password.
+      operationId: PostV1CustomersResetPassword
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id020
+              required:
+              - email
+              - resetToken
+              - newPassword
+              properties:
+                email:
+                  type: string
+                  description: If empty value given then the customer will be matched by the RP token.
+                resetToken:
+                  type: string
+                newPassword:
+                  type: string
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id020
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id021
+                type: boolean
+                description: true on success
+            application/xml:
+              schema: *id021
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id022
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id022
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id023
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id023
+  /V1/customers/isEmailAvailable:
+    post:
+      tags:
+      - customerAccountManagementV1
+      description: Check if given email is associated with a customer account in given website.
+      operationId: PostV1CustomersIsEmailAvailable
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id024
+              required:
+              - customerEmail
+              properties:
+                customerEmail:
+                  type: string
+                websiteId:
+                  type: integer
+                  description: If not set, will use the current websiteId
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id024
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id025
+                type: boolean
+            application/xml:
+              schema: *id025
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id026
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id026
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id027
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id027
+  /V1/search:
+    get:
+      tags:
+      - searchV1
+      description: Make Full Text Search and return found Documents
+      operationId: GetV1Search
+      parameters:
+      - name: searchCriteria[requestName]
+        in: query
+        schema:
+          type: string
+      - name: searchCriteria[filterGroups][0][filters][0][field]
+        in: query
+        description: Field
+        schema:
+          type: string
+      - name: searchCriteria[filterGroups][0][filters][0][value]
+        in: query
+        description: Value
+        schema:
+          type: string
+      - name: searchCriteria[filterGroups][0][filters][0][conditionType]
+        in: query
+        description: Condition type
+        schema:
+          type: string
+      - name: searchCriteria[sortOrders][0][field]
+        in: query
+        description: Sorting field.
+        schema:
+          type: string
+      - name: searchCriteria[sortOrders][0][direction]
+        in: query
+        description: Sorting direction.
+        schema:
+          type: string
+      - name: searchCriteria[pageSize]
+        in: query
+        description: Page size.
+        schema:
+          type: integer
+      - name: searchCriteria[currentPage]
+        in: query
+        description: Current page.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id028
+                $ref: '#/components/schemas/framework-search-search-result-interface'
+            application/xml:
+              schema: *id028
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id029
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id029
+  /V1/products-render-info:
+    get:
+      tags:
+      - catalogProductRenderListV1
+      description: Collect and retrieve the list of product render info. This info contains raw prices and formatted prices,
+        product name, stock status, store_id, etc.
+      operationId: GetV1Productsrenderinfo
+      parameters:
+      - name: searchCriteria[filterGroups][0][filters][0][field]
+        in: query
+        description: Field
+        schema:
+          type: string
+      - name: searchCriteria[filterGroups][0][filters][0][value]
+        in: query
+        description: Value
+        schema:
+          type: string
+      - name: searchCriteria[filterGroups][0][filters][0][conditionType]
+        in: query
+        description: Condition type
+        schema:
+          type: string
+      - name: searchCriteria[sortOrders][0][field]
+        in: query
+        description: Sorting field.
+        schema:
+          type: string
+      - name: searchCriteria[sortOrders][0][direction]
+        in: query
+        description: Sorting direction.
+        schema:
+          type: string
+      - name: searchCriteria[pageSize]
+        in: query
+        description: Page size.
+        schema:
+          type: integer
+      - name: searchCriteria[currentPage]
+        in: query
+        description: Current page.
+        schema:
+          type: integer
+      - name: storeId
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: currencyCode
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id030
+                $ref: '#/components/schemas/catalog-data-product-render-search-results-interface'
+            application/xml:
+              schema: *id030
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id031
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id031
+  /V1/guest-carts/{cartId}:
+    get:
+      tags:
+      - quoteGuestCartRepositoryV1
+      description: Enable a guest user to return information for a specified cart.
+      operationId: GetV1GuestcartsCartId
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id032
+                $ref: '#/components/schemas/quote-data-cart-interface'
+            application/xml:
+              schema: *id032
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id033
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id033
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id034
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id034
+  /V1/guest-carts:
+    post:
+      tags:
+      - quoteGuestCartManagementV1
+      description: Enable an customer or guest user to create an empty cart and quote for an anonymous customer.
+      operationId: PostV1Guestcarts
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id035
+                type: string
+                description: Cart ID.
+            application/xml:
+              schema: *id035
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id036
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id036
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id037
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id037
+  /V1/guest-carts/{cartId}/order:
+    put:
+      tags:
+      - quoteGuestCartManagementV1
+      description: Place an order for a specified cart.
+      operationId: PutV1GuestcartsCartIdOrder
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id038
+              properties:
+                paymentMethod:
+                  $ref: '#/components/schemas/quote-data-payment-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id038
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id039
+                type: integer
+                description: Order ID.
+            application/xml:
+              schema: *id039
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id040
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id040
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id041
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id041
+  /V1/guest-carts/{cartId}/shipping-methods:
+    get:
+      tags:
+      - quoteGuestShippingMethodManagementV1
+      description: List applicable shipping methods for a specified quote.
+      operationId: GetV1GuestcartsCartIdShippingmethods
+      parameters:
+      - name: cartId
+        in: path
+        description: The shopping cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id042
+                type: array
+                description: An array of shipping methods.
+                items:
+                  $ref: '#/components/schemas/quote-data-shipping-method-interface'
+            application/xml:
+              schema: *id042
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id043
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id043
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id044
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id044
+  /V1/guest-carts/{cartId}/estimate-shipping-methods:
+    post:
+      tags:
+      - quoteGuestShipmentEstimationV1
+      description: Estimate shipping by address and return list of available shipping methods
+      operationId: PostV1GuestcartsCartIdEstimateshippingmethods
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id045
+              required:
+              - address
+              properties:
+                address:
+                  $ref: '#/components/schemas/quote-data-address-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id045
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id046
+                type: array
+                description: An array of shipping methods
+                items:
+                  $ref: '#/components/schemas/quote-data-shipping-method-interface'
+            application/xml:
+              schema: *id046
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id047
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id047
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id048
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id048
+  /V1/guest-carts/{cartId}/items:
+    get:
+      tags:
+      - quoteGuestCartItemRepositoryV1
+      description: List items that are assigned to a specified cart.
+      operationId: GetV1GuestcartsCartIdItems
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id049
+                type: array
+                description: Array of items.
+                items:
+                  $ref: '#/components/schemas/quote-data-cart-item-interface'
+            application/xml:
+              schema: *id049
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id050
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id050
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id051
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id051
+    post:
+      tags:
+      - quoteGuestCartItemRepositoryV1
+      description: Add/update the specified cart item.
+      operationId: PostV1GuestcartsCartIdItems
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id052
+              required:
+              - cartItem
+              properties:
+                cartItem:
+                  $ref: '#/components/schemas/quote-data-cart-item-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id052
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id053
+                $ref: '#/components/schemas/quote-data-cart-item-interface'
+            application/xml:
+              schema: *id053
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id054
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id054
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id055
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id055
+  /V1/guest-carts/{cartId}/items/{itemId}:
+    put:
+      tags:
+      - quoteGuestCartItemRepositoryV1
+      description: Add/update the specified cart item.
+      operationId: PutV1GuestcartsCartIdItemsItemId
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id056
+              required:
+              - cartItem
+              properties:
+                cartItem:
+                  $ref: '#/components/schemas/quote-data-cart-item-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id056
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id057
+                $ref: '#/components/schemas/quote-data-cart-item-interface'
+            application/xml:
+              schema: *id057
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id058
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id058
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id059
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id059
+    delete:
+      tags:
+      - quoteGuestCartItemRepositoryV1
+      description: Remove the specified item from the specified cart.
+      operationId: DeleteV1GuestcartsCartIdItemsItemId
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        description: The item ID of the item to be removed.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id060
+                type: boolean
+            application/xml:
+              schema: *id060
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id061
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id061
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id062
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id062
+  /V1/guest-carts/{cartId}/selected-payment-method:
+    get:
+      tags:
+      - quoteGuestPaymentMethodManagementV1
+      description: Return the payment method for a specified shopping cart.
+      operationId: GetV1GuestcartsCartIdSelectedpaymentmethod
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id063
+                $ref: '#/components/schemas/quote-data-payment-interface'
+            application/xml:
+              schema: *id063
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id064
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id064
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id065
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id065
+    put:
+      tags:
+      - quoteGuestPaymentMethodManagementV1
+      description: Add a specified payment method to a specified shopping cart.
+      operationId: PutV1GuestcartsCartIdSelectedpaymentmethod
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id066
+              required:
+              - method
+              properties:
+                method:
+                  $ref: '#/components/schemas/quote-data-payment-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id066
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id067
+                type: integer
+                description: Payment method ID.
+            application/xml:
+              schema: *id067
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id068
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id068
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id069
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id069
+  /V1/guest-carts/{cartId}/payment-methods:
+    get:
+      tags:
+      - quoteGuestPaymentMethodManagementV1
+      description: List available payment methods for a specified shopping cart. This call returns an array of objects, but
+        detailed information about each object’s attributes might not be included.  See https://developer.adobe.com/commerce/webapi/rest/attributes#GuestPaymentMethodManagementInterface
+        to determine which call to use to get detailed information about all attributes for an object.
+      operationId: GetV1GuestcartsCartIdPaymentmethods
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id070
+                type: array
+                description: Array of payment methods.
+                items:
+                  $ref: '#/components/schemas/quote-data-payment-method-interface'
+            application/xml:
+              schema: *id070
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id071
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id071
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id072
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id072
+  /V1/guest-carts/{cartId}/billing-address:
+    get:
+      tags:
+      - quoteGuestBillingAddressManagementV1
+      description: Return the billing address for a specified quote.
+      operationId: GetV1GuestcartsCartIdBillingaddress
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id073
+                $ref: '#/components/schemas/quote-data-address-interface'
+            application/xml:
+              schema: *id073
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id074
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id074
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id075
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id075
+    post:
+      tags:
+      - quoteGuestBillingAddressManagementV1
+      description: Assign a specified billing address to a specified cart.
+      operationId: PostV1GuestcartsCartIdBillingaddress
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id076
+              required:
+              - address
+              properties:
+                address:
+                  $ref: '#/components/schemas/quote-data-address-interface'
+                useForShipping:
+                  type: boolean
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id076
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id077
+                type: integer
+                description: Address ID.
+            application/xml:
+              schema: *id077
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id078
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id078
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id079
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id079
+  /V1/guest-carts/{cartId}/coupons:
+    get:
+      tags:
+      - quoteGuestCouponManagementV1
+      description: Return information for a coupon in a specified cart.
+      operationId: GetV1GuestcartsCartIdCoupons
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id080
+                type: string
+                description: The coupon code data.
+            application/xml:
+              schema: *id080
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id081
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id081
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id082
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id082
+    delete:
+      tags:
+      - quoteGuestCouponManagementV1
+      description: Delete a coupon from a specified cart.
+      operationId: DeleteV1GuestcartsCartIdCoupons
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id083
+                type: boolean
+            application/xml:
+              schema: *id083
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id084
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id084
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id085
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id085
+  /V1/guest-carts/{cartId}/coupons/{couponCode}:
+    put:
+      tags:
+      - quoteGuestCouponManagementV1
+      description: Add a coupon by code to a specified cart.
+      operationId: PutV1GuestcartsCartIdCouponsCouponCode
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      - name: couponCode
+        in: path
+        description: The coupon code data.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id086
+                type: boolean
+            application/xml:
+              schema: *id086
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id087
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id087
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id088
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id088
+  /V1/guest-carts/{cartId}/collect-totals:
+    put:
+      tags:
+      - quoteGuestCartTotalManagementV1
+      description: Set shipping/billing methods and additional data for cart and collect totals for guest.
+      operationId: PutV1GuestcartsCartIdCollecttotals
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id089
+              required:
+              - paymentMethod
+              properties:
+                paymentMethod:
+                  $ref: '#/components/schemas/quote-data-payment-interface'
+                shippingCarrierCode:
+                  type: string
+                  description: The carrier code.
+                shippingMethodCode:
+                  type: string
+                  description: The shipping method code.
+                additionalData:
+                  $ref: '#/components/schemas/quote-data-totals-additional-data-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id089
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id090
+                $ref: '#/components/schemas/quote-data-totals-interface'
+            application/xml:
+              schema: *id090
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id091
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id091
+  /V1/guest-carts/{cartId}/totals:
+    get:
+      tags:
+      - quoteGuestCartTotalRepositoryV1
+      description: Return quote totals data for a specified cart.
+      operationId: GetV1GuestcartsCartIdTotals
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id092
+                $ref: '#/components/schemas/quote-data-totals-interface'
+            application/xml:
+              schema: *id092
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id093
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id093
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id094
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id094
+  /V1/guest-carts/{cartId}/shipping-information:
+    post:
+      tags:
+      - checkoutGuestShippingInformationManagementV1
+      description: ''
+      operationId: PostV1GuestcartsCartIdShippinginformation
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id095
+              required:
+              - addressInformation
+              properties:
+                addressInformation:
+                  $ref: '#/components/schemas/checkout-data-shipping-information-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id095
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id096
+                $ref: '#/components/schemas/checkout-data-payment-details-interface'
+            application/xml:
+              schema: *id096
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id097
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id097
+  /V1/guest-carts/{cartId}/totals-information:
+    post:
+      tags:
+      - checkoutGuestTotalsInformationManagementV1
+      description: Calculate quote totals based on address and shipping method.
+      operationId: PostV1GuestcartsCartIdTotalsinformation
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id098
+              required:
+              - addressInformation
+              properties:
+                addressInformation:
+                  $ref: '#/components/schemas/checkout-data-totals-information-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id098
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id099
+                $ref: '#/components/schemas/quote-data-totals-interface'
+            application/xml:
+              schema: *id099
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id100
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id100
+  /V1/guest-carts/{cartId}/payment-information:
+    post:
+      tags:
+      - checkoutGuestPaymentInformationManagementV1
+      description: Set payment information and place order for a specified cart.
+      operationId: PostV1GuestcartsCartIdPaymentinformation
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id101
+              required:
+              - email
+              - paymentMethod
+              properties:
+                email:
+                  type: string
+                paymentMethod:
+                  $ref: '#/components/schemas/quote-data-payment-interface'
+                billingAddress:
+                  $ref: '#/components/schemas/quote-data-address-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id101
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id102
+                type: integer
+                description: Order ID.
+            application/xml:
+              schema: *id102
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id103
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id103
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id104
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id104
+    get:
+      tags:
+      - checkoutGuestPaymentInformationManagementV1
+      description: Get payment information
+      operationId: GetV1GuestcartsCartIdPaymentinformation
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id105
+                $ref: '#/components/schemas/checkout-data-payment-details-interface'
+            application/xml:
+              schema: *id105
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id106
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id106
+  /V1/guest-carts/{cartId}/set-payment-information:
+    post:
+      tags:
+      - checkoutGuestPaymentInformationManagementV1
+      description: Set payment information for a specified cart.
+      operationId: PostV1GuestcartsCartIdSetpaymentinformation
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id107
+              required:
+              - email
+              - paymentMethod
+              properties:
+                email:
+                  type: string
+                paymentMethod:
+                  $ref: '#/components/schemas/quote-data-payment-interface'
+                billingAddress:
+                  $ref: '#/components/schemas/quote-data-address-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id107
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id108
+                type: integer
+                description: Order ID.
+            application/xml:
+              schema: *id108
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id109
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id109
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id110
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id110
+  /V1/integration/admin/token:
+    post:
+      tags:
+      - integrationAdminTokenServiceV1
+      description: Create access token for admin given the admin credentials.
+      operationId: PostV1IntegrationAdminToken
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id111
+              required:
+              - username
+              - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id111
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id112
+                type: string
+                description: Token created
+            application/xml:
+              schema: *id112
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id113
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id113
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id114
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id114
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id115
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id115
+  /V1/integration/customer/token:
+    post:
+      tags:
+      - integrationCustomerTokenServiceV1
+      description: Create access token for admin given the customer credentials.
+      operationId: PostV1IntegrationCustomerToken
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id116
+              required:
+              - username
+              - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id116
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id117
+                type: string
+                description: Token created
+            application/xml:
+              schema: *id117
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id118
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id118
+        '401':
+          description: 401 Unauthorized
+          content:
+            application/json:
+              schema: &id119
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id119
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id120
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id120
+  /V1/guest-carts/{cartId}/gift-message:
+    get:
+      tags:
+      - giftMessageGuestCartRepositoryV1
+      description: Return the gift message for a specified order.
+      operationId: GetV1GuestcartsCartIdGiftmessage
+      parameters:
+      - name: cartId
+        in: path
+        description: The shopping cart ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id121
+                $ref: '#/components/schemas/gift-message-data-message-interface'
+            application/xml:
+              schema: *id121
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id122
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id122
+    post:
+      tags:
+      - giftMessageGuestCartRepositoryV1
+      description: Set the gift message for an entire order.
+      operationId: PostV1GuestcartsCartIdGiftmessage
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id123
+              required:
+              - giftMessage
+              properties:
+                giftMessage:
+                  $ref: '#/components/schemas/gift-message-data-message-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id123
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id124
+                type: boolean
+            application/xml:
+              schema: *id124
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id125
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id125
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id126
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id126
+  /V1/guest-carts/{cartId}/gift-message/{itemId}:
+    get:
+      tags:
+      - giftMessageGuestItemRepositoryV1
+      description: Return the gift message for a specified item in a specified shopping cart.
+      operationId: GetV1GuestcartsCartIdGiftmessageItemId
+      parameters:
+      - name: cartId
+        in: path
+        description: The shopping cart ID.
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        description: The item ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id127
+                $ref: '#/components/schemas/gift-message-data-message-interface'
+            application/xml:
+              schema: *id127
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id128
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id128
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id129
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id129
+    post:
+      tags:
+      - giftMessageGuestItemRepositoryV1
+      description: Set the gift message for a specified item in a specified shopping cart.
+      operationId: PostV1GuestcartsCartIdGiftmessageItemId
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        description: The item ID.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id130
+              required:
+              - giftMessage
+              properties:
+                giftMessage:
+                  $ref: '#/components/schemas/gift-message-data-message-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id130
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id131
+                type: boolean
+            application/xml:
+              schema: *id131
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema: &id132
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id132
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id133
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id133
+  /V1/inventory/in-store-pickup/pickup-locations/:
+    get:
+      tags:
+      - inventoryInStorePickupApiGetPickupLocationsV1
+      description: Get Pickup Locations according to the results of filtration by Search Request.
+      operationId: GetV1InventoryInstorepickupPickuplocations
+      parameters:
+      - name: searchRequest[area][radius]
+        in: query
+        description: Search radius in KM.
+        schema:
+          type: integer
+      - name: searchRequest[area][searchTerm]
+        in: query
+        description: Search term string.
+        schema:
+          type: string
+      - name: searchRequest[filters][country][value]
+        in: query
+        description: Value.
+        schema:
+          type: string
+      - name: searchRequest[filters][country][conditionType]
+        in: query
+        description: Condition Type.
+        schema:
+          type: string
+      - name: searchRequest[filters][postcode][value]
+        in: query
+        description: Value.
+        schema:
+          type: string
+      - name: searchRequest[filters][postcode][conditionType]
+        in: query
+        description: Condition Type.
+        schema:
+          type: string
+      - name: searchRequest[filters][region][value]
+        in: query
+        description: Value.
+        schema:
+          type: string
+      - name: searchRequest[filters][region][conditionType]
+        in: query
+        description: Condition Type.
+        schema:
+          type: string
+      - name: searchRequest[filters][regionId][value]
+        in: query
+        description: Value.
+        schema:
+          type: string
+      - name: searchRequest[filters][regionId][conditionType]
+        in: query
+        description: Condition Type.
+        schema:
+          type: string
+      - name: searchRequest[filters][city][value]
+        in: query
+        description: Value.
+        schema:
+          type: string
+      - name: searchRequest[filters][city][conditionType]
+        in: query
+        description: Condition Type.
+        schema:
+          type: string
+      - name: searchRequest[filters][street][value]
+        in: query
+        description: Value.
+        schema:
+          type: string
+      - name: searchRequest[filters][street][conditionType]
+        in: query
+        description: Condition Type.
+        schema:
+          type: string
+      - name: searchRequest[filters][name][value]
+        in: query
+        description: Value.
+        schema:
+          type: string
+      - name: searchRequest[filters][name][conditionType]
+        in: query
+        description: Condition Type.
+        schema:
+          type: string
+      - name: searchRequest[filters][pickupLocationCode][value]
+        in: query
+        description: Value.
+        schema:
+          type: string
+      - name: searchRequest[filters][pickupLocationCode][conditionType]
+        in: query
+        description: Condition Type.
+        schema:
+          type: string
+      - name: searchRequest[pageSize]
+        in: query
+        description: Page size.
+        schema:
+          type: integer
+      - name: searchRequest[currentPage]
+        in: query
+        description: Current page.
+        schema:
+          type: integer
+      - name: searchRequest[scopeType]
+        in: query
+        description: Sales Channel Type.
+        schema:
+          type: string
+      - name: searchRequest[scopeCode]
+        in: query
+        description: Sales Channel code.
+        schema:
+          type: string
+      - name: searchRequest[sort][0][field]
+        in: query
+        description: Sorting field.
+        schema:
+          type: string
+      - name: searchRequest[sort][0][direction]
+        in: query
+        description: Sorting direction.
+        schema:
+          type: string
+      - name: searchRequest[extensionAttributes][productsInfo][0][sku]
+        in: query
+        description: Product SKU.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id134
+                $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-result-interface'
+            application/xml:
+              schema: *id134
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id135
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id135
+  /V1/payments-config/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Config.
+      operationId: GetV1PaymentsconfigLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id136
+                $ref: '#/components/schemas/payment-services-paypal-payment-config-response-interface'
+            application/xml:
+              schema: *id136
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id137
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id137
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id138
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id138
+  /V1/payments-config/google-pay/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Google Pay Config.
+      operationId: GetV1PaymentsconfigGooglepayLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id139
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-interface'
+            application/xml:
+              schema: *id139
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id140
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id140
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id141
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id141
+  /V1/payments-config/apple-pay/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Apple Pay Config.
+      operationId: GetV1PaymentsconfigApplepayLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id142
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-apple-pay-interface'
+            application/xml:
+              schema: *id142
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id143
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id143
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id144
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id144
+  /V1/payments-config/smart-buttons/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Smart Buttons Config.
+      operationId: GetV1PaymentsconfigSmartbuttonsLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id145
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-interface'
+            application/xml:
+              schema: *id145
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id146
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id146
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id147
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id147
+  /V1/payments-config/hosted-fields/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Hosted Fields Config.
+      operationId: GetV1PaymentsconfigHostedfieldsLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id148
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-hosted-fields-interface'
+            application/xml:
+              schema: *id148
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id149
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id149
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id150
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id150
+  /V1/guest-carts/{cartId}/payment-order:
+    post:
+      tags:
+      - paymentServicesPaypalPaymentOrderRequestV1
+      description: Create a payment order for guest customer
+      operationId: PostV1GuestcartsCartIdPaymentorder
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id151
+              required:
+              - methodCode
+              - paymentSource
+              - location
+              properties:
+                methodCode:
+                  type: string
+                paymentSource:
+                  type: string
+                location:
+                  type: string
+                vaultIntent:
+                  type: boolean
+                threeDSMode:
+                  type: string
+                  description: '| null $threeDSMode'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id151
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id152
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-order-interface'
+            application/xml:
+              schema: *id152
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id153
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id153
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id154
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id154
+  /V1/guest-carts/{cartId}/payment-order/{id}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentOrderRequestV1
+      description: Get payment order for guest customer
+      operationId: GetV1GuestcartsCartIdPaymentorderId
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id155
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-order-details-interface'
+            application/xml:
+              schema: *id155
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id156
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id156
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id157
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id157
+    post:
+      tags:
+      - paymentServicesPaypalPaymentOrderRequestV1
+      description: Sync payment order for guest customer
+      operationId: PostV1GuestcartsCartIdPaymentorderId
+      parameters:
+      - name: cartId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id158
+                type: boolean
+            application/xml:
+              schema: *id158
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id159
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id159
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id160
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id160
+  /V1/payments-sdk/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentSdkRequestV1
+      description: Get payment sdk url by location
+      operationId: GetV1PaymentssdkLocation
+      parameters:
+      - name: location
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id161
+                type: array
+                items:
+                  $ref: '#/components/schemas/payment-services-paypal-data-payment-sdk-params-interface'
+            application/xml:
+              schema: *id161
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id162
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id162
+  /V1/payments-sdk/{location}/{methodCode}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentSdkRequestV1
+      description: Get payment sdk url by location and methodCode
+      operationId: GetV1PaymentssdkLocationMethodCode
+      parameters:
+      - name: location
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: methodCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id163
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-sdk-params-interface'
+            application/xml:
+              schema: *id163
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id164
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id164
+  /V1/payment-order/completeOrder:
+    post:
+      tags:
+      - paymentServicesPaypalCompleteOrderV1
+      description: Rest API endpoint to place an order
+      operationId: PostV1PaymentorderCompleteOrder
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id165
+              required:
+              - orderId
+              properties:
+                orderId:
+                  type: string
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id165
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id166
+                type: string
+            application/xml:
+              schema: *id166
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id167
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id167
+  /V1/jwt/obtain:
+    post:
+      tags:
+      - eobJWTHttpServiceV1
+      description: Create and retrieve JWT.
+      operationId: PostV1JwtObtain
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id168
+                $ref: '#/components/schemas/eob-jw-tdata-token-data-interface'
+            application/xml:
+              schema: *id168
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id169
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id169
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id170
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id170
+  /V1/trustmate/displayapi/:
+    get:
+      tags:
+      - eobTrustmateIntegrationDisplayApiV1
+      description: ''
+      operationId: GetV1TrustmateDisplayapi
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id171
+                type: string
+            application/xml:
+              schema: *id171
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id172
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id172
+  /V1/orderManagement/placeOrder:
+    post:
+      tags:
+      - marketplacePlaceOrderOrderManagementV1
+      description: ''
+      operationId: PostV1OrderManagementPlaceOrder
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id173
+              required:
+              - order
+              properties:
+                order:
+                  $ref: '#/components/schemas/marketplace-place-order-data-order-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id173
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id174
+                $ref: '#/components/schemas/marketplace-place-order-data-order-response-interface'
+            application/xml:
+              schema: *id174
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id175
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id175
+  /V1/my-return-webhook/add-return-number-to-order:
+    post:
+      tags:
+      - modivoMyReturnsWebhookWebhookV1
+      description: Add return number to order api
+      operationId: PostV1MyreturnwebhookAddreturnnumbertoorder
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: &id176
+              required:
+              - id
+              - hash
+              properties:
+                id:
+                  type: string
+                hash:
+                  type: string
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema: *id176
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id177
+                type: string
+            application/xml:
+              schema: *id177
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema: &id178
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id178
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id179
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id179
+  /V1/applepay/auth:
+    get:
+      tags:
+      - payPalBraintreeAuthV1
+      description: Returns details required to be able to submit a payment with Apple Pay
+      operationId: GetV1ApplepayAuth
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema: &id180
+                $ref: '#/components/schemas/pay-pal-braintree-data-auth-data-interface'
+            application/xml:
+              schema: *id180
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema: &id181
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema: *id181
+components:
+  schemas:
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    directory-data-currency-information-interface:
+      type: object
+      description: Currency Information interface.
+      properties:
+        base_currency_code:
+          type: string
+          description: The base currency code for the store.
+        base_currency_symbol:
+          type: string
+          description: The currency symbol of the base currency for the store.
+        default_display_currency_code:
+          type: string
+          description: The default display currency code for the store.
+        default_display_currency_symbol:
+          type: string
+          description: The currency symbol of the default display currency for the store.
+        available_currency_codes:
+          type: array
+          description: The list of allowed currency codes for the store.
+          items:
+            type: string
+        exchange_rates:
+          type: array
+          description: The list of exchange rate information for the store.
+          items:
+            $ref: '#/components/schemas/directory-data-exchange-rate-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/directory-data-currency-information-extension-interface'
+      required:
+      - base_currency_code
+      - base_currency_symbol
+      - default_display_currency_code
+      - default_display_currency_symbol
+      - available_currency_codes
+      - exchange_rates
+    directory-data-exchange-rate-interface:
+      type: object
+      description: Exchange Rate interface.
+      properties:
+        currency_to:
+          type: string
+          description: The currency code associated with the exchange rate.
+        rate:
+          type: number
+          description: The exchange rate for the associated currency and the store's base currency.
+        extension_attributes:
+          $ref: '#/components/schemas/directory-data-exchange-rate-extension-interface'
+      required:
+      - currency_to
+      - rate
+    directory-data-exchange-rate-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\ExchangeRateInterface
+    directory-data-currency-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CurrencyInformationInterface
+    directory-data-country-information-interface:
+      type: object
+      description: Country Information interface.
+      properties:
+        id:
+          type: string
+          description: The country id for the store.
+        two_letter_abbreviation:
+          type: string
+          description: The country 2 letter abbreviation for the store.
+        three_letter_abbreviation:
+          type: string
+          description: The country 3 letter abbreviation for the store.
+        full_name_locale:
+          type: string
+          description: The country full name (in store locale) for the store.
+        full_name_english:
+          type: string
+          description: The country full name (in English) for the store.
+        available_regions:
+          type: array
+          description: The available regions for the store.
+          items:
+            $ref: '#/components/schemas/directory-data-region-information-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/directory-data-country-information-extension-interface'
+      required:
+      - id
+      - two_letter_abbreviation
+      - three_letter_abbreviation
+      - full_name_locale
+      - full_name_english
+    directory-data-region-information-interface:
+      type: object
+      description: Region Information interface.
+      properties:
+        id:
+          type: string
+          description: Region id
+        code:
+          type: string
+          description: Region code
+        name:
+          type: string
+          description: Region name
+        extension_attributes:
+          $ref: '#/components/schemas/directory-data-region-information-extension-interface'
+      required:
+      - id
+      - code
+      - name
+    directory-data-region-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\RegionInformationInterface
+    directory-data-country-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CountryInformationInterface
+    customer-data-customer-interface:
+      type: object
+      description: Customer entity interface for API handling.
+      properties:
+        id:
+          type: integer
+          description: Customer id
+        group_id:
+          type: integer
+          description: Group id
+        default_billing:
+          type: string
+          description: Default billing address id
+        default_shipping:
+          type: string
+          description: Default shipping address id
+        confirmation:
+          type: string
+          description: Confirmation
+        created_at:
+          type: string
+          description: Created at time
+        updated_at:
+          type: string
+          description: Updated at time
+        created_in:
+          type: string
+          description: Created in area
+        dob:
+          type: string
+          description: In keeping with current security and privacy best practices, be sure you are aware of any potential
+            legal and security risks associated with the storage of customers’ full date of birth (month, day, year) along
+            with other personal identifiers (e.g., full name) before collecting or processing such data.
+        email:
+          type: string
+          description: Email address
+        firstname:
+          type: string
+          description: First name
+        lastname:
+          type: string
+          description: Last name
+        middlename:
+          type: string
+          description: Middle name
+        prefix:
+          type: string
+          description: Prefix
+        suffix:
+          type: string
+          description: Suffix
+        gender:
+          type: integer
+          description: Gender
+        store_id:
+          type: integer
+          description: Store id
+        taxvat:
+          type: string
+          description: Tax Vat
+        website_id:
+          type: integer
+          description: Website id
+        addresses:
+          type: array
+          description: Customer addresses.
+          items:
+            $ref: '#/components/schemas/customer-data-address-interface'
+        disable_auto_group_change:
+          type: integer
+          description: Disable auto group change flag.
+        extension_attributes:
+          $ref: '#/components/schemas/customer-data-customer-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+      required:
+      - email
+      - firstname
+      - lastname
+    customer-data-address-interface:
+      type: object
+      description: Customer address interface.
+      properties:
+        id:
+          type: integer
+          description: ID
+        customer_id:
+          type: integer
+          description: Customer ID
+        region:
+          $ref: '#/components/schemas/customer-data-region-interface'
+        region_id:
+          type: integer
+          description: Region ID
+        country_id:
+          type: string
+          description: Country code in ISO_3166-2 format
+        street:
+          type: array
+          description: Street
+          items:
+            type: string
+        company:
+          type: string
+          description: Company
+        telephone:
+          type: string
+          description: Telephone number
+        fax:
+          type: string
+          description: Fax number
+        postcode:
+          type: string
+          description: Postcode
+        city:
+          type: string
+          description: City name
+        firstname:
+          type: string
+          description: First name
+        lastname:
+          type: string
+          description: Last name
+        middlename:
+          type: string
+          description: Middle name
+        prefix:
+          type: string
+          description: Prefix
+        suffix:
+          type: string
+          description: Suffix
+        vat_id:
+          type: string
+          description: Vat id
+        default_shipping:
+          type: boolean
+          description: If this address is default shipping address.
+        default_billing:
+          type: boolean
+          description: If this address is default billing address
+        extension_attributes:
+          $ref: '#/components/schemas/customer-data-address-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+    customer-data-region-interface:
+      type: object
+      description: Customer address region interface.
+      properties:
+        region_code:
+          type: string
+          description: Region code
+        region:
+          type: string
+          description: Region
+        region_id:
+          type: integer
+          description: Region id
+        extension_attributes:
+          $ref: '#/components/schemas/customer-data-region-extension-interface'
+      required:
+      - region_code
+      - region
+      - region_id
+    customer-data-region-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\RegionInterface
+    customer-data-address-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\AddressInterface
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
+        value:
+          type: string
+          description: Attribute value
+      required:
+      - attribute_code
+      - value
+    customer-data-customer-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\CustomerInterface
+      properties:
+        is_subscribed:
+          type: boolean
+        assistance_allowed:
+          type: integer
+    framework-search-search-result-interface:
+      type: object
+      description: Interface SearchResultInterface
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/framework-search-document-interface'
+        aggregations:
+          $ref: '#/components/schemas/framework-search-aggregation-interface'
+        search_criteria:
+          $ref: '#/components/schemas/framework-search-search-criteria-interface'
+        total_count:
+          type: integer
+          description: Total count.
+      required:
+      - items
+      - aggregations
+      - search_criteria
+      - total_count
+    framework-search-document-interface:
+      type: object
+      description: Interface Search Document
+      properties:
+        id:
+          type: integer
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+      required:
+      - id
+    framework-search-aggregation-interface:
+      type: object
+      description: Interface Aggregation to get faceted data
+      properties:
+        buckets:
+          type: array
+          description: All Document fields
+          items:
+            $ref: '#/components/schemas/framework-search-bucket-interface'
+        bucket_names:
+          type: array
+          description: Document field names
+          items:
+            type: string
+      required:
+      - buckets
+      - bucket_names
+    framework-search-bucket-interface:
+      type: object
+      description: Interface for facet Bucket
+      properties:
+        name:
+          type: string
+          description: Field name
+        values:
+          type: array
+          description: Field values
+          items:
+            $ref: '#/components/schemas/framework-search-aggregation-value-interface'
+      required:
+      - name
+      - values
+    framework-search-aggregation-value-interface:
+      type: object
+      description: Interface Aggregation Value
+      properties:
+        value:
+          type: string
+          description: Aggregation
+        metrics:
+          type: array
+          description: Metrics
+          items:
+            type: string
+      required:
+      - value
+      - metrics
+    framework-search-search-criteria-interface:
+      type: object
+      description: Interface SearchCriteriaInterface
+      properties:
+        request_name:
+          type: string
+        filter_groups:
+          type: array
+          description: A list of filter groups.
+          items:
+            $ref: '#/components/schemas/framework-search-filter-group'
+        sort_orders:
+          type: array
+          description: Sort order.
+          items:
+            $ref: '#/components/schemas/framework-sort-order'
+        page_size:
+          type: integer
+          description: Page size.
+        current_page:
+          type: integer
+          description: Current page.
+      required:
+      - request_name
+      - filter_groups
+    framework-search-filter-group:
+      type: object
+      description: Groups two or more filters together using a logical OR
+      properties:
+        filters:
+          type: array
+          description: A list of filters in this group
+          items:
+            $ref: '#/components/schemas/framework-filter'
+    framework-filter:
+      type: object
+      description: Filter which can be used by any methods from service layer.
+      properties:
+        field:
+          type: string
+          description: Field
+        value:
+          type: string
+          description: Value
+        condition_type:
+          type: string
+          description: Condition type
+      required:
+      - field
+      - value
+    framework-sort-order:
+      type: object
+      description: Data object for sort order.
+      properties:
+        field:
+          type: string
+          description: Sorting field.
+        direction:
+          type: string
+          description: Sorting direction.
+      required:
+      - field
+      - direction
+    catalog-data-product-render-search-results-interface:
+      type: object
+      description: Dto that holds render information about products
+      properties:
+        items:
+          type: array
+          description: List of products rendered information
+          items:
+            $ref: '#/components/schemas/catalog-data-product-render-interface'
+      required:
+      - items
+    catalog-data-product-render-interface:
+      type: object
+      description: Represents Data Object which holds enough information to render product This information is put into part
+        as Add To Cart or Add to Compare Data or Price Data
+      properties:
+        add_to_cart_button:
+          $ref: '#/components/schemas/catalog-data-product-render-button-interface'
+        add_to_compare_button:
+          $ref: '#/components/schemas/catalog-data-product-render-button-interface'
+        price_info:
+          $ref: '#/components/schemas/catalog-data-product-render-price-info-interface'
+        images:
+          type: array
+          description: Enough information, that needed to render image on front
+          items:
+            $ref: '#/components/schemas/catalog-data-product-render-image-interface'
+        url:
+          type: string
+          description: Product url
+        id:
+          type: integer
+          description: Product identifier
+        name:
+          type: string
+          description: Product name
+        type:
+          type: string
+          description: Product type. Such as bundle, grouped, simple, etc...
+        is_salable:
+          type: string
+          description: Information about product saleability (In Stock)
+        store_id:
+          type: integer
+          description: Information about current store id or requested store id
+        currency_code:
+          type: string
+          description: Current or desired currency code to product
+        extension_attributes:
+          $ref: '#/components/schemas/catalog-data-product-render-extension-interface'
+      required:
+      - add_to_cart_button
+      - add_to_compare_button
+      - price_info
+      - images
+      - url
+      - id
+      - name
+      - type
+      - is_salable
+      - store_id
+      - currency_code
+      - extension_attributes
+    catalog-data-product-render-button-interface:
+      type: object
+      description: 'Button interface. This interface represents all manner of product buttons: add to cart, add to compare,
+        etc... The buttons describes by this interface should have interaction with backend'
+      properties:
+        post_data:
+          type: string
+          description: Post data
+        url:
+          type: string
+          description: Url, needed to add product to cart
+        required_options:
+          type: boolean
+          description: Flag whether a product has options or not
+        extension_attributes:
+          $ref: '#/components/schemas/catalog-data-product-render-button-extension-interface'
+      required:
+      - post_data
+      - url
+      - required_options
+    catalog-data-product-render-button-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Catalog\Api\Data\ProductRender\ButtonInterface
+    catalog-data-product-render-price-info-interface:
+      type: object
+      description: Price interface.
+      properties:
+        final_price:
+          type: number
+          description: Final price
+        max_price:
+          type: number
+          description: Max price of a product
+        max_regular_price:
+          type: number
+          description: Max regular price
+        minimal_regular_price:
+          type: number
+          description: Minimal regular price
+        special_price:
+          type: number
+          description: Special price
+        minimal_price:
+          type: number
+          description: Minimal price
+        regular_price:
+          type: number
+          description: Regular price
+        formatted_prices:
+          $ref: '#/components/schemas/catalog-data-product-render-formatted-price-info-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/catalog-data-product-render-price-info-extension-interface'
+      required:
+      - final_price
+      - max_price
+      - max_regular_price
+      - minimal_regular_price
+      - special_price
+      - minimal_price
+      - regular_price
+      - formatted_prices
+    catalog-data-product-render-formatted-price-info-interface:
+      type: object
+      description: 'Formatted Price interface. Aggregate formatted html with price representations. E.g.: <span class="price">$9.00</span>
+        Consider currency, rounding and html'
+      properties:
+        final_price:
+          type: string
+          description: Html with final price
+        max_price:
+          type: string
+          description: Max price of a product
+        minimal_price:
+          type: string
+          description: The minimal price of the product or variation
+        max_regular_price:
+          type: string
+          description: Max regular price
+        minimal_regular_price:
+          type: string
+          description: Minimal regular price
+        special_price:
+          type: string
+          description: Special price
+        regular_price:
+          type: string
+          description: Price - is price of product without discounts and special price with taxes and fixed product tax
+        extension_attributes:
+          $ref: '#/components/schemas/catalog-data-product-render-formatted-price-info-extension-interface'
+      required:
+      - final_price
+      - max_price
+      - minimal_price
+      - max_regular_price
+      - minimal_regular_price
+      - special_price
+      - regular_price
+    catalog-data-product-render-formatted-price-info-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface
+    catalog-data-product-render-price-info-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface
+      properties:
+        msrp:
+          $ref: '#/components/schemas/msrp-data-product-render-msrp-price-info-interface'
+        tax_adjustments:
+          $ref: '#/components/schemas/catalog-data-product-render-price-info-interface'
+        weee_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/weee-data-product-render-weee-adjustment-attribute-interface'
+        weee_adjustment:
+          type: string
+    msrp-data-product-render-msrp-price-info-interface:
+      type: object
+      description: Price interface.
+      properties:
+        msrp_price:
+          type: string
+        is_applicable:
+          type: string
+        is_shown_price_on_gesture:
+          type: string
+        msrp_message:
+          type: string
+        explanation_message:
+          type: string
+        extension_attributes:
+          $ref: '#/components/schemas/msrp-data-product-render-msrp-price-info-extension-interface'
+      required:
+      - msrp_price
+      - is_applicable
+      - is_shown_price_on_gesture
+      - msrp_message
+      - explanation_message
+    msrp-data-product-render-msrp-price-info-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface
+    weee-data-product-render-weee-adjustment-attribute-interface:
+      type: object
+      description: List of all weee attributes, their amounts, etc.., that product has
+      properties:
+        amount:
+          type: string
+          description: Weee attribute amount
+        tax_amount:
+          type: string
+          description: Tax which is calculated to fixed product tax attribute
+        tax_amount_incl_tax:
+          type: string
+          description: Tax amount of weee attribute
+        amount_excl_tax:
+          type: string
+          description: Product amount exclude tax
+        attribute_code:
+          type: string
+          description: Weee attribute code
+        extension_attributes:
+          $ref: '#/components/schemas/weee-data-product-render-weee-adjustment-attribute-extension-interface'
+      required:
+      - amount
+      - tax_amount
+      - tax_amount_incl_tax
+      - amount_excl_tax
+      - attribute_code
+      - extension_attributes
+    weee-data-product-render-weee-adjustment-attribute-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterface
+    catalog-data-product-render-image-interface:
+      type: object
+      description: Product Render image interface. Represents physical characteristics of image, that can be used in product
+        listing or product view
+      properties:
+        url:
+          type: string
+          description: Image url
+        code:
+          type: string
+          description: Image code
+        height:
+          type: number
+          description: Image height
+        width:
+          type: number
+          description: Image width in px
+        label:
+          type: string
+          description: Image label
+        resized_width:
+          type: number
+          description: Resize width
+        resized_height:
+          type: number
+          description: Resize height
+        extension_attributes:
+          $ref: '#/components/schemas/catalog-data-product-render-image-extension-interface'
+      required:
+      - url
+      - code
+      - height
+      - width
+      - label
+      - resized_width
+      - resized_height
+    catalog-data-product-render-image-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Catalog\Api\Data\ProductRender\ImageInterface
+    catalog-data-product-render-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Catalog\Api\Data\ProductRenderInterface
+      properties:
+        review_html:
+          type: string
+        wishlist_button:
+          $ref: '#/components/schemas/catalog-data-product-render-button-interface'
+    quote-data-cart-interface:
+      type: object
+      description: Interface CartInterface
+      properties:
+        id:
+          type: integer
+          description: Cart/quote ID.
+        created_at:
+          type: string
+          description: Cart creation date and time. Otherwise, null.
+        updated_at:
+          type: string
+          description: Cart last update date and time. Otherwise, null.
+        converted_at:
+          type: string
+          description: Cart conversion date and time. Otherwise, null.
+        is_active:
+          type: boolean
+          description: Active status flag value. Otherwise, null.
+        is_virtual:
+          type: boolean
+          description: Virtual flag value. Otherwise, null.
+        items:
+          type: array
+          description: Array of items. Otherwise, null.
+          items:
+            $ref: '#/components/schemas/quote-data-cart-item-interface'
+        items_count:
+          type: integer
+          description: Number of different items or products in the cart. Otherwise, null.
+        items_qty:
+          type: number
+          description: Total quantity of all cart items. Otherwise, null.
+        customer:
+          $ref: '#/components/schemas/customer-data-customer-interface'
+        billing_address:
+          $ref: '#/components/schemas/quote-data-address-interface'
+        reserved_order_id:
+          type: string
+          description: Reserved order ID. Otherwise, null.
+        orig_order_id:
+          type: integer
+          description: Original order ID. Otherwise, null.
+        currency:
+          $ref: '#/components/schemas/quote-data-currency-interface'
+        customer_is_guest:
+          type: boolean
+          description: For guest customers, false for logged in customers
+        customer_note:
+          type: string
+          description: Notice text
+        customer_note_notify:
+          type: boolean
+          description: Customer notification flag
+        customer_tax_class_id:
+          type: integer
+          description: Customer tax class ID.
+        store_id:
+          type: integer
+          description: Store identifier
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-cart-extension-interface'
+      required:
+      - id
+      - customer
+      - store_id
+    quote-data-cart-item-interface:
+      type: object
+      description: Interface CartItemInterface
+      properties:
+        item_id:
+          type: integer
+          description: Item ID. Otherwise, null.
+        sku:
+          type: string
+          description: Product SKU. Otherwise, null.
+        qty:
+          type: number
+          description: Product quantity.
+        name:
+          type: string
+          description: Product name. Otherwise, null.
+        price:
+          type: number
+          description: Product price. Otherwise, null.
+        product_type:
+          type: string
+          description: Product type. Otherwise, null.
+        quote_id:
+          type: string
+          description: Quote id.
+        product_option:
+          $ref: '#/components/schemas/quote-data-product-option-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-cart-item-extension-interface'
+      required:
+      - qty
+      - quote_id
+    quote-data-product-option-interface:
+      type: object
+      description: Product option interface
+      properties:
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-product-option-extension-interface'
+    quote-data-product-option-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ProductOptionInterface
+      properties:
+        custom_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/catalog-data-custom-option-interface'
+        configurable_item_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/configurable-product-data-configurable-item-option-value-interface'
+        bundle_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/bundle-data-bundle-option-interface'
+        downloadable_option:
+          $ref: '#/components/schemas/downloadable-data-downloadable-option-interface'
+        grouped_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/grouped-product-data-grouped-options-interface'
+    catalog-data-custom-option-interface:
+      type: object
+      description: Interface CustomOptionInterface
+      properties:
+        option_id:
+          type: string
+          description: Option id
+        option_value:
+          type: string
+          description: Option value
+        extension_attributes:
+          $ref: '#/components/schemas/catalog-data-custom-option-extension-interface'
+      required:
+      - option_id
+      - option_value
+    catalog-data-custom-option-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Catalog\Api\Data\CustomOptionInterface
+      properties:
+        file_info:
+          $ref: '#/components/schemas/framework-data-image-content-interface'
+    framework-data-image-content-interface:
+      type: object
+      description: Image Content data interface
+      properties:
+        base64_encoded_data:
+          type: string
+          description: Media data (base64 encoded content)
+        type:
+          type: string
+          description: MIME type
+        name:
+          type: string
+          description: Image name
+      required:
+      - base64_encoded_data
+      - type
+      - name
+    configurable-product-data-configurable-item-option-value-interface:
+      type: object
+      description: Interface ConfigurableItemOptionValueInterface
+      properties:
+        option_id:
+          type: string
+          description: Option SKU
+        option_value:
+          type: integer
+          description: Item id
+        extension_attributes:
+          $ref: '#/components/schemas/configurable-product-data-configurable-item-option-value-extension-interface'
+      required:
+      - option_id
+    configurable-product-data-configurable-item-option-value-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface
+    bundle-data-bundle-option-interface:
+      type: object
+      description: Interface BundleOptionInterface
+      properties:
+        option_id:
+          type: integer
+          description: Bundle option id.
+        option_qty:
+          type: integer
+          description: Bundle option quantity.
+        option_selections:
+          type: array
+          description: Bundle option selection ids.
+          items:
+            type: integer
+        extension_attributes:
+          $ref: '#/components/schemas/bundle-data-bundle-option-extension-interface'
+      required:
+      - option_id
+      - option_qty
+      - option_selections
+    bundle-data-bundle-option-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Bundle\Api\Data\BundleOptionInterface
+    downloadable-data-downloadable-option-interface:
+      type: object
+      description: Downloadable Option
+      properties:
+        downloadable_links:
+          type: array
+          description: The list of downloadable links
+          items:
+            type: integer
+      required:
+      - downloadable_links
+    grouped-product-data-grouped-options-interface:
+      type: object
+      description: Represents `product item id with qty` of a grouped product.
+      properties:
+        id:
+          type: integer
+          description: Associated product id
+        qty:
+          type: integer
+          description: Associated product qty
+        extension_attributes:
+          $ref: '#/components/schemas/grouped-product-data-grouped-options-extension-interface'
+    grouped-product-data-grouped-options-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\GroupedProduct\Api\Data\GroupedOptionsInterface
+    quote-data-cart-item-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\CartItemInterface
+      properties:
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/sales-rule-data-rule-discount-interface'
+    sales-rule-data-rule-discount-interface:
+      type: object
+      description: Rule discount Interface
+      properties:
+        discount_data:
+          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
+        rule_label:
+          type: string
+          description: Rule Label
+        rule_i_d:
+          type: integer
+          description: Rule ID
+      required:
+      - discount_data
+      - rule_label
+      - rule_i_d
+    sales-rule-data-discount-data-interface:
+      type: object
+      description: Discount Data Interface
+      properties:
+        amount:
+          type: number
+          description: Amount
+        base_amount:
+          type: number
+          description: Base Amount
+        original_amount:
+          type: number
+          description: Original Amount
+        base_original_amount:
+          type: number
+          description: Base Original Amount
+      required:
+      - amount
+      - base_amount
+      - original_amount
+      - base_original_amount
+    quote-data-address-interface:
+      type: object
+      description: Interface AddressInterface
+      properties:
+        id:
+          type: integer
+          description: Id
+        region:
+          type: string
+          description: Region name
+        region_id:
+          type: integer
+          description: Region id
+        region_code:
+          type: string
+          description: Region code
+        country_id:
+          type: string
+          description: Country id
+        street:
+          type: array
+          description: Street
+          items:
+            type: string
+        company:
+          type: string
+          description: Company
+        telephone:
+          type: string
+          description: Telephone number
+        fax:
+          type: string
+          description: Fax number
+        postcode:
+          type: string
+          description: Postcode
+        city:
+          type: string
+          description: City name
+        firstname:
+          type: string
+          description: First name
+        lastname:
+          type: string
+          description: Last name
+        middlename:
+          type: string
+          description: Middle name
+        prefix:
+          type: string
+          description: Prefix
+        suffix:
+          type: string
+          description: Suffix
+        vat_id:
+          type: string
+          description: Vat id
+        customer_id:
+          type: integer
+          description: Customer id
+        email:
+          type: string
+          description: Billing/shipping email
+        same_as_billing:
+          type: integer
+          description: Same as billing flag
+        customer_address_id:
+          type: integer
+          description: Customer address id
+        save_in_address_book:
+          type: integer
+          description: Save in address book flag
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-address-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+      required:
+      - region
+      - region_id
+      - region_code
+      - country_id
+      - street
+      - telephone
+      - postcode
+      - city
+      - firstname
+      - lastname
+      - email
+    quote-data-address-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\AddressInterface
+      properties:
+        pickup_location_code:
+          type: string
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/sales-rule-data-rule-discount-interface'
+        address_title:
+          type: string
+        customer_address_type:
+          type: string
+        buy_as:
+          type: string
+        address_is_active:
+          type: string
+        address_house_number:
+          type: string
+        address_local_number:
+          type: string
+        address_avatar_id:
+          type: string
+    quote-data-currency-interface:
+      type: object
+      description: Interface CurrencyInterface
+      properties:
+        global_currency_code:
+          type: string
+          description: Global currency code
+        base_currency_code:
+          type: string
+          description: Base currency code
+        store_currency_code:
+          type: string
+          description: Store currency code
+        quote_currency_code:
+          type: string
+          description: Quote currency code
+        store_to_base_rate:
+          type: number
+          description: Store currency to base currency rate
+        store_to_quote_rate:
+          type: number
+          description: Store currency to quote currency rate
+        base_to_global_rate:
+          type: number
+          description: Base currency to global currency rate
+        base_to_quote_rate:
+          type: number
+          description: Base currency to quote currency rate
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-currency-extension-interface'
+    quote-data-currency-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\CurrencyInterface
+    quote-data-cart-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\CartInterface
+      properties:
+        shipping_assignments:
+          type: array
+          items:
+            $ref: '#/components/schemas/quote-data-shipping-assignment-interface'
+        applied_duty:
+          $ref: '#/components/schemas/eob-duty-calculator-data-duty-interface'
+        extended_data:
+          $ref: '#/components/schemas/instore-sales-data-quote-extended-data-interface'
+        dpd_parcel_shop:
+          type: string
+        inpost_point:
+          type: string
+        force_inpost_point_flag:
+          type: boolean
+        shipping_points:
+          type: string
+        shipping_option:
+          type: string
+        shipping_option_title:
+          type: string
+        shipping_option_description:
+          type: string
+        speedy_parcel_shop:
+          type: string
+        store_pickup_place_id:
+          type: string
+        persist_store_pickup_place_id_flag:
+          type: boolean
+    quote-data-shipping-assignment-interface:
+      type: object
+      description: Interface ShippingAssignmentInterface
+      properties:
+        shipping:
+          $ref: '#/components/schemas/quote-data-shipping-interface'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/quote-data-cart-item-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-shipping-assignment-extension-interface'
+      required:
+      - shipping
+      - items
+    quote-data-shipping-interface:
+      type: object
+      description: Interface ShippingInterface
+      properties:
+        address:
+          $ref: '#/components/schemas/quote-data-address-interface'
+        method:
+          type: string
+          description: Shipping method
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-shipping-extension-interface'
+      required:
+      - address
+      - method
+    quote-data-shipping-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ShippingInterface
+    quote-data-shipping-assignment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ShippingAssignmentInterface
+    eob-duty-calculator-data-duty-interface:
+      type: object
+      description: ''
+      properties:
+        label:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        formatted_amount:
+          type: string
+      required:
+      - label
+      - amount
+      - currency
+      - formatted_amount
+    instore-sales-data-quote-extended-data-interface:
+      type: object
+      description: Interface QuoteExtendedDataInterface
+      properties:
+        quote_id:
+          type: string
+          description: Quote ID
+        sale_place_id:
+          type: string
+          description: SalePlaceId
+        electronic_invoice_required:
+          type: boolean
+          description: ElectronicInvoiceRequired.
+      required:
+      - quote_id
+      - sale_place_id
+      - electronic_invoice_required
+    quote-data-payment-interface:
+      type: object
+      description: Interface PaymentInterface
+      properties:
+        po_number:
+          type: string
+          description: Purchase order number
+        method:
+          type: string
+          description: Payment method code
+        additional_data:
+          type: array
+          description: Payment additional details
+          items:
+            type: string
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-payment-extension-interface'
+      required:
+      - method
+    quote-data-payment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
+      properties:
+        agreement_ids:
+          type: array
+          items:
+            type: string
+    quote-data-shipping-method-interface:
+      type: object
+      description: Interface ShippingMethodInterface
+      properties:
+        carrier_code:
+          type: string
+          description: Shipping carrier code.
+        method_code:
+          type: string
+          description: Shipping method code.
+        carrier_title:
+          type: string
+          description: Shipping carrier title. Otherwise, null.
+        method_title:
+          type: string
+          description: Shipping method title. Otherwise, null.
+        amount:
+          type: number
+          description: Shipping amount in store currency.
+        base_amount:
+          type: number
+          description: Shipping amount in base currency.
+        available:
+          type: boolean
+          description: The value of the availability flag for the current shipping method.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-shipping-method-extension-interface'
+        error_message:
+          type: string
+          description: Shipping Error message.
+        price_excl_tax:
+          type: number
+          description: Shipping price excl tax.
+        price_incl_tax:
+          type: number
+          description: Shipping price incl tax.
+      required:
+      - carrier_code
+      - method_code
+      - amount
+      - base_amount
+      - available
+      - error_message
+      - price_excl_tax
+      - price_incl_tax
+    quote-data-shipping-method-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ShippingMethodInterface
+    quote-data-payment-method-interface:
+      type: object
+      description: Interface PaymentMethodInterface
+      properties:
+        code:
+          type: string
+          description: Payment method code
+        title:
+          type: string
+          description: Payment method title
+      required:
+      - code
+      - title
+    quote-data-totals-additional-data-interface:
+      type: object
+      description: Additional data for totals collection.
+      properties:
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-additional-data-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+    quote-data-totals-additional-data-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsAdditionalDataInterface
+      properties:
+        gift_messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/gift-message-data-message-interface'
+    gift-message-data-message-interface:
+      type: object
+      description: Interface MessageInterface
+      properties:
+        gift_message_id:
+          type: integer
+          description: Gift message ID. Otherwise, null.
+        customer_id:
+          type: integer
+          description: Customer ID. Otherwise, null.
+        sender:
+          type: string
+          description: Sender name.
+        recipient:
+          type: string
+          description: Recipient name.
+        message:
+          type: string
+          description: Message text.
+        extension_attributes:
+          $ref: '#/components/schemas/gift-message-data-message-extension-interface'
+      required:
+      - sender
+      - recipient
+      - message
+    gift-message-data-message-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\GiftMessage\Api\Data\MessageInterface
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          type: string
+    quote-data-totals-interface:
+      type: object
+      description: Interface TotalsInterface
+      properties:
+        grand_total:
+          type: number
+          description: Grand total in quote currency
+        base_grand_total:
+          type: number
+          description: Grand total in base currency
+        subtotal:
+          type: number
+          description: Subtotal in quote currency
+        base_subtotal:
+          type: number
+          description: Subtotal in base currency
+        discount_amount:
+          type: number
+          description: Discount amount in quote currency
+        base_discount_amount:
+          type: number
+          description: Discount amount in base currency
+        subtotal_with_discount:
+          type: number
+          description: Subtotal in quote currency with applied discount
+        base_subtotal_with_discount:
+          type: number
+          description: Subtotal in base currency with applied discount
+        shipping_amount:
+          type: number
+          description: Shipping amount in quote currency
+        base_shipping_amount:
+          type: number
+          description: Shipping amount in base currency
+        shipping_discount_amount:
+          type: number
+          description: Shipping discount amount in quote currency
+        base_shipping_discount_amount:
+          type: number
+          description: Shipping discount amount in base currency
+        tax_amount:
+          type: number
+          description: Tax amount in quote currency
+        base_tax_amount:
+          type: number
+          description: Tax amount in base currency
+        weee_tax_applied_amount:
+          type: number
+          description: Item weee tax applied amount in quote currency.
+        shipping_tax_amount:
+          type: number
+          description: Shipping tax amount in quote currency
+        base_shipping_tax_amount:
+          type: number
+          description: Shipping tax amount in base currency
+        subtotal_incl_tax:
+          type: number
+          description: Subtotal including tax in quote currency
+        base_subtotal_incl_tax:
+          type: number
+          description: Subtotal including tax in base currency
+        shipping_incl_tax:
+          type: number
+          description: Shipping including tax in quote currency
+        base_shipping_incl_tax:
+          type: number
+          description: Shipping including tax in base currency
+        base_currency_code:
+          type: string
+          description: Base currency code
+        quote_currency_code:
+          type: string
+          description: Quote currency code
+        coupon_code:
+          type: string
+          description: Applied coupon code
+        items_qty:
+          type: integer
+          description: Items qty
+        items:
+          type: array
+          description: Totals by items
+          items:
+            $ref: '#/components/schemas/quote-data-totals-item-interface'
+        total_segments:
+          type: array
+          description: Dynamically calculated totals
+          items:
+            $ref: '#/components/schemas/quote-data-total-segment-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-extension-interface'
+      required:
+      - weee_tax_applied_amount
+      - total_segments
+    quote-data-totals-item-interface:
+      type: object
+      description: Interface TotalsItemInterface
+      properties:
+        item_id:
+          type: integer
+          description: Item id
+        price:
+          type: number
+          description: Item price in quote currency.
+        base_price:
+          type: number
+          description: Item price in base currency.
+        qty:
+          type: number
+          description: Item quantity.
+        row_total:
+          type: number
+          description: Row total in quote currency.
+        base_row_total:
+          type: number
+          description: Row total in base currency.
+        row_total_with_discount:
+          type: number
+          description: Row total with discount in quote currency. Otherwise, null.
+        tax_amount:
+          type: number
+          description: Tax amount in quote currency. Otherwise, null.
+        base_tax_amount:
+          type: number
+          description: Tax amount in base currency. Otherwise, null.
+        tax_percent:
+          type: number
+          description: Tax percent. Otherwise, null.
+        discount_amount:
+          type: number
+          description: Discount amount in quote currency. Otherwise, null.
+        base_discount_amount:
+          type: number
+          description: Discount amount in base currency. Otherwise, null.
+        discount_percent:
+          type: number
+          description: Discount percent. Otherwise, null.
+        price_incl_tax:
+          type: number
+          description: Price including tax in quote currency. Otherwise, null.
+        base_price_incl_tax:
+          type: number
+          description: Price including tax in base currency. Otherwise, null.
+        row_total_incl_tax:
+          type: number
+          description: Row total including tax in quote currency. Otherwise, null.
+        base_row_total_incl_tax:
+          type: number
+          description: Row total including tax in base currency. Otherwise, null.
+        options:
+          type: string
+          description: Item price in quote currency.
+        weee_tax_applied_amount:
+          type: number
+          description: Item weee tax applied amount in quote currency.
+        weee_tax_applied:
+          type: string
+          description: Item weee tax applied in quote currency.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-item-extension-interface'
+        name:
+          type: string
+          description: Product name. Otherwise, null.
+      required:
+      - item_id
+      - price
+      - base_price
+      - qty
+      - row_total
+      - base_row_total
+      - options
+      - weee_tax_applied_amount
+      - weee_tax_applied
+    quote-data-totals-item-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
+    quote-data-total-segment-interface:
+      type: object
+      description: Interface TotalsInterface
+      properties:
+        code:
+          type: string
+          description: Code
+        title:
+          type: string
+          description: Total title
+        value:
+          type: number
+          description: Total value
+        area:
+          type: string
+          description: Display area code.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-total-segment-extension-interface'
+      required:
+      - code
+      - value
+    quote-data-total-segment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
+      properties:
+        tax_grandtotal_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
+    tax-data-grand-total-details-interface:
+      type: object
+      description: Interface GrandTotalDetailsInterface
+      properties:
+        amount:
+          type: number
+          description: Tax amount value
+        rates:
+          type: array
+          description: Tax rates info
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-rates-interface'
+        group_id:
+          type: integer
+          description: Group identifier
+      required:
+      - amount
+      - rates
+      - group_id
+    tax-data-grand-total-rates-interface:
+      type: object
+      description: Interface GrandTotalRatesInterface
+      properties:
+        percent:
+          type: string
+          description: Tax percentage value
+        title:
+          type: string
+          description: Rate title
+      required:
+      - percent
+      - title
+    quote-data-totals-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
+      properties:
+        coupon_label:
+          type: string
+    checkout-data-shipping-information-interface:
+      type: object
+      description: Interface ShippingInformationInterface
+      properties:
+        shipping_address:
+          $ref: '#/components/schemas/quote-data-address-interface'
+        billing_address:
+          $ref: '#/components/schemas/quote-data-address-interface'
+        shipping_method_code:
+          type: string
+          description: Shipping method code
+        shipping_carrier_code:
+          type: string
+          description: Carrier code
+        extension_attributes:
+          $ref: '#/components/schemas/checkout-data-shipping-information-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+      required:
+      - shipping_address
+      - shipping_method_code
+      - shipping_carrier_code
+    checkout-data-shipping-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Checkout\Api\Data\ShippingInformationInterface
+    checkout-data-payment-details-interface:
+      type: object
+      description: Interface PaymentDetailsInterface
+      properties:
+        payment_methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/quote-data-payment-method-interface'
+        totals:
+          $ref: '#/components/schemas/quote-data-totals-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/checkout-data-payment-details-extension-interface'
+      required:
+      - payment_methods
+      - totals
+    checkout-data-payment-details-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Checkout\Api\Data\PaymentDetailsInterface
+    checkout-data-totals-information-interface:
+      type: object
+      description: Interface TotalsInformationInterface
+      properties:
+        address:
+          $ref: '#/components/schemas/quote-data-address-interface'
+        shipping_method_code:
+          type: string
+          description: Shipping method code
+        shipping_carrier_code:
+          type: string
+          description: Carrier code
+        extension_attributes:
+          $ref: '#/components/schemas/checkout-data-totals-information-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+      required:
+      - address
+    checkout-data-totals-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Checkout\Api\Data\TotalsInformationInterface
+    inventory-in-store-pickup-api-data-search-result-interface:
+      type: object
+      description: Search results for providing pickup locations.
+      properties:
+        items:
+          type: array
+          description: Items list.
+          items:
+            $ref: '#/components/schemas/inventory-in-store-pickup-api-data-pickup-location-interface'
+        search_request:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-interface'
+        total_count:
+          type: integer
+          description: Total count.
+      required:
+      - items
+      - search_request
+      - total_count
+    inventory-in-store-pickup-api-data-pickup-location-interface:
+      type: object
+      description: Represents sources projection on In-Store Pickup context. Realisation must follow immutable DTO concept.
+        Partial immutability done according to restriction of current Extension Attributes implementation.
+      properties:
+        pickup_location_code:
+          type: string
+          description: Source code of Pickup Location.
+        name:
+          type: string
+          description: Pickup Location name.
+        email:
+          type: string
+          description: Pickup Location contact email.
+        fax:
+          type: string
+          description: Fax contact info.
+        contact_name:
+          type: string
+          description: Pickup Location contact name.
+        description:
+          type: string
+          description: Pickup Location description.
+        latitude:
+          type: number
+          description: Pickup Location latitude.
+        longitude:
+          type: number
+          description: Pickup Location longitude.
+        country_id:
+          type: string
+          description: Pickup Location country ID.
+        region_id:
+          type: integer
+          description: Pickup Location region ID.
+        region:
+          type: string
+          description: Pickup Location region.
+        city:
+          type: string
+          description: Pickup Location city.
+        street:
+          type: string
+          description: Pickup Location street.
+        postcode:
+          type: string
+          description: Pickup Location postcode.
+        phone:
+          type: string
+          description: Pickup Location phone.
+        extension_attributes:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-pickup-location-extension-interface'
+      required:
+      - pickup_location_code
+    inventory-in-store-pickup-api-data-pickup-location-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\InventoryInStorePickupApi\Api\Data\PickupLocationInterface
+    inventory-in-store-pickup-api-data-search-request-interface:
+      type: object
+      description: 'Endpoint used to search Pickup Locations by different parameters: - by attribute filters fields @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequest\FiltersInterface
+        - by distance to the address @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequest\AreaInterface Also, endpoint
+        supports paging and sort orders.'
+      properties:
+        area:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-area-interface'
+        filters:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filters-interface'
+        page_size:
+          type: integer
+          description: Page size.
+        current_page:
+          type: integer
+          description: Current page.
+        scope_type:
+          type: string
+          description: Sales Channel Type.
+        scope_code:
+          type: string
+          description: Sales Channel code.
+        sort:
+          type: array
+          description: Sort Order.
+          items:
+            $ref: '#/components/schemas/framework-sort-order'
+        extension_attributes:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-extension-interface'
+      required:
+      - current_page
+      - scope_type
+      - scope_code
+    inventory-in-store-pickup-api-data-search-request-area-interface:
+      type: object
+      description: 'Filter by Distance to the Address. Pickup Locations will be filtered by distance according to the geo-position
+        of the entered address. Required fields for the address are country and one of the field: region or city or postcode.'
+      properties:
+        radius:
+          type: integer
+          description: Search radius in KM.
+        search_term:
+          type: string
+          description: Search term string.
+      required:
+      - radius
+      - search_term
+    inventory-in-store-pickup-api-data-search-request-filters-interface:
+      type: object
+      description: Filter to filter by Fields. Each field may be filtered with different condition type. Supported condition
+        types restricted by @see \Magento\Framework\Api\SearchCriteriaInterface
+      properties:
+        country:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        postcode:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        region:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        region_id:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        city:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        street:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        name:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        pickup_location_code:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+    inventory-in-store-pickup-api-data-search-request-filter-interface:
+      type: object
+      description: Filter for Pickup Location search.
+      properties:
+        value:
+          type: string
+          description: Value.
+        condition_type:
+          type: string
+          description: Condition Type.
+      required:
+      - value
+      - condition_type
+    inventory-in-store-pickup-api-data-search-request-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequestInterface
+      properties:
+        products_info:
+          type: array
+          items:
+            $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-product-info-interface'
+    inventory-in-store-pickup-api-data-search-request-product-info-interface:
+      type: object
+      description: Product Info Data Transfer Object.
+      properties:
+        sku:
+          type: string
+          description: Product SKU.
+        extension_attributes:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-product-info-extension-interface'
+      required:
+      - sku
+    inventory-in-store-pickup-api-data-search-request-product-info-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequest\ProductInfoInterface
+    payment-services-paypal-payment-config-response-interface:
+      type: object
+      description: ''
+      properties:
+        apple_pay:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-apple-pay-interface'
+        google_pay:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-interface'
+        hosted_fields:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-hosted-fields-interface'
+        smart_buttons:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-interface'
+      required:
+      - apple_pay
+      - google_pay
+      - hosted_fields
+      - smart_buttons
+    payment-services-paypal-data-payment-config-apple-pay-interface:
+      type: object
+      description: ''
+      properties:
+        button_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-button-styles-interface'
+        payment_source:
+          type: string
+          description: PaymentSource
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - button_styles
+      - payment_source
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    payment-services-paypal-data-payment-config-button-styles-interface:
+      type: object
+      description: ''
+      properties:
+        layout:
+          type: string
+          description: Layout
+        color:
+          type: string
+          description: Color
+        shape:
+          type: string
+          description: Shape
+        label:
+          type: string
+          description: Label
+        tagline:
+          type: boolean
+          description: ShowTagline
+        height:
+          type: integer
+          description: Height
+        use_default_height:
+          type: boolean
+          description: Height
+      required:
+      - layout
+      - color
+      - shape
+      - label
+      - tagline
+      - height
+      - use_default_height
+    payment-services-paypal-data-payment-config-sdk-params-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Code
+        value:
+          type: string
+          description: Config
+      required:
+      - name
+      - value
+    payment-services-paypal-data-payment-config-google-pay-interface:
+      type: object
+      description: ''
+      properties:
+        button_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-button-styles-interface'
+        payment_source:
+          type: string
+          description: PaymentSource
+        three_d_s:
+          type: string
+          description: ThreeDS
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - button_styles
+      - payment_source
+      - three_d_s
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    payment-services-paypal-data-payment-config-google-pay-button-styles-interface:
+      type: object
+      description: ''
+      properties:
+        color:
+          type: string
+          description: Color
+        height:
+          type: integer
+          description: Height
+        type:
+          type: string
+          description: Type
+      required:
+      - color
+      - height
+      - type
+    payment-services-paypal-data-payment-config-hosted-fields-interface:
+      type: object
+      description: ''
+      properties:
+        payment_source:
+          type: string
+          description: Payment Source
+        three_d_s:
+          type: string
+          description: ThreeDS
+        is_vault_enabled:
+          type: boolean
+          description: HasIsVaultEnabled
+        cc_vault_code:
+          type: string
+          description: CcVaultCode
+        requires_card_details:
+          type: boolean
+          description: RequiresCardDetails
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - payment_source
+      - three_d_s
+      - is_vault_enabled
+      - cc_vault_code
+      - requires_card_details
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    payment-services-paypal-data-payment-config-smart-buttons-interface:
+      type: object
+      description: ''
+      properties:
+        display_message:
+          type: boolean
+          description: CanDisplayMessage
+        display_venmo:
+          type: boolean
+          description: Venmo
+        message_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-message-styles-interface'
+        button_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-button-styles-interface'
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - display_message
+      - display_venmo
+      - message_styles
+      - button_styles
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    payment-services-paypal-data-payment-config-smart-buttons-message-styles-interface:
+      type: object
+      description: ''
+      properties:
+        layout:
+          type: string
+          description: CanDisplayMessage
+        logo:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-logo-interface'
+      required:
+      - layout
+      - logo
+    payment-services-paypal-data-payment-config-smart-buttons-logo-interface:
+      type: object
+      description: ''
+      properties:
+        type:
+          type: string
+          description: CanDisplayMessage
+      required:
+      - type
+    payment-services-paypal-data-payment-order-interface:
+      type: object
+      description: Interface PaymentOrderInterface
+      properties:
+        id:
+          type: string
+          description: Payment order id
+        mp_order_id:
+          type: string
+          description: Payment order mpOrderId
+        status:
+          type: string
+          description: Payment order status
+        amount:
+          type: number
+          description: Payment order amount
+        currency_code:
+          type: string
+          description: Payment order currency code
+      required:
+      - id
+      - mp_order_id
+      - status
+      - amount
+      - currency_code
+    payment-services-paypal-data-payment-order-details-interface:
+      type: object
+      description: Interface PaymentOrderDetailsInterface
+      properties:
+        payment_source_details:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-source-details-interface'
+        id:
+          type: string
+          description: Payment order id
+        mp_order_id:
+          type: string
+          description: Payment order mpOrderId
+        status:
+          type: string
+          description: Payment order status
+        amount:
+          type: number
+          description: Payment order amount
+        currency_code:
+          type: string
+          description: Payment order currency code
+      required:
+      - payment_source_details
+      - id
+      - mp_order_id
+      - status
+      - amount
+      - currency_code
+    payment-services-paypal-data-payment-source-details-interface:
+      type: object
+      description: ''
+      properties:
+        card:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-details-interface'
+      required:
+      - card
+    payment-services-paypal-data-payment-card-details-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Name
+        last_digits:
+          type: string
+          description: Last digits
+        card_expiry_month:
+          type: string
+          description: Card expiry month
+        card_expiry_year:
+          type: string
+          description: Card expiry year
+        bin_details:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-bin-details-interface'
+      required:
+      - name
+      - last_digits
+      - card_expiry_month
+      - card_expiry_year
+      - bin_details
+    payment-services-paypal-data-payment-card-bin-details-interface:
+      type: object
+      description: ''
+      properties:
+        bin:
+          type: string
+          description: Bin
+      required:
+      - bin
+    payment-services-paypal-data-payment-sdk-params-interface:
+      type: object
+      description: ''
+      properties:
+        code:
+          type: string
+          description: The payments sdk code
+        params:
+          type: array
+          description: The payments sdk params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+      required:
+      - code
+      - params
+    eob-jw-tdata-token-data-interface:
+      type: object
+      description: ''
+      properties:
+        token:
+          type: string
+          description: JWT Token.
+        expires_in:
+          type: integer
+          description: Expires in in seconds.
+      required:
+      - token
+      - expires_in
+    marketplace-place-order-data-order-interface:
+      type: object
+      description: ''
+      properties:
+        is_electronic_document:
+          type: boolean
+        suborders:
+          type: array
+          description: Suborders
+          items:
+            $ref: '#/components/schemas/marketplace-place-order-data-order-suborder-interface'
+        default_store_id:
+          type: string
+          description: Store eg. MOD-PL WEB
+        ecommerce_id:
+          type: string
+          description: Ecommerce id
+        prefix:
+          type: string
+          description: Prefix
+        is_invoice:
+          type: boolean
+          description: Is invoice
+        order_total_price:
+          type: string
+          description: Total price of order
+        payment:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-payment-interface'
+        customer:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-customer-interface'
+        shipping_address:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-shipping-address-interface'
+        billing_address:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-billing-address-interface'
+        attributes:
+          type: array
+          description: Attributes
+          items:
+            $ref: '#/components/schemas/stanley-order-create-data-attribute-interface'
+        created_at:
+          type: string
+          description: Created at
+        order_source_ip:
+          type: string
+          description: Order source ip
+      required:
+      - suborders
+      - default_store_id
+      - ecommerce_id
+      - is_invoice
+      - order_total_price
+      - payment
+      - customer
+      - shipping_address
+      - billing_address
+    marketplace-place-order-data-order-suborder-interface:
+      type: object
+      description: ''
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/marketplace-place-order-data-order-suborder-item-interface'
+        store_id:
+          type: string
+        index:
+          type: integer
+        delivery_method:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-suborder-delivery-method-interface'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/marketplace-order-create-data-order-suborder-note-interface'
+        shipment_cost:
+          type: string
+        suborder_total_price:
+          type: string
+          description: Total price of sub-order
+      required:
+      - items
+      - store_id
+      - index
+      - delivery_method
+      - shipment_cost
+      - suborder_total_price
+    marketplace-place-order-data-order-suborder-item-interface:
+      type: object
+      description: ''
+      properties:
+        price:
+          type: string
+        offer_id:
+          type: string
+          description: Offer id
+        base_price:
+          type: string
+          description: Base price
+        final_price:
+          type: string
+          description: Final price
+        quantity:
+          type: integer
+          description: Quantity
+        sku:
+          type: string
+          description: Sku
+      required:
+      - price
+      - offer_id
+      - base_price
+      - final_price
+      - quantity
+      - sku
+    marketplace-order-create-data-order-suborder-delivery-method-interface:
+      type: object
+      description: ''
+      properties:
+        id:
+          type: string
+          description: Id
+        pudo_id:
+          type: string
+          description: Pudo id
+        submethods_of_delivery:
+          type: array
+          description: Selected options ids
+          items:
+            type: string
+      required:
+      - id
+      - submethods_of_delivery
+    marketplace-order-create-data-order-suborder-note-interface:
+      type: object
+      description: ''
+      properties:
+        body:
+          type: string
+          description: Body
+        created_at:
+          type: string
+          description: Created at
+      required:
+      - body
+    marketplace-order-create-data-order-payment-interface:
+      type: object
+      description: ''
+      properties:
+        continue_url:
+          type: string
+          description: Continue url
+        currency_code:
+          type: string
+          description: Currency code
+        coupon_code:
+          type: string
+          description: Coupon code
+        method_id:
+          type: string
+          description: Method id
+        bank_transfer_details:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-payment-bank-transfer-details-interface'
+      required:
+      - continue_url
+      - currency_code
+      - method_id
+    marketplace-order-create-data-order-payment-bank-transfer-details-interface:
+      type: object
+      description: ''
+      properties:
+        account_number:
+          type: string
+          description: Account number
+        cbt_account_number:
+          type: string
+          description: Cbt account number
+      required:
+      - account_number
+      - cbt_account_number
+    marketplace-order-create-data-order-customer-interface:
+      type: object
+      description: ''
+      properties:
+        email_address:
+          type: string
+          description: Email
+        external_id:
+          type: string
+          description: External id
+        avatar_id:
+          type: string
+          description: Avatar id
+      required:
+      - email_address
+      - external_id
+      - avatar_id
+    marketplace-order-create-data-order-shipping-address-interface:
+      type: object
+      description: ''
+      properties:
+        company_name:
+          type: string
+          description: The company name
+        contact_person_first_name:
+          type: string
+          description: The contact person first name
+        contact_person_last_name:
+          type: string
+          description: The contact person last name
+        address_name:
+          type: string
+          description: The address name
+        phone_number:
+          type: string
+          description: The phone number
+        country_code:
+          type: string
+          description: The country code
+        locality:
+          type: string
+          description: The locality
+        street:
+          type: string
+          description: The street
+        house_number:
+          type: string
+          description: The house number
+        flat_number:
+          type: string
+          description: The flat number
+        post_code:
+          type: string
+          description: The post code
+        post:
+          type: string
+          description: The post
+      required:
+      - contact_person_first_name
+      - contact_person_last_name
+      - address_name
+      - phone_number
+      - country_code
+      - locality
+      - street
+      - house_number
+      - post_code
+      - post
+    marketplace-order-create-data-order-billing-address-interface:
+      type: object
+      description: ''
+      properties:
+        first_name:
+          type: string
+          description: The first name
+        last_name:
+          type: string
+          description: The last name
+        full_name:
+          type: string
+          description: The full name
+        tin:
+          type: string
+          description: The tin
+        is_company:
+          type: boolean
+          description: The 'is company' flag
+        is_vat_ue:
+          type: boolean
+          description: The 'is vat ue' flag
+        phone_number:
+          type: string
+          description: The phone number
+        country_code:
+          type: string
+          description: The country code
+        locality:
+          type: string
+          description: The locality
+        street:
+          type: string
+          description: The street
+        house_number:
+          type: string
+          description: The house number
+        flat_number:
+          type: string
+          description: The flat number
+        post_code:
+          type: string
+          description: The post code
+        post:
+          type: string
+          description: The post
+      required:
+      - first_name
+      - last_name
+      - full_name
+      - tin
+      - is_company
+      - is_vat_ue
+      - phone_number
+      - country_code
+      - locality
+      - street
+      - house_number
+      - post_code
+      - post
+    stanley-order-create-data-attribute-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Name.
+        value:
+          type: string
+          description: Value.
+      required:
+      - name
+      - value
+    marketplace-place-order-data-order-response-interface:
+      type: object
+      description: ''
+      properties:
+        order_number:
+          type: string
+        order_hash:
+          type: string
+        masked_quote_id:
+          type: string
+      required:
+      - order_number
+      - order_hash
+      - masked_quote_id
+    pay-pal-braintree-data-auth-data-interface:
+      type: object
+      description: Interface AuthDataInterface
+      properties:
+        client_token:
+          type: string
+          description: Client token
+        display_name:
+          type: string
+          description: Display name
+        action_success:
+          type: string
+          description: To success page
+        logged_in:
+          type: boolean
+          description: Logged in
+        store_code:
+          type: string
+          description: Current store code
+      required:
+      - display_name
+      - action_success
+      - logged_in
+      - store_code
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      description: Magento integration/customer bearer token supplied in the Authorization header (Bearer <token>).

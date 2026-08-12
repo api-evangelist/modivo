@@ -1,28 +1,41 @@
 aid: modivo
+name: MODIVO
+description: >-
+  MODIVO is a Polish multibrand fashion and lifestyle retailer that operates one of the largest
+  fashion e-commerce platforms in Central and Eastern Europe, selling clothing, footwear,
+  accessories, beauty and home products from more than a thousand brands across Poland, the Czech
+  Republic, Slovakia, Romania, Hungary, Ukraine, the Baltics and Western Europe. MODIVO S.A. is the
+  listed parent of the former CCC Group (renamed MODIVO S.A. in February 2026) and the group behind
+  the eobuwie.pl, CCC, HalfPrice, worldbox and DeeZee retail brands; the MODIVO storefront company
+  itself is the former eobuwie.pl S.A., a consumer-technology investment of SoftBank Vision Fund.
+  MODIVO does not run a developer portal, but its storefront is an Adobe Commerce (Magento 2.4)
+  deployment that serves two live, publicly readable machine contracts from its own domain: a
+  self-describing Swagger 2.0 REST schema at https://modivo.pl/rest/all/schema?services=all and an
+  openly introspectable GraphQL endpoint at https://modivo.pl/graphql. Third-party sellers integrate
+  through a Mirakl-hosted marketplace tenant, and brands buy sponsored placements through MODIVO Ads,
+  the group's retail-media platform spanning MODIVO and eobuwie.
 accessModel:
   pricing: unknown
-  onboarding: unknown
+  onboarding: none
   trial: false
   try_now: false
-  public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
+  public: true
+  label: Public storefront commerce API, no developer program
+  confidence: medium
+  source:
+  - authentication
+  - openapi
+  generated: '2026-08-12'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/modivo.png
-name: MODIVO
-description: 'MODIVO is a Polish multibrand online fashion retailer operating one of the largest fashion e-commerce platforms in Central and Eastern Europe, offering more than 300,000 products from over 1,700 brands across women''s, men''s, and children''s clothing, footwear, accessories, and beauty. Part of the MODIVO Group (alongside eobuwie.pl), the company is a consumer-technology portfolio company of SoftBank Vision Fund and also runs MODIVO Platform (a commerce technology offering) and MODIVO Advertising (a retail-media network). As of this enrichment pass MODIVO publishes no public developer portal, API documentation, or machine-readable API surface.'
 url: https://raw.githubusercontent.com/api-evangelist/modivo/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - softbank-vision-fund
-x-tier: stub
-x-tier-reason: portfolio-lead
-specificationVersion: '0.20'
+specificationVersion: '0.21'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-08-12'
 tags:
 - Company
 - Consumer
@@ -31,19 +44,219 @@ tags:
 - Retail
 - Marketplace
 - Retail Media
-apis: []
+- Commerce
+- Checkout
+- Catalog
+- GraphQL
+- Adobe Commerce
+- Magento
+- Poland
+- Central Europe
+apis:
+- name: MODIVO Commerce REST API
+  description: >-
+    The public REST surface of the MODIVO storefront, served by its Adobe Commerce / Magento 2.4
+    deployment at https://modivo.pl/rest/all and self-described by a Swagger 2.0 document the
+    platform generates at /rest/all/schema?services=all. 57 operations across 48 paths cover guest
+    cart creation and management, shipping and totals estimation, coupon application, payment method
+    selection and guest order placement, customer account creation and password reset, product
+    render info, catalog search, directory (country/currency) reference data, gift messages,
+    in-store pickup locations, PayPal and Braintree payment services, and MODIVO-specific extensions
+    for marketplace order placement, the MODIVO My Returns webhook, a JWT issuing service and a
+    Trustmate review display integration. Anonymous callers can read directory and guest-cart
+    resources; everything else requires a Magento integration or customer bearer token.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - E-Commerce
+  - Commerce
+  - Checkout
+  - Catalog
+  - Retail
+  - Marketplace
+  - Adobe Commerce
+  - Magento
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-commerce-rest-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: Overlay
+    url: overlays/modivo-commerce-rest-api-overlay.yaml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+- name: MODIVO Storefront GraphQL API
+  description: >-
+    The GraphQL endpoint that powers the MODIVO storefront and mobile applications, exposed at
+    https://modivo.pl/graphql with introspection left open to anonymous callers. The schema carries
+    770 types, 111 root query fields and 134 root mutation fields — the Adobe Commerce storefront
+    schema plus a large set of MODIVO extensions: marketplace cart and offer handling, MODIVO club
+    and loyalty, returns and RMA flows, product reviews, DPD and InPost parcel-shop lookup, store
+    pickup places, GDPR consent management, app deep links and CMS content elements, and a wide
+    payment surface (Braintree, PayPal, Klarna, PayU virtual bank accounts, vaulted cards).
+    Authentication is a customer bearer token minted by generateCustomerToken and its social
+    variants; unauthenticated access is limited to catalog, CMS, directory and guest-cart fields.
+  humanURL: https://modivo.pl/graphql
+  baseURL: https://modivo.pl/graphql
+  tags:
+  - GraphQL
+  - E-Commerce
+  - Commerce
+  - Checkout
+  - Catalog
+  - Retail
+  - Marketplace
+  - Adobe Commerce
+  properties:
+  - type: GraphQL
+    url: graphql/modivo-storefront.graphql
+  - type: GraphQL
+    url: https://modivo.pl/graphql
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ToolCrosswalk
+    url: mcp/modivo-tool-crosswalk.yml
+- name: eobuwie Commerce REST API
+  description: >-
+    The public REST surface of eobuwie.com.pl, the MODIVO Group's footwear storefront, served by its
+    own Adobe Commerce / Magento 2.4 deployment and self-described at
+    https://eobuwie.com.pl/rest/all/schema?services=all. 43 operations across 35 paths cover the same
+    guest cart, checkout, customer account, directory and product-render surface as MODIVO, plus
+    eobuwie-specific extensions for order placement, the My Returns webhook, and a chatbot order REST
+    API. Included in this profile because eobuwie is a MODIVO Group business line and eobuwie.pl S.A.
+    is the legal entity that was renamed MODIVO in 2022.
+  humanURL: https://eobuwie.com.pl/rest/all/schema?services=all
+  baseURL: https://eobuwie.com.pl/rest/all
+  tags:
+  - E-Commerce
+  - Commerce
+  - Checkout
+  - Retail
+  - Adobe Commerce
+  - Magento
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-eobuwie-commerce-rest-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+  - type: Overlay
+    url: overlays/modivo-eobuwie-commerce-rest-api-overlay.yaml
+- name: MODIVO Marketplace Seller API (Mirakl)
+  description: >-
+    MODIVO's third-party marketplace runs on a Mirakl tenant at modivo.mirakl.net. Sellers automate
+    offers, stock, prices, orders and tracking numbers through the standard Mirakl Marketplace Seller
+    API on that host. The tenant is closed: the console 302s to Mirakl SSO, /api/documentation and
+    /api/openapi.json both return HTTP 401, and robots.txt disallows /api/. No MODIVO-published
+    contract is available for this surface, so none is recorded here — only the probed evidence that
+    it exists and is gated.
+  humanURL: https://modivo.mirakl.net/
+  baseURL: https://modivo.mirakl.net/api
+  tags:
+  - Marketplace
+  - E-Commerce
+  - Retail
+  - Commerce
+  properties:
+  - type: Documentation
+    url: https://modivo.mirakl.net/
+  - type: Conformance
+    url: conformance/modivo-conformance.yml
 common:
-- type: DomainSecurity
-  url: security/modivo-domain-security.yml
 - type: Website
   url: https://modivo.pl/
+- type: Company
+  url: https://modivoplatform.com/en
+- type: Support
+  url: https://modivo.pl/b/centrum-pomocy
+- type: HelpCenter
+  url: https://modivo.pl/b/centrum-pomocy
+- type: SignUp
+  url: https://modivo.pl/login
+- type: Login
+  url: https://modivo.pl/login
+- type: TermsOfService
+  url: https://modivo.pl/b/regulamin-sklepu
+- type: PrivacyPolicy
+  url: https://modivo.pl/b/regulamin_prywatnosci
+- type: Blog
+  url: https://advertising.modivo.com/news
+- type: Advertising
+  url: https://advertising.modivo.com/
+- type: Careers
+  url: https://praca.modivo.pl/technologia-i-produkt
+- type: InvestorRelations
+  url: https://modivoplatform.com/en/investors
+- type: Authentication
+  url: authentication/modivo-authentication.yml
+- type: Conventions
+  url: conventions/modivo-conventions.yml
+- type: Conformance
+  url: conformance/modivo-conformance.yml
+- type: ErrorCatalog
+  url: errors/modivo-problem-types.yml
+- type: DataModel
+  url: data-model/modivo-data-model.yml
+- type: Lifecycle
+  url: lifecycle/modivo-lifecycle.yml
+- type: Packages
+  url: packages/modivo-packages.yml
+- type: Plans
+  url: plans/modivo-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/modivo-rate-limits.yml
+- type: Webhooks
+  url: asyncapi/modivo-webhooks.yml
+- type: LLMsTxt
+  url: llms/modivo-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/modivo-domain-security.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 x-enrichment:
-  date: '2026-07-20'
-  status: minimal
-  artifacts_added: 1
+  date: '2026-08-12'
+  status: enriched
+  artifacts_added: 26
   pass: local-v1
+x-coverage:
+  state: covered
+  reason: contract-discovery-hit
+  detail: >-
+    The prior pass recorded MODIVO as having no machine-readable API surface. STEP 0b contract
+    discovery overturned that: a live Swagger 2.0 document is served by the storefront itself at
+    https://modivo.pl/rest/all/schema?services=all (HTTP 200, 57 operations) and the GraphQL endpoint
+    at https://modivo.pl/graphql answers anonymous introspection with 770 types.
+  evidence:
+  - url: https://modivo.pl/rest/all/schema?services=all
+    status: 200
+  - url: https://modivo.pl/graphql
+    status: 200
+  - url: https://eobuwie.com.pl/rest/all/schema?services=all
+    status: 200
+  - url: https://modivo.mirakl.net/api/documentation
+    status: 401
+  - url: https://modivo.pl/.well-known/agent-card.json
+    status: 404
+  checked: '2026-08-12'

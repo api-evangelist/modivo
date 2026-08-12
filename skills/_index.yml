@@ -1,0 +1,51 @@
+generated: '2026-08-12'
+method: generated
+source: >-
+  openapi/modivo-commerce-rest-api-openapi.yml and graphql/modivo-storefront.graphql. Every
+  operationId and GraphQL field named in these skills was verified to exist in the provider's own
+  contract before it was written; none is invented.
+note: >-
+  MODIVO publishes no skills, no AGENTS.md and no agent-facing documentation of any kind — searched
+  and not found. These are API Evangelist-authored skills grounded in MODIVO's live contracts. The
+  hard-won knowledge in them is the split between the two surfaces: three of the most useful MODIVO
+  capabilities (catalog search, order history, returns) are unreachable from the REST contract that
+  is easiest to find.
+skills:
+- name: modivo-guest-checkout
+  file: modivo-guest-checkout.md
+  api: MODIVO Commerce REST API
+  surface: rest
+  auth: none
+  destructive: true
+  summary: >-
+    Full anonymous guest checkout — create cart, add line, price, ship, pay, place order — with the
+    non-idempotency rules that make step 9 safe.
+- name: modivo-catalog-search-graphql
+  file: modivo-catalog-search-graphql.md
+  api: MODIVO Storefront GraphQL API
+  surface: graphql
+  auth: none
+  destructive: false
+  summary: >-
+    Faceted product search, category traversal and the EU omnibus price fields. The capability the
+    REST contract does not have.
+- name: modivo-customer-orders-and-returns
+  file: modivo-customer-orders-and-returns.md
+  api: MODIVO Storefront GraphQL API
+  surface: graphql
+  auth: bearer (customer token)
+  destructive: true
+  summary: >-
+    Authenticate, read order history, raise and track returns, cancel an order. GraphQL-only; no REST
+    equivalent exists.
+cross_cutting_rules:
+- No idempotency anywhere. Order placement, cancellation and returns are all unsafe to retry.
+- No rate limits published and no rate-limit headers returned. Self-throttle; a non-JSON body means
+  Cloudflare challenged you.
+- REST error messages are localized (Polish on modivo.pl, English on eobuwie.com.pl). Branch on
+  status and on parameters[], not on the message.
+- GraphQL resolver failures return HTTP 200 with a populated errors[]. Only authorization failures
+  return 403. Always inspect errors[].
+- extension_attributes is where MODIVO's own data lives on every REST entity.
+- Log x-request-id / x-correlation-id / x-causation-id from GraphQL responses; they are the only
+  support handle MODIVO provides.

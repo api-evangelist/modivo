@@ -1,0 +1,91 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  graphql/modivo-storefront.graphql (introspected 2026-08-12),
+  openapi/_original/modivo-rest-schema-swagger.json, and live probes of modivo.pl and status hosts
+note: >-
+  MODIVO runs no developer program, so there is no published versioning policy, no deprecation
+  policy, no SLA, no changelog and no API status page. What follows is what the contracts themselves
+  say plus what was probed. The single most useful finding is that the GraphQL schema carries 385
+  @deprecated markers with machine-readable reasons — MODIVO signals deprecation IN the contract even
+  though it publishes no policy about it.
+versioning:
+  policy_published: false
+  policy_url: null
+  rest:
+    scheme: path-version
+    current: V1
+    detail: >-
+      /rest/{store}/V1/... — V1 is the only version present in either deployment. The store segment
+      (`all`, `default`, or a store-view code) is not a version. info.version in the generated
+      document reads 2.4, which is the Adobe Commerce platform release, not an API version.
+  graphql:
+    scheme: unversioned
+    detail: >-
+      A single unversioned endpoint at https://modivo.pl/graphql. The schema evolves in place; there
+      is no /v2 endpoint and no version header.
+deprecation:
+  policy_published: false
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  detail: >-
+    No Sunset or Deprecation response header was observed on any probed endpoint, and MODIVO
+    publishes no deprecation or end-of-life policy. Consumers get no advance notice channel.
+  in_contract_signals:
+    graphql:
+      mechanism: '@deprecated(reason: ...) directive'
+      count: 385
+      detail: >-
+        385 fields, arguments, input fields and enum values in the introspected schema carry
+        @deprecated with a reason string. This is the only deprecation signal MODIVO emits, and it is
+        machine-readable: a client can diff the SDL in graphql/modivo-storefront.graphql against a
+        later introspection to detect scheduled removals. Because there is no accompanying policy,
+        there is no stated removal date for any of them.
+    rest:
+      mechanism: none
+      count: 0
+      detail: >-
+        The string "deprecated" does not appear anywhere in either generated Swagger document. No REST
+        operation is marked deprecated.
+status_page:
+  published: false
+  url: null
+  evidence:
+  - url: https://status.modivo.pl/
+    status: 000
+    note: host does not resolve
+  - url: https://modivo.pl/status
+    status: 404
+  detail: >-
+    No status page exists on any MODIVO host. No StatusPage pointer is wired in apis.yml.
+changelog:
+  published: false
+  url: null
+  detail: >-
+    No API changelog. The only dated public feed on a MODIVO property is the retail-media newsroom at
+    https://advertising.modivo.com/news (HTTP 200), which covers MODIVO Ads product announcements, not
+    API changes. Wired as Blog, not as ChangeLog.
+sla:
+  published: false
+  detail: No uptime or support-response commitment is published for either surface.
+support:
+  channel: general customer help centre
+  url: https://modivo.pl/b/centrum-pomocy
+  developer_channel: false
+  detail: >-
+    The only support surface is the consumer help centre. There is no developer support channel,
+    forum, Slack, or issue tracker. Marketplace sellers are supported through the closed Mirakl
+    tenant after onboarding.
+stability_observations:
+  contract_availability: >-
+    Both /rest/all/schema?services=all endpoints and the GraphQL introspection endpoint answered
+    anonymously on 2026-08-12. They are platform-generated, so they track the deployment
+    automatically and cannot go stale relative to the running code — but they are also not guaranteed
+    to stay public: an Adobe Commerce operator can disable schema exposure and anonymous introspection
+    with a configuration flag at any time, with no notice channel to tell consumers it happened.
+  eobuwie_graphql: >-
+    https://eobuwie.com.pl/graphql returned HTTP 403 with a Polish maintenance placeholder page on
+    2026-08-12 while its REST schema endpoint answered normally, so the eobuwie GraphQL surface could
+    not be introspected in this pass.

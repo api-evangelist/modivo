@@ -1,0 +1,118 @@
+# MODIVO
+
+> MODIVO is a Polish multibrand fashion and lifestyle retailer running one of the largest fashion
+> e-commerce platforms in Central and Eastern Europe. MODIVO S.A. is the listed parent of the former
+> CCC Group, renamed in February 2026, and the group behind eobuwie.pl, CCC, HalfPrice, worldbox and
+> DeeZee. MODIVO operates NO developer program, publishes NO API documentation and offers NO API
+> product — but its Adobe Commerce storefront serves two live, publicly readable machine contracts
+> from its own domain. Everything below was probed or introspected on 2026-08-12.
+
+Generated: 2026-08-12
+Method: generated
+Source: apis.yml plus the artifacts in this repository; contracts fetched live from modivo.pl.
+
+## What is actually callable
+
+- [MODIVO Commerce REST API](https://modivo.pl/rest/all/schema?services=all): Swagger 2.0, served
+  live by the storefront. 48 paths, 57 operations, 135 schemas. Guest cart, checkout, order
+  placement, customer account, product render info, directory data, gift messages, in-store pickup,
+  PayPal/Braintree payment configuration, plus MODIVO extensions (marketplace order placement, My
+  Returns webhook, JWT service, Trustmate reviews).
+- [MODIVO Storefront GraphQL API](https://modivo.pl/graphql): 770 types, 111 query fields, 134
+  mutation fields. Introspection answers anonymously. This is the larger and more capable surface.
+- [eobuwie Commerce REST API](https://eobuwie.com.pl/rest/all/schema?services=all): the sibling
+  storefront's own Swagger 2.0, 35 paths, 43 operations, including a chatbot order API that
+  modivo.pl does not have.
+
+## Read this before you integrate
+
+- **Prefer GraphQL.** The REST contract is a checkout machine. Product search, category browse, order
+  history, returns, wishlist, reviews, and DPD/InPost parcel-shop lookup exist ONLY on GraphQL. An
+  integrator who finds the Swagger document and stops will conclude those capabilities do not exist.
+  The full mapping is in `mcp/modivo-tool-crosswalk.yml`.
+- **`GET /V1/search` is not product search.** It is Magento's generic search-engine endpoint, it is
+  ACL-protected, and it returns HTTP 401 anonymously. Use `Query.products`.
+- **There is no idempotency.** No Idempotency-Key, no idempotency parameter, no occurrence of the
+  string anywhere in either spec or in the GraphQL schema. Order placement is NOT replay-safe. On a
+  timeout, read order state; do not retry.
+- **There are no published rate limits and no rate-limit headers.** No RateLimit-*, no X-RateLimit-*,
+  no Retry-After on any observed response. Both hosts sit behind Cloudflare, so expect an HTML
+  challenge rather than a well-formed 429. Self-throttle and send a real User-Agent.
+- **Error messages are localized.** The same error-response schema returns Polish on modivo.pl and
+  English on eobuwie.com.pl. Branch on HTTP status and on `parameters[].fieldName` /
+  `parameters.resources`, never on the message string. GraphQL resolver failures come back as HTTP
+  200 with a populated `errors[]` — status code alone does not detect failure.
+- **`extension_attributes` is where MODIVO's own data lives.** Duty calculation, in-store sales data,
+  marketplace attributes and applied rule discounts all hang off it. A client that reads only the
+  base interfaces silently drops provider-specific data.
+- **The GraphQL surface returns real tracing headers.** `x-request-id`, `x-correlation-id` and
+  `x-causation-id` on every response. Quote them in any support conversation. REST returns none of
+  them — only Cloudflare's `cf-ray`.
+
+## Authentication
+
+- Header: `Authorization: Bearer <token>`.
+- Customer token: `POST /V1/integration/customer/token`, or `generateCustomerToken` on GraphQL.
+- Admin/integration token: `POST /V1/integration/admin/token`.
+- No OAuth 2.0, no OIDC, no scopes. `/.well-known/oauth-authorization-server` and
+  `/.well-known/openid-configuration` both return 404.
+- Anonymous access works for directory, product-render, guest-cart, and for catalog/CMS/directory
+  fields on GraphQL.
+- Detail: [authentication](authentication/modivo-authentication.yml)
+
+## Artifacts in this repository
+
+- [OpenAPI 3.0.3 — MODIVO commerce REST](openapi/modivo-commerce-rest-api-openapi.yml) (converted;
+  verbatim Swagger 2.0 in `openapi/_original/`)
+- [OpenAPI 3.0.3 — eobuwie commerce REST](openapi/modivo-eobuwie-commerce-rest-api-openapi.yml)
+- [GraphQL SDL](graphql/modivo-storefront.graphql) and the raw introspection response
+- [Conventions](conventions/modivo-conventions.yml) — auth, pagination, tracing, versioning, caching
+- [Error catalog](errors/modivo-problem-types.yml)
+- [Data model](data-model/modivo-data-model.yml)
+- [Tool crosswalk — REST vs GraphQL](mcp/modivo-tool-crosswalk.yml)
+- [Candidate MCP tool set](mcp/modivo-mcp.yml) — DERIVED, not published by MODIVO
+- [Webhooks](asyncapi/modivo-webhooks.yml) — inbound receivers only; no outbound events
+- [Lifecycle](lifecycle/modivo-lifecycle.yml)
+- [Rate limits](rate-limits/modivo-rate-limits.yml)
+- [Conformance](conformance/modivo-conformance.yml)
+- [Plans and pricing](plans/modivo-plans-pricing.yml) — zero API plans
+- [Packages](packages/modivo-packages.yml) — zero SDKs
+- [Well-known probe](well-known/modivo-well-known.yml) — every path 404
+- [Domain security](security/modivo-domain-security.yml)
+- [Agent skills](skills/_index.yml)
+
+## What MODIVO does not publish
+
+- No developer portal, no API documentation, no getting-started guide.
+- No SDKs or client libraries in any registry. The `modivo` package on npm is an unrelated dependency
+  injection library by a different author.
+- No status page, no changelog, no SLA, no deprecation policy. The only deprecation signal is 385
+  `@deprecated` markers inside the GraphQL schema itself.
+- No security.txt, no OIDC or OAuth metadata, no api-catalog, no ai-plugin, no agent card, no
+  llms.txt — every well-known path returns 404 on every MODIVO host.
+- No MCP server. No AsyncAPI. No outbound events or webhook subscriptions.
+- No public Postman collection.
+
+## Other surfaces
+
+- [MODIVO Marketplace (Mirakl)](https://modivo.mirakl.net/): third-party sellers integrate through a
+  Mirakl tenant. Closed — the console 302s to Mirakl SSO and `/api/documentation` returns 401. No
+  MODIVO-published contract.
+- [MODIVO Ads](https://advertising.modivo.com/): self-service retail-media panel for sponsored offers
+  across MODIVO and eobuwie. No API.
+- Undocumented internal prefixes disclosed by `robots.txt`: `/m-api/`, `/t-api/`, `/n-api/`. None
+  serves a spec.
+
+## Company
+
+- [Storefront](https://modivo.pl/)
+- [Group / investor relations](https://modivoplatform.com/en)
+- [Help centre](https://modivo.pl/b/centrum-pomocy)
+- [Terms of service](https://modivo.pl/b/regulamin-sklepu)
+- [Privacy policy](https://modivo.pl/b/regulamin_prywatnosci)
+
+## About this file
+
+This llms.txt was generated by API Evangelist from an independent third-party profile of MODIVO's
+public API surface. MODIVO does not serve an llms.txt of its own — `https://modivo.pl/llms.txt`
+returns HTTP 404. Corrections: info@apievangelist.com.

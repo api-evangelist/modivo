@@ -1,0 +1,272 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  openapi/modivo-commerce-rest-api-openapi.yml (135 component schemas, 57 operations) and
+  graphql/modivo-storefront.graphql (770 types, 111 query fields, 134 mutation fields)
+note: >-
+  MODIVO publishes no object reference, so this graph is computed from $ref edges in the provider's
+  own generated Swagger document and cross-checked against the introspected GraphQL schema. It is the
+  Adobe Commerce commerce core (quote/cart, customer, catalog, directory, totals) plus MODIVO's own
+  extensions. Adobe Commerce entities use plain integer/string surrogate identifiers, NOT prefixed
+  ids — a cart is addressed by an opaque masked `cart_id` string on the guest surface and by an
+  integer quote id internally, and there is no id-prefix scheme to key off.
+identifier_scheme:
+  style: opaque-and-integer
+  prefixed: false
+  detail: >-
+    Guest carts are addressed by a masked cart id (an opaque string minted by POST /V1/guest-carts and
+    by createEmptyCart/createGuestCart in GraphQL). Customers, addresses, products, orders and regions
+    use integer surrogate keys. SKUs are the natural key for catalog items across both surfaces.
+core_entities:
+- name: Cart (Quote)
+  schema: quote-data-cart-interface
+  graphql_type: Cart
+  key: id (integer) / masked cart_id (string, guest surface)
+  description: >-
+    The shopping quote. Root of the checkout aggregate: holds items, billing address, currency, the
+    customer, and — via quote-data-cart-extension-interface — shipping assignments, duty calculation
+    (eob-duty-calculator) and in-store sales data.
+- name: CartItem
+  schema: quote-data-cart-item-interface
+  graphql_type: CartItemInterface
+  key: item_id (integer)
+  description: A line on the quote, carrying sku, qty, price and configurable/bundle product options.
+- name: Address
+  schema: quote-data-address-interface
+  graphql_type: CartAddressInterface
+  key: id (integer)
+  description: >-
+    A quote address. Also the carrier of applied sales-rule discounts through
+    quote-data-address-extension-interface.
+- name: Customer
+  schema: customer-data-customer-interface
+  graphql_type: Customer
+  key: id (integer), email (natural key)
+  description: The account record, with its collection of customer addresses and EAV custom attributes.
+- name: CustomerAddress
+  schema: customer-data-address-interface
+  graphql_type: CustomerAddress
+  key: id (integer)
+  description: A saved address on the customer account, referencing a directory region.
+- name: Totals
+  schema: quote-data-totals-interface
+  graphql_type: CartPrices
+  key: none (value object on the cart)
+  description: >-
+    The priced view of the quote — grand total, subtotal, tax, shipping, and an ordered list of total
+    segments plus per-item totals.
+- name: TotalSegment
+  schema: quote-data-total-segment-interface
+  key: code (string)
+  description: One named line in the totals breakdown; tax grand-total detail hangs off its extension.
+- name: ShippingMethod
+  schema: quote-data-shipping-method-interface
+  graphql_type: AvailableShippingMethod
+  key: carrier_code + method_code
+  description: An offered carrier/method pair with its price, availability and error message.
+- name: PaymentMethod
+  schema: quote-data-payment-method-interface
+  graphql_type: AvailablePaymentMethod
+  key: code (string)
+  description: An offered payment method on the quote.
+- name: ProductRender
+  schema: catalog-data-product-render-interface
+  graphql_type: ProductInterface
+  key: id (integer), sku (natural key)
+  description: >-
+    The storefront-rendering projection of a catalog product — images, buttons, formatted and raw
+    price info, MSRP and WEEE adjustments. This is the only product read the REST surface exposes
+    anonymously; the full catalog lives on GraphQL.
+- name: Country
+  schema: directory-data-country-information-interface
+  graphql_type: Country
+  key: id (ISO 3166-1 alpha-2)
+  description: Directory reference data with its available regions. Readable anonymously.
+- name: Currency
+  schema: directory-data-currency-information-interface
+  graphql_type: Currency
+  key: base_currency_code
+  description: Directory currency reference data with exchange rates.
+- name: PickupLocation
+  schema: inventory-in-store-pickup-api-data-pickup-location-interface
+  graphql_type: PickupLocation
+  key: pickup_location_code
+  description: An in-store pickup point, searchable by area and product availability.
+- name: MarketplaceOrder
+  schema: marketplace-place-order-data-order-interface
+  key: none exposed on the request
+  description: >-
+    MODIVO-specific. The marketplace order-placement payload: billing and shipping address, customer,
+    payment (including bank-transfer details), attributes, and a list of suborders — one per
+    marketplace seller — each with its own delivery method, notes and items.
+- name: MarketplaceSuborder
+  schema: marketplace-place-order-data-order-suborder-interface
+  description: One seller's slice of a marketplace order.
+- name: GiftMessage
+  schema: gift-message-data-message-interface
+  graphql_type: GiftMessage
+  description: A gift message attachable to a whole guest cart or to a single item.
+relationships:
+- from: Cart
+  to: CartItem
+  type: has_many
+  via: items
+- from: Cart
+  to: Customer
+  type: has_one
+  via: customer
+- from: Cart
+  to: Address
+  type: has_one
+  via: billing_address
+- from: Cart
+  to: Currency
+  type: has_one
+  via: currency
+- from: Cart
+  to: ShippingAssignment
+  type: has_many
+  via: extension_attributes.shipping_assignments
+- from: ShippingAssignment
+  to: CartItem
+  type: has_many
+  via: items
+- from: ShippingAssignment
+  to: Shipping
+  type: has_one
+  via: shipping
+- from: Shipping
+  to: Address
+  type: has_one
+  via: address
+- from: Address
+  to: RuleDiscount
+  type: has_many
+  via: extension_attributes.discounts
+- from: CartItem
+  to: ProductOption
+  type: has_one
+  via: product_option
+- from: ProductOption
+  to: BundleOption
+  type: has_many
+  via: extension_attributes.bundle_options
+- from: ProductOption
+  to: ConfigurableItemOption
+  type: has_many
+  via: extension_attributes.configurable_item_options
+- from: ProductOption
+  to: CustomOption
+  type: has_many
+  via: extension_attributes.custom_options
+- from: ProductOption
+  to: GroupedOption
+  type: has_many
+  via: extension_attributes.grouped_options
+- from: Customer
+  to: CustomerAddress
+  type: has_many
+  via: addresses
+- from: CustomerAddress
+  to: Region
+  type: has_one
+  via: region
+- from: Country
+  to: Region
+  type: has_many
+  via: available_regions
+- from: Currency
+  to: ExchangeRate
+  type: has_many
+  via: exchange_rates
+- from: Totals
+  to: TotalSegment
+  type: has_many
+  via: total_segments
+- from: Totals
+  to: TotalsItem
+  type: has_many
+  via: items
+- from: TotalSegment
+  to: GrandTotalDetails
+  type: has_one
+  via: extension_attributes.tax_grandtotal_details
+- from: PaymentDetails
+  to: PaymentMethod
+  type: has_many
+  via: payment_methods
+- from: PaymentDetails
+  to: Totals
+  type: has_one
+  via: totals
+- from: ShippingInformation
+  to: Address
+  type: has_one
+  via: shipping_address
+- from: ProductRender
+  to: PriceInfo
+  type: has_one
+  via: price_info
+- from: ProductRender
+  to: ProductRenderImage
+  type: has_many
+  via: images
+- from: ProductRender
+  to: ProductRenderButton
+  type: has_one
+  via: extension_attributes.wishlist_button
+- from: PriceInfo
+  to: FormattedPriceInfo
+  type: has_one
+  via: formatted_prices
+- from: PriceInfo
+  to: MsrpPriceInfo
+  type: has_one
+  via: extension_attributes.msrp
+- from: PickupLocationSearchResult
+  to: PickupLocation
+  type: has_many
+  via: items
+- from: MarketplaceOrder
+  to: MarketplaceSuborder
+  type: has_many
+  via: suborders
+- from: MarketplaceOrder
+  to: OrderPayment
+  type: has_one
+  via: payment
+- from: MarketplaceSuborder
+  to: SuborderItem
+  type: has_many
+  via: items
+- from: MarketplaceSuborder
+  to: DeliveryMethod
+  type: has_one
+  via: delivery_method
+extension_pattern:
+  name: extension_attributes
+  note: >-
+    Adobe Commerce's extension mechanism, and the single most important shape in this model: nearly
+    every entity carries an `extension_attributes` object whose *-extension-interface schema is where
+    MODIVO's own additions live. Reading only the base interface hides the provider-specific data.
+    MODIVO-authored extensions found in this spec include eob-duty-calculator-data-duty-interface
+    (duty calculation on the cart), instore-sales-data-quote-extended-data-interface, and
+    stanley-order-create-data-attribute-interface on the marketplace order.
+graphql_only_domains:
+  note: >-
+    The GraphQL schema is a strict superset of the REST surface for reads. Domains that exist ONLY on
+    GraphQL, with no REST counterpart in the published Swagger, include:
+  domains:
+  - category and categoryList (catalog tree)
+  - products and search with faceted aggregations
+  - wishlist and compare lists
+  - customer orders, returns, RMA and return carriers
+  - product reviews (customerProductReviews, addProductReview)
+  - MODIVO club / loyalty and consent categories
+  - DPD and InPost parcel-shop lookup
+  - CMS pages, blocks and app content elements
+  - newsletter subscription
+  - vaulted payment tokens and payment SDK configuration
+render:
+  subway: null
+  note: No subway/ diagram exists in this repo yet.

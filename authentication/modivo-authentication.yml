@@ -1,0 +1,17 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/modivo-commerce-rest-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: api_key
+  type: apiKey
+  in: header
+  parameter: api_key
+  description: Magento integration/customer bearer token supplied in the Authorization header
+    (Bearer <token>).
+  sources:
+  - openapi/modivo-commerce-rest-api-openapi.yml

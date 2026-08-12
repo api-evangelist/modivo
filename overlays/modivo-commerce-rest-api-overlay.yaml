@@ -1,0 +1,112 @@
+overlay: 1.0.0
+info:
+  title: MODIVO Commerce REST API — API Evangelist enrichment overlay
+  version: 1.0.0
+  x-generated: '2026-08-12'
+  x-method: generated
+  x-source: >-
+    Enhancements API Evangelist derived from openapi/_original/modivo-rest-schema-swagger.json,
+    conventions/modivo-conventions.yml, errors/modivo-problem-types.yml,
+    rate-limits/modivo-rate-limits.yml and live probes of https://modivo.pl on 2026-08-12. Applies to
+    openapi/modivo-commerce-rest-api-openapi.yml. The original spec is never mutated.
+extends: ../openapi/modivo-commerce-rest-api-openapi.yml
+actions:
+- target: $.info
+  description: >-
+    Record what the provider's own generated document does not say — who serves it, what it actually
+    is, and the runtime facts an integrator needs before the first call.
+  update:
+    x-provider: MODIVO S.A.
+    x-provider-domain: modivo.pl
+    x-platform: Adobe Commerce (Magento) 2.4
+    x-contract-origin: >-
+      Platform-generated Swagger 2.0, served live and anonymously by the provider's own deployment at
+      https://modivo.pl/rest/all/schema?services=all. It is not hand-authored and not published as
+      documentation — MODIVO runs no developer program.
+    x-title-caveat: >-
+      info.title in the original reads "Magento Community", the platform name. It does not identify
+      the operator. The operator is established by host = modivo.pl in the source document.
+    x-no-developer-portal: true
+    x-idempotency: none
+    x-rate-limits: undocumented
+    x-error-format: magento-error-envelope
+    x-companion-surface: >-
+      A far larger GraphQL contract is served at https://modivo.pl/graphql with open introspection.
+      Catalog search, category browse, order history, returns, wishlist, reviews and carrier
+      parcel-shop lookup exist ONLY there. See mcp/modivo-tool-crosswalk.yml.
+- target: $.servers
+  description: Document the store-view path segment, which the generated document hard-codes to one value.
+  update:
+  - url: https://modivo.pl/rest/{store}
+    description: >-
+      MODIVO storefront REST base. {store} is the Adobe Commerce store-view code and selects the
+      country/language storefront. Both `all` and `default` resolve and return the same schema.
+    variables:
+      store:
+        default: all
+        description: Store view code.
+- target: $.components.securitySchemes.api_key
+  description: >-
+    The generated document declares only that a header-borne apiKey exists. Name the header, the two
+    token types, and how each is obtained.
+  update:
+    x-header: Authorization
+    x-format: 'Bearer <token>'
+    x-token-types:
+    - name: customer
+      mint: POST /V1/integration/customer/token
+      graphql_equivalent: generateCustomerToken
+    - name: admin-integration
+      mint: POST /V1/integration/admin/token
+      note: Scoped by the ACL role attached to the integration in the Adobe Commerce admin.
+    x-anonymous-operations: >-
+      Directory, product-render and the guest-cart family are callable with no credentials at all.
+      Verified live: GET /V1/directory/countries returned HTTP 200 anonymously on 2026-08-12.
+- target: $.paths['/V1/guest-carts/{cartId}/order'].put
+  description: Flag the non-idempotent, money-moving operation.
+  update:
+    x-idempotent: false
+    x-destructive: true
+    x-retry-safe: false
+    x-agent-guidance: >-
+      Placing an order is not replay-safe. MODIVO accepts no Idempotency-Key. On timeout, do NOT
+      retry — read order state instead. Dedupe client-side on the masked cart id.
+- target: $.paths['/V1/orderManagement/placeOrder'].post
+  description: Mark the marketplace ingestion seam.
+  update:
+    x-idempotent: false
+    x-destructive: true
+    x-surface: marketplace-internal
+    x-agent-guidance: >-
+      Accepts a fully-formed multi-seller marketplace order rather than converting a quote. This is an
+      internal seam between MODIVO's marketplace layer and the commerce platform, not a storefront
+      operation.
+- target: $.paths['/V1/my-return-webhook/add-return-number-to-order'].post
+  description: Identify the inbound webhook receiver.
+  update:
+    x-surface: inbound-webhook-receiver
+    x-caller: MODIVO's returns provider
+    x-auth-note: >-
+      Authorised by the `hash` field in the body rather than by the Authorization header. The
+      computation of that hash is not published.
+- target: $.paths['/V1/search'].get
+  description: Correct a misleading operation name.
+  update:
+    x-not-product-search: true
+    x-agent-guidance: >-
+      Despite the name, this is Magento's generic search-engine endpoint returning framework search
+      documents, and it is ACL-protected — it returns HTTP 401 anonymously. Product search on this
+      provider is Query.products on the GraphQL surface.
+- target: $.paths['/V1/jwt/obtain'].post
+  description: Mark the internal token service.
+  update:
+    x-surface: internal
+    x-agent-guidance: MODIVO's eob JWT issuing service. Not a public integration point.
+- target: $.components.schemas.error-response
+  description: Warn that the human-readable message is localized and unsuitable as a machine key.
+  update:
+    x-localized: true
+    x-agent-guidance: >-
+      `message` is returned in Polish on modivo.pl and in English on eobuwie.com.pl, and carries
+      %placeholders. Branch on the HTTP status and on parameters[].fieldName / parameters.resources,
+      never on the message string. See errors/modivo-problem-types.yml.

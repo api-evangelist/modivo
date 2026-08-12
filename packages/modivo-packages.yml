@@ -1,0 +1,59 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  registry.npmjs.org (name lookup + text search), pypi.org, packagist.org search API,
+  api.github.com/orgs/modivo, and the MODIVO storefront surfaces — searched 2026-08-12
+package_count: 0
+official_count: 0
+note: >-
+  MODIVO ships no client libraries. It runs no developer program, so there is nothing to wrap. Every
+  registry was queried and every result was either absent or third-party. No `type: SDKs` pointer is
+  wired in apis.yml, because MODIVO publishes no SDK.
+packages: []
+registries_checked:
+- registry: npm
+  query: exact name `modivo`
+  result: exists-but-not-first-party
+  version: 0.0.8
+  published: '2025-09-13'
+  detail: >-
+    https://registry.npmjs.org/modivo resolves, but the package is "Dependency Injection Library" by
+    npm user `marjandb`, repository github.com/MarjanDB/Modivo. Unrelated to the retailer. Recorded
+    here so a later pass does not mistake it for a first-party SDK.
+- registry: npm
+  query: text search `modivo`
+  result: none
+  version: null
+  detail: The name-collision package above is the only hit; no @modivo scope, no modivo-sdk.
+- registry: pypi
+  query: modivo
+  result: none
+  version: null
+  detail: https://pypi.org/pypi/modivo/json returns HTTP 404.
+- registry: packagist
+  query: modivo
+  result: none
+  version: null
+  detail: >-
+    Searched because MODIVO runs Adobe Commerce (PHP) and would publish Magento modules to Packagist
+    if it open-sourced any. Returns only fuzzy matches (motivo/*, modionut/*, codivores/*) and no
+    MODIVO-owned vendor namespace.
+- registry: cdn
+  query: storefront JS bundles
+  result: none
+  version: null
+  detail: >-
+    No unpkg/jsDelivr-distributed MODIVO component or loader library was found. The storefront ships
+    its own Nuxt bundles from its own origin; they are application code, not a distributed package.
+source_repositories:
+- host: github.com
+  org: modivo
+  url: https://github.com/modivo
+  public_repos: 0
+  verified: false
+  created: '2024-02-06'
+  detail: >-
+    A GitHub organization named `modivo` exists (id 159107614) but has zero public repositories, no
+    description, no verified domain and no public members. Nothing links it to MODIVO S.A. from a
+    MODIVO property. No GitHubOrganization pointer is wired — an empty, unverified org is not a
+    published source surface.

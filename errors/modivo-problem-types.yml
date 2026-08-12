@@ -1,0 +1,119 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  openapi/modivo-commerce-rest-api-openapi.yml,
+  openapi/modivo-eobuwie-commerce-rest-api-openapi.yml, plus live unauthenticated responses observed
+  against https://modivo.pl/rest/V1/store/storeViews and https://modivo.pl/graphql
+format: magento-error-envelope
+rfc9457: false
+note: >-
+  MODIVO does not publish an error reference and does not emit RFC 9457 application/problem+json.
+  Both storefront REST deployments return the Adobe Commerce / Magento error envelope
+  (application/json) described by the error-response schema in their own generated Swagger document.
+  The envelope is localized: the modivo.pl deployment returns Polish message text, the eobuwie.com.pl
+  deployment returns English, so the human-readable `message` is NOT a stable machine key. The stable
+  parts are the HTTP status, the parameter placeholders inside `message` (e.g. %resources,
+  %fieldName), and the structured `parameters` array that carries their values. GraphQL errors use the
+  standard GraphQL `errors[]` envelope with `message`, `locations`, `path` and `extensions.category`
+  rather than the REST envelope.
+envelope:
+  media_type: application/json
+  schema: '#/components/schemas/error-response'
+  fields:
+  - name: message
+    type: string
+    required: true
+    note: >-
+      Human-readable, localized to the store view. May contain %placeholders that are filled from
+      the parameters array. Do not match on this string.
+  - name: code
+    type: integer
+    required: false
+    note: Application error code where the underlying service supplies one.
+  - name: parameters
+    type: array
+    required: false
+    note: >-
+      Structured substitution values for the placeholders in message. Items may carry `resources`
+      (the ACL resource that was denied), `fieldName` (missing or invalid field) and `fieldValue`
+      (the incorrect value). This is the machine-readable part of the envelope.
+  - name: errors
+    type: array
+    required: false
+    note: Nested list of individual failures, each with its own message and parameters.
+  - name: trace
+    type: string
+    required: false
+    note: Stack trace. Only returned when the deployment runs in developer mode; not seen in production.
+problem_types:
+- status: 400
+  title: Bad Request
+  occurrences: 27
+  media_type: application/json
+  schema: '#/components/schemas/error-response'
+  meaning: >-
+    Request validation failed — a required field is missing, a field value is invalid, or the cart /
+    customer / quote identified by a path parameter is not in a state that permits the operation.
+  remediation: >-
+    Read parameters[].fieldName and parameters[].fieldValue to identify the offending field rather
+    than parsing the localized message.
+- status: 401
+  title: Unauthorized
+  occurrences: 1
+  media_type: application/json
+  schema: '#/components/schemas/error-response'
+  meaning: >-
+    The caller presented no token, an expired token, or a token whose ACL role does not cover the
+    resource. Observed live on GET /rest/V1/store/storeViews with no credentials, which returned
+    {"message":"Konsument nie jest upowazniony do dostepu do %resources.","parameters":{"resources":"Magento_Backend::store"}}
+    on modivo.pl and the English equivalent on eobuwie.com.pl.
+  remediation: >-
+    Obtain a bearer token via POST /V1/integration/customer/token (customer) or an admin integration
+    token, and send it as `Authorization: Bearer <token>`. The denied ACL resource is named in
+    parameters.resources — that is the permission to request.
+  note: >-
+    The specification declares 401 on only one operation, but the deployment returns it on every
+    ACL-protected path. Treat 401 as possible on all operations regardless of what the spec declares.
+- status: 500
+  title: Internal Server Error
+  occurrences: 16
+  media_type: application/json
+  schema: '#/components/schemas/error-response'
+  meaning: Unhandled server-side failure in the commerce backend.
+  remediation: Retry with backoff. Non-idempotent order-placement calls must not be blindly retried.
+- status: default
+  title: Unexpected error
+  occurrences: 57
+  media_type: application/json
+  schema: '#/components/schemas/error-response'
+  meaning: >-
+    Every operation in both specs declares a `default` response carrying the same error envelope.
+    This is the catch-all the platform emits for any status it did not enumerate.
+  remediation: Branch on the HTTP status code; the body shape is identical across all of them.
+graphql_errors:
+  envelope: errors[]
+  fields:
+  - message
+  - locations
+  - path
+  - extensions.category
+  - extensions.code
+  categories_observed:
+  - category: graphql-authorization
+    code: FORBIDDEN
+    http_status: 403
+    example_message: The current customer isn't authorized.
+    observed_on: '{customer{email}} with no bearer token'
+  - category: graphql-no-such-entity
+    code: NO_SUCH_ENTITY
+    http_status: 200
+    example_message: Could not find a cart with ID "zzzznotreal"
+    observed_on: '{cart(cart_id:"zzzznotreal"){id}}'
+  note: >-
+    Observed live on 2026-08-12. An empty POST body returns HTTP 400 with a bare
+    {"errors":[{"message":"Syntax Error: Unexpected <EOF>","locations":[...]}]} and no extensions; a
+    query naming an unknown field returns HTTP 200 with a validation error and no extensions. Once a
+    query parses and validates, resolver failures come back as HTTP 200 with a populated errors[]
+    array and data:null for the failed field — so the HTTP status alone is not sufficient to detect
+    failure on this surface. Only graphql-authorization escalates the status (403). Branch on
+    extensions.code, which is stable and unlocalized, not on the message string.

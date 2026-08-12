@@ -1,0 +1,135 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  openapi/modivo-commerce-rest-api-openapi.yml, graphql/modivo-storefront.graphql,
+  well-known/modivo-well-known.yml, security/modivo-domain-security.yml, and live probes of
+  modivo.pl, eobuwie.com.pl and modivo.mirakl.net on 2026-08-12
+note: >-
+  MODIVO publishes no compliance or standards claims of its own on any developer-facing surface.
+  Every assertion below is judged against artifacts in this repo or against something probed live.
+  A `conforms: false` here means "not observed", not "the provider failed an audit".
+standards:
+- id: openapi
+  conforms: true
+  version: '2.0'
+  evidence: >-
+    The provider's own deployment generates and serves a Swagger 2.0 document at
+    https://modivo.pl/rest/all/schema?services=all (HTTP 200, application/json, 123,867 bytes,
+    swagger:"2.0", host modivo.pl, 48 paths, 57 operations, 135 definitions). A second one is served
+    at https://eobuwie.com.pl/rest/all/schema?services=all (89,325 bytes, 35 paths, 43 operations).
+    Both are verbatim in openapi/_original/. Neither is OpenAPI 3.x; the 3.0.3 documents in openapi/
+    are our mechanical conversion, not the provider's.
+- id: graphql
+  conforms: true
+  version: June 2018 spec with @oneOf and @specifiedBy directives
+  evidence: >-
+    https://modivo.pl/graphql answers POST introspection anonymously with HTTP 200 — 770 types, 111
+    query fields, 134 mutation fields, standard @skip/@include/@deprecated/@specifiedBy/@oneOf
+    directives. No subscription type. SDL in graphql/modivo-storefront.graphql.
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    No application/problem+json media type appears in either spec. Errors use the Adobe Commerce
+    error-response object; GraphQL uses the standard errors[] envelope with extensions.category and
+    extensions.code. See errors/modivo-problem-types.yml.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header, no idempotency parameter, and no occurrence of the string "idempot" in
+    either generated Swagger document or in the GraphQL schema. Order placement is not replay-safe.
+- id: pagination
+  conforms: true
+  style: offset/page-based
+  evidence: >-
+    REST uses Adobe Commerce searchCriteria bracket notation (searchCriteria[pageSize],
+    searchCriteria[currentPage], filterGroups, sortOrders) on /V1/search and /V1/products-render-info.
+    GraphQL list fields take pageSize/currentPage and return page_info. Neither surface offers cursor
+    pagination.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    The only securityScheme declared is apiKey in the header. No authorization or token endpoint is
+    advertised, and /.well-known/oauth-authorization-server returns 404 on every MODIVO host. Tokens
+    are minted by a plain credential-exchange endpoint (POST /V1/integration/customer/token), which is
+    not OAuth 2.0.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on modivo.pl and eobuwie.com.pl.
+- id: rfc9116
+  name: security.txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on modivo.pl, eobuwie.com.pl and advertising.modivo.com. A
+    real security.txt is served on modivo.mirakl.net, but it is Mirakl's (Contact:
+    https://vdp.mirakl.com) on Mirakl's own domain and is not credited to MODIVO.
+- id: rfc8594
+  name: Sunset/Deprecation headers
+  conforms: false
+  evidence: >-
+    No Sunset or Deprecation response header observed on any probed endpoint, and no deprecation
+    policy is published. See lifecycle/modivo-lifecycle.yml.
+- id: rfc8615
+  name: well-known URIs
+  conforms: false
+  evidence: Every probed well-known path returns 404. See well-known/modivo-well-known.yml.
+- id: rfc6797
+  name: HSTS
+  conforms: true
+  evidence: >-
+    strict-transport-security max-age=31536000; includeSubDomains observed on modivo.pl and
+    eobuwie.com.pl. See security/modivo-domain-security.yml.
+- id: dnssec
+  conforms: false
+  evidence: DNSSEC not enabled on modivo.pl or eobuwie.com.pl (probed).
+- id: caa
+  conforms: false
+  evidence: No CAA records published for modivo.pl or eobuwie.com.pl (probed).
+- id: dmarc
+  conforms: true
+  policy: none
+  evidence: >-
+    DMARC records exist for modivo.pl and eobuwie.com.pl with p=none — published but not enforcing.
+    SPF present on both.
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No AsyncAPI document is served on any host and no event catalog is published. MODIVO does expose
+    an inbound webhook receiver (POST /V1/my-return-webhook/add-return-number-to-order) but publishes
+    no outbound event surface. See asyncapi/modivo-webhooks.yml.
+- id: mcp
+  conforms: false
+  evidence: >-
+    No hosted MCP server. https://modivo.pl/mcp returns 404 and mcp.modivo.pl does not resolve.
+- id: a2a
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json both return 404 on modivo.pl,
+    eobuwie.com.pl and advertising.modivo.com. No agent card is published, so no a2a/ artifact exists
+    in this repo.
+- id: pci-dss
+  conforms: unknown
+  evidence: >-
+    MODIVO processes card payments through Braintree, PayPal Payment Services, Klarna and PayU rather
+    than handling raw PAN itself — the spec exposes vaulted-token and hosted-field configuration
+    endpoints, not card capture. MODIVO publishes no PCI attestation and no trust center, so no claim
+    is recorded either way. probe-security-programs.py returned vdp=none trust=none.
+- id: gdpr
+  conforms: claimed
+  evidence: >-
+    MODIVO is an EU (Polish) controller and publishes a privacy policy at
+    https://modivo.pl/b/regulamin_prywatnosci (HTTP 200) and a data-protection page at
+    https://modivo.pl/b/ochrona-danych. The GraphQL schema carries a first-class consent surface —
+    gdprAgreements, gdprCustomerAgreements, createGdprAgreementDecision, customerConsentCategories,
+    customerConsentProviders, deleteCustomer — which is a machine-readable implementation of data
+    subject consent and erasure. This is a published legal posture plus observable implementation, not
+    a certification.
+- id: omnibus-directive
+  name: EU Omnibus Directive (price-reduction disclosure)
+  conforms: claimed
+  evidence: >-
+    modivo.pl/robots.txt contains an explicit Allow rule for /*omnibus_discount:~r-5-99*, and the
+    GraphQL schema carries omnibus price fields. The lowest-price-in-30-days disclosure required by
+    EU Directive 2019/2161 is implemented in the storefront data model and exposed on the API.
+certifications_published: []
+trust_center: null
+compliance_program_published: false

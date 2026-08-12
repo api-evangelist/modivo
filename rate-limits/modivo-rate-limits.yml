@@ -1,0 +1,74 @@
+generated: '2026-08-12'
+method: probed
+source: >-
+  Live unauthenticated responses from https://modivo.pl/rest/V1/directory/countries and
+  https://modivo.pl/graphql, observed 2026-08-12; plus a search of every MODIVO public surface for a
+  published limit.
+limit_count: 0
+documented: false
+docs: null
+note: >-
+  MODIVO publishes no rate limits for any API surface, and neither surface returns a rate-limit
+  header. Full response headers were captured on both: the REST response carried date, content-type,
+  set-cookie, vary, x-frame-options, cache-control, x-cache, age, strict-transport-security,
+  cf-cache-status, server and cf-ray; the GraphQL response added x-magento-cache-id, x-route,
+  x-content-type-options, x-xss-protection, x-correlation-id, x-causation-id, x-request-id and
+  access-control-allow-credentials. No RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset,
+  X-RateLimit-*, or Retry-After appeared on any response. A consumer therefore receives no runtime
+  budget signal at all and must self-throttle blind.
+limits: []
+response_headers:
+  ratelimit_standard: []
+  legacy_x_headers: []
+  retry_after: false
+  observed_on:
+  - url: https://modivo.pl/rest/V1/directory/countries
+    status: 200
+    headers_seen:
+    - date
+    - content-type
+    - set-cookie
+    - vary
+    - x-frame-options
+    - cache-control
+    - x-cache
+    - age
+    - strict-transport-security
+    - cf-cache-status
+    - server
+    - cf-ray
+  - url: https://modivo.pl/graphql
+    status: 200
+    headers_seen:
+    - x-magento-cache-id
+    - x-route
+    - x-content-type-options
+    - x-xss-protection
+    - x-frame-options
+    - x-correlation-id
+    - x-causation-id
+    - x-request-id
+    - access-control-allow-credentials
+    - strict-transport-security
+    - cf-cache-status
+    - server
+    - cf-ray
+exhaustion:
+  status_code: null
+  detail: >-
+    Not observed. No 429 was produced during this pass and none is declared in either generated
+    Swagger document — the only statuses either spec declares are 200, 400, 401, 500 and default.
+enforcement:
+  layer: edge
+  provider: Cloudflare
+  detail: >-
+    Both modivo.pl and eobuwie.com.pl are served through Cloudflare (server: cloudflare, cf-ray,
+    __cf_bm bot-management cookie set on every response). The practical throttle is Cloudflare bot
+    management and any WAF rate-limiting rule MODIVO has configured, neither of which is documented
+    or signalled in-band. Expect a Cloudflare challenge or block page rather than a well-formed API
+    429. advertising.modivo.com and modivo.mirakl.net were not load-probed.
+guidance: >-
+  Treat this as an undocumented, edge-throttled surface. Keep concurrency low, back off on any
+  non-JSON response body (a Cloudflare interstitial is HTML, not the Magento error envelope), and
+  send a real identifying User-Agent — a default library UA was enough to draw an HTTP 403 HTML
+  challenge on eobuwie.com.pl/graphql during this pass.

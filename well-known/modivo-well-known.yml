@@ -1,0 +1,97 @@
+generated: '2026-08-12'
+method: probed
+source: live HTTP probes of the RFC 8615 well-known surface on every MODIVO host
+note: >-
+  Every RFC 8615 well-known path probed on MODIVO's own hosts returned HTTP 404. No security.txt, no
+  OIDC or OAuth authorization-server metadata, no api-catalog, no ai-plugin, no A2A agent card and no
+  llms.txt is served. This file records that absence; NO WellKnown or SecurityTxt pointer is wired
+  into apis.yml, because there is no served document to point at. The only security.txt reachable
+  anywhere in MODIVO's surface belongs to Mirakl (recorded below under third_party) and is served from
+  Mirakl's own domain, so it is not MODIVO's disclosure program and is not credited to MODIVO.
+hosts:
+- host: https://modivo.pl
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    note: SPA HTML shell returned with a 404 status
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+- host: https://eobuwie.com.pl
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+- host: https://advertising.modivo.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+third_party:
+- host: https://modivo.mirakl.net
+  owner: Mirakl
+  path: /.well-known/security.txt
+  status: 200
+  file: null
+  credited_to_modivo: false
+  note: >-
+    A real RFC 9116 security.txt is served on MODIVO's Mirakl marketplace tenant, but its only
+    directive is "Contact: https://vdp.mirakl.com" — Mirakl's vulnerability disclosure program on
+    Mirakl's own domain. modivo.mirakl.net is a subdomain of mirakl.net, controlled by Mirakl, not by
+    MODIVO. Recorded for completeness, deliberately NOT saved as a MODIVO artifact and NOT wired as a
+    SecurityTxt or Security pointer.

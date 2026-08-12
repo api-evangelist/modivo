@@ -1,0 +1,82 @@
+overlay: 1.0.0
+info:
+  title: eobuwie Commerce REST API — API Evangelist enrichment overlay
+  version: 1.0.0
+  x-generated: '2026-08-12'
+  x-method: generated
+  x-source: >-
+    Enhancements API Evangelist derived from
+    openapi/_original/modivo-eobuwie-rest-schema-swagger.json and live probes of
+    https://eobuwie.com.pl on 2026-08-12. Applies to
+    openapi/modivo-eobuwie-commerce-rest-api-openapi.yml. The original spec is never mutated.
+extends: ../openapi/modivo-eobuwie-commerce-rest-api-openapi.yml
+actions:
+- target: $.info
+  description: Establish the operator and the relationship to MODIVO.
+  update:
+    x-provider: MODIVO S.A.
+    x-brand: eobuwie
+    x-provider-domain: eobuwie.com.pl
+    x-platform: Adobe Commerce (Magento) 2.4
+    x-contract-origin: >-
+      Platform-generated Swagger 2.0 served live and anonymously at
+      https://eobuwie.com.pl/rest/all/schema?services=all (HTTP 200, 89,325 bytes, host
+      eobuwie.com.pl).
+    x-ownership-justification: >-
+      eobuwie is a MODIVO Group business line, listed among the group's business lines on
+      modivoplatform.com/en/platforms, and eobuwie.pl S.A. is the legal entity that was renamed MODIVO
+      in 2022. The spec self-identifies host eobuwie.com.pl, so it is served by a domain this company
+      controls.
+    x-title-caveat: >-
+      info.title reads "Magento Community" — the platform, not the operator. Operator established by
+      host.
+    x-relationship-to-modivo: >-
+      A separate deployment of the same platform, not a copy. It carries 43 operations against
+      MODIVO's 57 and has its own extensions — notably a chatbot order API that modivo.pl does not
+      have, and no marketplace order placement, no in-store pickup, no PayPal Payment Services family
+      and no Trustmate integration.
+- target: $.servers
+  description: Document the store-view path segment.
+  update:
+  - url: https://eobuwie.com.pl/rest/{store}
+    description: eobuwie storefront REST base. {store} selects the country/language store view.
+    variables:
+      store:
+        default: all
+        description: Store view code.
+- target: $.paths['/V1/chatbot/order/status'].post
+  description: Flag the agent-facing surface unique to this deployment.
+  update:
+    x-surface: conversational-agent
+    x-unique-to-eobuwie: true
+    x-agent-guidance: >-
+      Order-status lookup built for a chatbot. This is the closest thing anywhere in MODIVO Group's
+      published contracts to an agent-facing API, and it exists only on eobuwie.com.pl — there is no
+      equivalent on modivo.pl.
+- target: $.paths['/V1/chatbot/order/request-cancellation'].post
+  description: Flag the destructive half of the chatbot surface.
+  update:
+    x-surface: conversational-agent
+    x-unique-to-eobuwie: true
+    x-destructive: true
+    x-idempotent: false
+- target: $.paths['/V1/my-return-webhook/add-return-number-to-order'].post
+  description: Identify the inbound webhook receiver.
+  update:
+    x-surface: inbound-webhook-receiver
+    x-caller: the returns provider
+- target: $.components.schemas.error-response
+  description: Note the localization difference from the MODIVO deployment.
+  update:
+    x-localized: true
+    x-agent-guidance: >-
+      This deployment returns English error messages where modivo.pl returns Polish, from the same
+      error-response schema. Confirmation that `message` is a presentation string, not a machine key.
+- target: $.info
+  description: Record the state of the sibling GraphQL surface at the time of this pass.
+  update:
+    x-graphql-surface: >-
+      https://eobuwie.com.pl/graphql returned HTTP 403 with a Polish maintenance placeholder page on
+      2026-08-12, so it could not be introspected. The equivalent MODIVO endpoint
+      (https://modivo.pl/graphql) introspects freely; expect this deployment to expose a similar
+      schema when reachable.
