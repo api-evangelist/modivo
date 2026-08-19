@@ -1,0 +1,1075 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "eobuwie Commerce REST API",
+    "version": "2.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "directoryCurrencyInformationAcquirerV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "directoryCurrencyInformationAcquirerV1GetCurrencyInfoGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/directory/currency"
+          },
+          "docs": "Get currency information for the store."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "directoryCountryInformationAcquirerV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "directoryCountryInformationAcquirerV1GetCountriesInfoGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/directory/countries"
+          },
+          "docs": "Get all countries and regions information for the store."
+        },
+        {
+          "info": {
+            "name": "directoryCountryInformationAcquirerV1GetCountryInfoGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/directory/countries/:countryId",
+            "params": [
+              {
+                "name": "countryId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get country and region information for the store."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "customerAccountManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "customerAccountManagementV1CreateAccountPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/customers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create customer account. Perform necessary business operations like sending email."
+        },
+        {
+          "info": {
+            "name": "customerAccountManagementV1ValidateResetPasswordLinkTokenGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/customers/:customerId/password/resetLinkToken/:resetPasswordLinkToken",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "If null is given then a customer will be matched by the RP token."
+              },
+              {
+                "name": "resetPasswordLinkToken",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Check if password reset token is valid."
+        },
+        {
+          "info": {
+            "name": "customerAccountManagementV1InitiatePasswordResetPut",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://eobuwie.com.pl/rest/all/V1/customers/password",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send an email to the customer with a password reset link."
+        },
+        {
+          "info": {
+            "name": "customerAccountManagementV1ResetPasswordPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/customers/resetPassword",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reset customer password."
+        },
+        {
+          "info": {
+            "name": "customerAccountManagementV1IsEmailAvailablePost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/customers/isEmailAvailable",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Check if given email is associated with a customer account in given website."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "catalogProductRenderListV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "catalogProductRenderListV1GetListGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/products-render-info",
+            "params": [
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][field]",
+                "value": "",
+                "type": "query",
+                "description": "Field"
+              },
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value"
+              },
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition type"
+              },
+              {
+                "name": "searchCriteria[sortOrders][0][field]",
+                "value": "",
+                "type": "query",
+                "description": "Sorting field."
+              },
+              {
+                "name": "searchCriteria[sortOrders][0][direction]",
+                "value": "",
+                "type": "query",
+                "description": "Sorting direction."
+              },
+              {
+                "name": "searchCriteria[pageSize]",
+                "value": "",
+                "type": "query",
+                "description": "Page size."
+              },
+              {
+                "name": "searchCriteria[currentPage]",
+                "value": "",
+                "type": "query",
+                "description": "Current page."
+              },
+              {
+                "name": "storeId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currencyCode",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Collect and retrieve the list of product render info. This info contains raw prices and formatted prices, product name, stock status, store_id, etc."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestCartRepositoryV1GetGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Enable a guest user to return information for a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestCartManagementV1CreateEmptyCartPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts"
+          },
+          "docs": "Enable an customer or guest user to create an empty cart and quote for an anonymous customer."
+        },
+        {
+          "info": {
+            "name": "quoteGuestCartManagementV1PlaceOrderPut",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/order",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Place an order for a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestShippingMethodManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestShippingMethodManagementV1GetListGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/shipping-methods",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The shopping cart ID."
+              }
+            ]
+          },
+          "docs": "List applicable shipping methods for a specified quote."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestShipmentEstimationV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestShipmentEstimationV1EstimateByExtendedAddressPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/estimate-shipping-methods",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Estimate shipping by address and return list of available shipping methods"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartItemRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestCartItemRepositoryV1GetListGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/items",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "List items that are assigned to a specified cart."
+        },
+        {
+          "info": {
+            "name": "quoteGuestCartItemRepositoryV1SavePost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/items",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add/update the specified cart item."
+        },
+        {
+          "info": {
+            "name": "quoteGuestCartItemRepositoryV1SavePut",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/items/:itemId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add/update the specified cart item."
+        },
+        {
+          "info": {
+            "name": "quoteGuestCartItemRepositoryV1DeleteByIdDelete",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/items/:itemId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The item ID of the item to be removed."
+              }
+            ]
+          },
+          "docs": "Remove the specified item from the specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestPaymentMethodManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestPaymentMethodManagementV1GetGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/selected-payment-method",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Return the payment method for a specified shopping cart."
+        },
+        {
+          "info": {
+            "name": "quoteGuestPaymentMethodManagementV1SetPut",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/selected-payment-method",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a specified payment method to a specified shopping cart."
+        },
+        {
+          "info": {
+            "name": "quoteGuestPaymentMethodManagementV1GetListGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/payment-methods",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "List available payment methods for a specified shopping cart. This call returns an array of objects, but detailed information about each object’s attributes might not be included.  See https://devdocs.magento.com/codelinks/attributes.html#GuestPaymentMethodManagementInterface to determine which call to use to get detailed information about all attributes for an object."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestBillingAddressManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestBillingAddressManagementV1GetGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/billing-address",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Return the billing address for a specified quote."
+        },
+        {
+          "info": {
+            "name": "quoteGuestBillingAddressManagementV1AssignPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/billing-address",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign a specified billing address to a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCouponManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestCouponManagementV1GetGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/coupons",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Return information for a coupon in a specified cart."
+        },
+        {
+          "info": {
+            "name": "quoteGuestCouponManagementV1RemoveDelete",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/coupons",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Delete a coupon from a specified cart."
+        },
+        {
+          "info": {
+            "name": "quoteGuestCouponManagementV1SetPut",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/coupons/:couponCode",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              },
+              {
+                "name": "couponCode",
+                "value": "",
+                "type": "path",
+                "description": "The coupon code data."
+              }
+            ]
+          },
+          "docs": "Add a coupon by code to a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartTotalManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestCartTotalManagementV1CollectTotalsPut",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/collect-totals",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set shipping/billing methods and additional data for cart and collect totals for guest."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartTotalRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "quoteGuestCartTotalRepositoryV1GetGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/totals",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Return quote totals data for a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "checkoutGuestShippingInformationManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "checkoutGuestShippingInformationManagementV1SaveAddressInformationPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/shipping-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "checkoutGuestTotalsInformationManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "checkoutGuestTotalsInformationManagementV1CalculatePost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/totals-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calculate quote totals based on address and shipping method."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "checkoutGuestPaymentInformationManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "checkoutGuestPaymentInformationManagementV1GetPaymentInformationGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/payment-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get payment information"
+        },
+        {
+          "info": {
+            "name": "checkoutGuestPaymentInformationManagementV1SavePaymentInformationAndPlaceOrderPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/payment-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set payment information and place order for a specified cart."
+        },
+        {
+          "info": {
+            "name": "checkoutGuestPaymentInformationManagementV1SavePaymentInformationPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/set-payment-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set payment information for a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "giftMessageGuestCartRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "giftMessageGuestCartRepositoryV1GetGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/gift-message",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The shopping cart ID."
+              }
+            ]
+          },
+          "docs": "Return the gift message for a specified order."
+        },
+        {
+          "info": {
+            "name": "giftMessageGuestCartRepositoryV1SavePost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/gift-message",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the gift message for an entire order."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "giftMessageGuestItemRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "giftMessageGuestItemRepositoryV1GetGet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/gift-message/:itemId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The shopping cart ID."
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The item ID."
+              }
+            ]
+          },
+          "docs": "Return the gift message for a specified item in a specified shopping cart."
+        },
+        {
+          "info": {
+            "name": "giftMessageGuestItemRepositoryV1SavePost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/guest-carts/:cartId/gift-message/:itemId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The item ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the gift message for a specified item in a specified shopping cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "integrationAdminTokenServiceV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "integrationAdminTokenServiceV1CreateAdminAccessTokenPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/integration/admin/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create access token for admin given the admin credentials."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "integrationCustomerTokenServiceV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "integrationCustomerTokenServiceV1CreateCustomerAccessTokenPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/integration/customer/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create access token for admin given the customer credentials."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "eobMyReturnsWebhookWebhookV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "eobMyReturnsWebhookWebhookV1AddReturnNumberToOrderPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/my-return-webhook/add-return-number-to-order",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add return number to order api"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "eobPlaceOrderOrderManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "eobPlaceOrderOrderManagementV1PlaceOrderPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/orderManagement/placeOrder",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "chatbotOrderRestApiOrderRestApiServiceV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "chatbotOrderRestApiOrderRestApiServiceV1GetStatusPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/chatbot/order/status",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns order status complex info"
+        },
+        {
+          "info": {
+            "name": "chatbotOrderRestApiOrderRestApiServiceV1RequestCancellationPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://eobuwie.com.pl/rest/all/V1/chatbot/order/request-cancellation",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requests for order cancellation"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

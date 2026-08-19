@@ -1,9 +1,8 @@
 generated: '2026-08-12'
 method: derived
 status: candidate
-source: >-
-  Derived from openapi/modivo-commerce-rest-api-openapi.yml and
-  graphql/modivo-storefront.graphql after searching for a first-party MCP server and finding none.
+source: Derived from openapi/modivo-commerce-rest-api-openapi.yml and graphql/modivo-storefront.graphql
+  after searching for a first-party MCP server and finding none.
 official_server: null
 search_result:
   found: false
@@ -11,34 +10,30 @@ search_result:
   - url: https://modivo.pl/mcp
     status: 404
   - url: https://mcp.modivo.pl/
-    status: 000
+    status: 0
     note: host does not resolve
   - url: https://modivo.pl/.well-known/agent-card.json
     status: 404
   - url: https://modivo.pl/.well-known/ai-plugin.json
     status: 404
-  detail: >-
-    MODIVO operates no hosted or remote MCP server, publishes no MCP endpoint, and serves no agent
+  detail: MODIVO operates no hosted or remote MCP server, publishes no MCP endpoint, and serves no agent
     card that could point at one. Nothing in this file is provider-published.
-note: >-
-  CANDIDATE, NOT PUBLISHED. This is a proposal for what an MCP server over MODIVO's existing public
-  contracts would expose, derived entirely from operations and fields that already exist. Every tool
-  below names the real backing operation, so the input schema is knowable from the spec rather than
-  invented. It is recorded so the tool crosswalk has a defined left-hand side and so a later pass can
-  tell a real MODIVO MCP server from this derivation. Do not present it as a MODIVO product.
-no_pointer_reason: >-
-  Deliberately NOT wired as a type MCPServer pointer in apis.yml. An MCPServer pointer asserts that
-  the PROVIDER serves an MCP endpoint; MODIVO does not. Wiring it would credit MODIVO with an agent
-  surface it has never shipped — the same failure mode as advertising a WellKnown pointer over a
-  404 probe. Only mcp/modivo-tool-crosswalk.yml is wired, and that is an analytical artifact about
-  MODIVO's two real contracts, not a claim about a third.
+note: CANDIDATE, NOT PUBLISHED. This is a proposal for what an MCP server over MODIVO's existing public
+  contracts would expose, derived entirely from operations and fields that already exist. Every tool below
+  names the real backing operation, so the input schema is knowable from the spec rather than invented.
+  It is recorded so the tool crosswalk has a defined left-hand side and so a later pass can tell a real
+  MODIVO MCP server from this derivation. Do not present it as a MODIVO product.
+no_pointer_reason: Deliberately NOT wired as a type MCPServer pointer in apis.yml. An MCPServer pointer
+  asserts that the PROVIDER serves an MCP endpoint; MODIVO does not. Wiring it would credit MODIVO with
+  an agent surface it has never shipped — the same failure mode as advertising a WellKnown pointer over
+  a 404 probe. Only mcp/modivo-tool-crosswalk.yml is wired, and that is an analytical artifact about MODIVO's
+  two real contracts, not a claim about a third.
 transport_proposed: streamable-http
 auth_proposed:
   scheme: bearer
-  detail: >-
-    A customer token from generateCustomerToken (GraphQL) or POST /V1/integration/customer/token
-    (REST) for anything customer-scoped; no token at all for catalog, CMS and directory reads, which
-    MODIVO already serves anonymously.
+  detail: A customer token from generateCustomerToken (GraphQL) or POST /V1/integration/customer/token
+    (REST) for anything customer-scoped; no token at all for catalog, CMS and directory reads, which MODIVO
+    already serves anonymously.
 tools:
 - name: search_products
   category: catalog
@@ -119,9 +114,8 @@ tools:
   description: Place the order for a guest cart.
   anonymous: true
   destructive: true
-  warning: >-
-    NOT IDEMPOTENT. MODIVO accepts no idempotency key on this operation. An MCP server exposing it
-    must dedupe on the masked cart id itself and must never auto-retry on timeout.
+  warning: NOT IDEMPOTENT. MODIVO accepts no idempotency key on this operation. An MCP server exposing
+    it must dedupe on the masked cart id itself and must never auto-retry on timeout.
 - name: find_pickup_locations
   category: fulfilment
   backing: rest
@@ -164,8 +158,13 @@ excluded_from_proposal:
 - operation: PostV1MyreturnwebhookAddreturnnumbertoorder
   reason: Inbound webhook receiver for MODIVO's returns provider, not an agent capability.
 - operation: PostV1OrderManagementPlaceOrder
-  reason: >-
-    Marketplace-internal order ingestion between MODIVO's own systems. Exposing it to an agent would
+  reason: Marketplace-internal order ingestion between MODIVO's own systems. Exposing it to an agent would
     be exposing an internal seam.
 - field: deleteCustomer
   reason: Irreversible account destruction.
+deployment:
+  mode: none
+  verified: derived
+  tools: 19
+  checked: '2026-08-12'
+  source: catalog MCP census

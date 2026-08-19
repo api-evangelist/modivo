@@ -1,0 +1,1583 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "MODIVO Commerce REST API",
+    "version": "2.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "directoryCurrencyInformationAcquirerV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1DirectoryCurrency",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/directory/currency"
+          },
+          "docs": "Get currency information for the store."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "directoryCountryInformationAcquirerV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1DirectoryCountries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/directory/countries"
+          },
+          "docs": "Get all countries and regions information for the store."
+        },
+        {
+          "info": {
+            "name": "GetV1DirectoryCountriesCountryId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/directory/countries/:countryId",
+            "params": [
+              {
+                "name": "countryId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get country and region information for the store."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "customerAccountManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1Customers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/customers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create customer account. Perform necessary business operations like sending email."
+        },
+        {
+          "info": {
+            "name": "GetV1CustomersCustomerIdPasswordResetLinkTokenResetPasswordLinkToken",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/customers/:customerId/password/resetLinkToken/:resetPasswordLinkToken",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "If null is given then a customer will be matched by the RP token."
+              },
+              {
+                "name": "resetPasswordLinkToken",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Check if password reset token is valid."
+        },
+        {
+          "info": {
+            "name": "PutV1CustomersPassword",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://modivo.pl/rest/all/V1/customers/password",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send an email to the customer with a password reset link."
+        },
+        {
+          "info": {
+            "name": "PostV1CustomersResetPassword",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/customers/resetPassword",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reset customer password."
+        },
+        {
+          "info": {
+            "name": "PostV1CustomersIsEmailAvailable",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/customers/isEmailAvailable",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Check if given email is associated with a customer account in given website."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "searchV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/search",
+            "params": [
+              {
+                "name": "searchCriteria[requestName]",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][field]",
+                "value": "",
+                "type": "query",
+                "description": "Field"
+              },
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value"
+              },
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition type"
+              },
+              {
+                "name": "searchCriteria[sortOrders][0][field]",
+                "value": "",
+                "type": "query",
+                "description": "Sorting field."
+              },
+              {
+                "name": "searchCriteria[sortOrders][0][direction]",
+                "value": "",
+                "type": "query",
+                "description": "Sorting direction."
+              },
+              {
+                "name": "searchCriteria[pageSize]",
+                "value": "",
+                "type": "query",
+                "description": "Page size."
+              },
+              {
+                "name": "searchCriteria[currentPage]",
+                "value": "",
+                "type": "query",
+                "description": "Current page."
+              }
+            ]
+          },
+          "docs": "Make Full Text Search and return found Documents"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "catalogProductRenderListV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1Productsrenderinfo",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/products-render-info",
+            "params": [
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][field]",
+                "value": "",
+                "type": "query",
+                "description": "Field"
+              },
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value"
+              },
+              {
+                "name": "searchCriteria[filterGroups][0][filters][0][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition type"
+              },
+              {
+                "name": "searchCriteria[sortOrders][0][field]",
+                "value": "",
+                "type": "query",
+                "description": "Sorting field."
+              },
+              {
+                "name": "searchCriteria[sortOrders][0][direction]",
+                "value": "",
+                "type": "query",
+                "description": "Sorting direction."
+              },
+              {
+                "name": "searchCriteria[pageSize]",
+                "value": "",
+                "type": "query",
+                "description": "Page size."
+              },
+              {
+                "name": "searchCriteria[currentPage]",
+                "value": "",
+                "type": "query",
+                "description": "Current page."
+              },
+              {
+                "name": "storeId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currencyCode",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Collect and retrieve the list of product render info. This info contains raw prices and formatted prices, product name, stock status, store_id, etc."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Enable a guest user to return information for a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1Guestcarts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts"
+          },
+          "docs": "Enable an customer or guest user to create an empty cart and quote for an anonymous customer."
+        },
+        {
+          "info": {
+            "name": "PutV1GuestcartsCartIdOrder",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/order",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Place an order for a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestShippingMethodManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdShippingmethods",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/shipping-methods",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The shopping cart ID."
+              }
+            ]
+          },
+          "docs": "List applicable shipping methods for a specified quote."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestShipmentEstimationV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdEstimateshippingmethods",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/estimate-shipping-methods",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Estimate shipping by address and return list of available shipping methods"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartItemRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdItems",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/items",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "List items that are assigned to a specified cart."
+        },
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdItems",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/items",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add/update the specified cart item."
+        },
+        {
+          "info": {
+            "name": "PutV1GuestcartsCartIdItemsItemId",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/items/:itemId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add/update the specified cart item."
+        },
+        {
+          "info": {
+            "name": "DeleteV1GuestcartsCartIdItemsItemId",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/items/:itemId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The item ID of the item to be removed."
+              }
+            ]
+          },
+          "docs": "Remove the specified item from the specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestPaymentMethodManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdSelectedpaymentmethod",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/selected-payment-method",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Return the payment method for a specified shopping cart."
+        },
+        {
+          "info": {
+            "name": "PutV1GuestcartsCartIdSelectedpaymentmethod",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/selected-payment-method",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a specified payment method to a specified shopping cart."
+        },
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdPaymentmethods",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/payment-methods",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "List available payment methods for a specified shopping cart. This call returns an array of objects, but detailed information about each object’s attributes might not be included.  See https://developer.adobe.com/commerce/webapi/rest/attributes#GuestPaymentMethodManagementInterface to determine which call to use to get detailed information about all attributes for an object."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestBillingAddressManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdBillingaddress",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/billing-address",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Return the billing address for a specified quote."
+        },
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdBillingaddress",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/billing-address",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign a specified billing address to a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCouponManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdCoupons",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/coupons",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Return information for a coupon in a specified cart."
+        },
+        {
+          "info": {
+            "name": "DeleteV1GuestcartsCartIdCoupons",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/coupons",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Delete a coupon from a specified cart."
+        },
+        {
+          "info": {
+            "name": "PutV1GuestcartsCartIdCouponsCouponCode",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/coupons/:couponCode",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              },
+              {
+                "name": "couponCode",
+                "value": "",
+                "type": "path",
+                "description": "The coupon code data."
+              }
+            ]
+          },
+          "docs": "Add a coupon by code to a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartTotalManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PutV1GuestcartsCartIdCollecttotals",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/collect-totals",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set shipping/billing methods and additional data for cart and collect totals for guest."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "quoteGuestCartTotalRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdTotals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/totals",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ]
+          },
+          "docs": "Return quote totals data for a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "checkoutGuestShippingInformationManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdShippinginformation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/shipping-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "checkoutGuestTotalsInformationManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdTotalsinformation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/totals-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calculate quote totals based on address and shipping method."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "checkoutGuestPaymentInformationManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdPaymentinformation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/payment-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get payment information"
+        },
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdPaymentinformation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/payment-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set payment information and place order for a specified cart."
+        },
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdSetpaymentinformation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/set-payment-information",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set payment information for a specified cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "integrationAdminTokenServiceV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1IntegrationAdminToken",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/integration/admin/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create access token for admin given the admin credentials."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "integrationCustomerTokenServiceV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1IntegrationCustomerToken",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/integration/customer/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create access token for admin given the customer credentials."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "giftMessageGuestCartRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdGiftmessage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/gift-message",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The shopping cart ID."
+              }
+            ]
+          },
+          "docs": "Return the gift message for a specified order."
+        },
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdGiftmessage",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/gift-message",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the gift message for an entire order."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "giftMessageGuestItemRepositoryV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdGiftmessageItemId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/gift-message/:itemId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The shopping cart ID."
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The item ID."
+              }
+            ]
+          },
+          "docs": "Return the gift message for a specified item in a specified shopping cart."
+        },
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdGiftmessageItemId",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/gift-message/:itemId",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "The cart ID."
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The item ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the gift message for a specified item in a specified shopping cart."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "inventoryInStorePickupApiGetPickupLocationsV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1InventoryInstorepickupPickuplocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/inventory/in-store-pickup/pickup-locations/",
+            "params": [
+              {
+                "name": "searchRequest[area][radius]",
+                "value": "",
+                "type": "query",
+                "description": "Search radius in KM."
+              },
+              {
+                "name": "searchRequest[area][searchTerm]",
+                "value": "",
+                "type": "query",
+                "description": "Search term string."
+              },
+              {
+                "name": "searchRequest[filters][country][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value."
+              },
+              {
+                "name": "searchRequest[filters][country][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition Type."
+              },
+              {
+                "name": "searchRequest[filters][postcode][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value."
+              },
+              {
+                "name": "searchRequest[filters][postcode][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition Type."
+              },
+              {
+                "name": "searchRequest[filters][region][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value."
+              },
+              {
+                "name": "searchRequest[filters][region][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition Type."
+              },
+              {
+                "name": "searchRequest[filters][regionId][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value."
+              },
+              {
+                "name": "searchRequest[filters][regionId][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition Type."
+              },
+              {
+                "name": "searchRequest[filters][city][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value."
+              },
+              {
+                "name": "searchRequest[filters][city][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition Type."
+              },
+              {
+                "name": "searchRequest[filters][street][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value."
+              },
+              {
+                "name": "searchRequest[filters][street][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition Type."
+              },
+              {
+                "name": "searchRequest[filters][name][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value."
+              },
+              {
+                "name": "searchRequest[filters][name][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition Type."
+              },
+              {
+                "name": "searchRequest[filters][pickupLocationCode][value]",
+                "value": "",
+                "type": "query",
+                "description": "Value."
+              },
+              {
+                "name": "searchRequest[filters][pickupLocationCode][conditionType]",
+                "value": "",
+                "type": "query",
+                "description": "Condition Type."
+              },
+              {
+                "name": "searchRequest[pageSize]",
+                "value": "",
+                "type": "query",
+                "description": "Page size."
+              },
+              {
+                "name": "searchRequest[currentPage]",
+                "value": "",
+                "type": "query",
+                "description": "Current page."
+              },
+              {
+                "name": "searchRequest[scopeType]",
+                "value": "",
+                "type": "query",
+                "description": "Sales Channel Type."
+              },
+              {
+                "name": "searchRequest[scopeCode]",
+                "value": "",
+                "type": "query",
+                "description": "Sales Channel code."
+              },
+              {
+                "name": "searchRequest[sort][0][field]",
+                "value": "",
+                "type": "query",
+                "description": "Sorting field."
+              },
+              {
+                "name": "searchRequest[sort][0][direction]",
+                "value": "",
+                "type": "query",
+                "description": "Sorting direction."
+              },
+              {
+                "name": "searchRequest[extensionAttributes][productsInfo][0][sku]",
+                "value": "",
+                "type": "query",
+                "description": "Product SKU."
+              }
+            ]
+          },
+          "docs": "Get Pickup Locations according to the results of filtration by Search Request."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "paymentServicesPaypalPaymentConfigRequestV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1PaymentsconfigLocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/payments-config/:location",
+            "params": [
+              {
+                "name": "location",
+                "value": "",
+                "type": "path",
+                "description": "sdk location."
+              }
+            ]
+          },
+          "docs": "Get Config."
+        },
+        {
+          "info": {
+            "name": "GetV1PaymentsconfigGooglepayLocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/payments-config/google-pay/:location",
+            "params": [
+              {
+                "name": "location",
+                "value": "",
+                "type": "path",
+                "description": "sdk location."
+              }
+            ]
+          },
+          "docs": "Get Google Pay Config."
+        },
+        {
+          "info": {
+            "name": "GetV1PaymentsconfigApplepayLocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/payments-config/apple-pay/:location",
+            "params": [
+              {
+                "name": "location",
+                "value": "",
+                "type": "path",
+                "description": "sdk location."
+              }
+            ]
+          },
+          "docs": "Get Apple Pay Config."
+        },
+        {
+          "info": {
+            "name": "GetV1PaymentsconfigSmartbuttonsLocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/payments-config/smart-buttons/:location",
+            "params": [
+              {
+                "name": "location",
+                "value": "",
+                "type": "path",
+                "description": "sdk location."
+              }
+            ]
+          },
+          "docs": "Get Smart Buttons Config."
+        },
+        {
+          "info": {
+            "name": "GetV1PaymentsconfigHostedfieldsLocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/payments-config/hosted-fields/:location",
+            "params": [
+              {
+                "name": "location",
+                "value": "",
+                "type": "path",
+                "description": "sdk location."
+              }
+            ]
+          },
+          "docs": "Get Hosted Fields Config."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "paymentServicesPaypalPaymentOrderRequestV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdPaymentorder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/payment-order",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a payment order for guest customer"
+        },
+        {
+          "info": {
+            "name": "GetV1GuestcartsCartIdPaymentorderId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/payment-order/:id",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get payment order for guest customer"
+        },
+        {
+          "info": {
+            "name": "PostV1GuestcartsCartIdPaymentorderId",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/guest-carts/:cartId/payment-order/:id",
+            "params": [
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Sync payment order for guest customer"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "paymentServicesPaypalPaymentSdkRequestV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1PaymentssdkLocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/payments-sdk/:location",
+            "params": [
+              {
+                "name": "location",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get payment sdk url by location"
+        },
+        {
+          "info": {
+            "name": "GetV1PaymentssdkLocationMethodCode",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/payments-sdk/:location/:methodCode",
+            "params": [
+              {
+                "name": "location",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "methodCode",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get payment sdk url by location and methodCode"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "paymentServicesPaypalCompleteOrderV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1PaymentorderCompleteOrder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/payment-order/completeOrder",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Rest API endpoint to place an order"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "eobJWTHttpServiceV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1JwtObtain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/jwt/obtain"
+          },
+          "docs": "Create and retrieve JWT."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "eobTrustmateIntegrationDisplayApiV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1TrustmateDisplayapi",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/trustmate/displayapi/"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "marketplacePlaceOrderOrderManagementV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1OrderManagementPlaceOrder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/orderManagement/placeOrder",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "modivoMyReturnsWebhookWebhookV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PostV1MyreturnwebhookAddreturnnumbertoorder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://modivo.pl/rest/all/V1/my-return-webhook/add-return-number-to-order",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add return number to order api"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "payPalBraintreeAuthV1",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetV1ApplepayAuth",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://modivo.pl/rest/all/V1/applepay/auth"
+          },
+          "docs": "Returns details required to be able to submit a payment with Apple Pay"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
