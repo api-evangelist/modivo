@@ -1,0 +1,14 @@
+{
+  "repo": "modivo",
+  "feeds": [
+    {
+      "source": "https://modivo.pl/b/regulamin_prywatnosci",
+      "feed_url": "https://modivo.pl/b/regulamin_prywatnosci",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-22T20:20:02Z"
+}
