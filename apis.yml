@@ -53,63 +53,16 @@ tags:
 - Poland
 - Central Europe
 apis:
-- name: MODIVO Commerce REST API
-  description: >-
-    The public REST surface of the MODIVO storefront, served by its Adobe Commerce / Magento 2.4
-    deployment at https://modivo.pl/rest/all and self-described by a Swagger 2.0 document the
-    platform generates at /rest/all/schema?services=all. 57 operations across 48 paths cover guest
-    cart creation and management, shipping and totals estimation, coupon application, payment method
-    selection and guest order placement, customer account creation and password reset, product
-    render info, catalog search, directory (country/currency) reference data, gift messages,
-    in-store pickup locations, PayPal and Braintree payment services, and MODIVO-specific extensions
-    for marketplace order placement, the MODIVO My Returns webhook, a JWT issuing service and a
-    Trustmate review display integration. Anonymous callers can read directory and guest-cart
-    resources; everything else requires a Magento integration or customer bearer token.
-  humanURL: https://modivo.pl/rest/all/schema?services=all
-  baseURL: https://modivo.pl/rest/all
-  tags:
-  - E-Commerce
-  - Commerce
-  - Checkout
-  - Catalog
-  - Retail
-  - Marketplace
-  - Adobe Commerce
-  - Magento
-  properties:
-  - type: OpenAPI
-    url: openapi/modivo-commerce-rest-api-openapi.yml
-  - type: Swagger
-    url: openapi/_original/modivo-rest-schema-swagger.json
-  - type: APIReference
-    url: https://modivo.pl/rest/all/schema?services=all
-  - type: Authentication
-    url: authentication/modivo-authentication.yml
-  - type: Conventions
-    url: conventions/modivo-conventions.yml
-  - type: ErrorCatalog
-    url: errors/modivo-problem-types.yml
-  - type: DataModel
-    url: data-model/modivo-data-model.yml
-  - type: Overlay
-    url: overlays/modivo-commerce-rest-api-overlay.yaml
-  - type: RateLimits
-    url: rate-limits/modivo-rate-limits.yml
-  - type: Webhooks
-    url: asyncapi/modivo-webhooks.yml
-  - type: AgentSkill
-    url: skills/_index.yml
 - name: MODIVO Storefront GraphQL API
   description: >-
-    The GraphQL endpoint that powers the MODIVO storefront and mobile applications, exposed at
-    https://modivo.pl/graphql with introspection left open to anonymous callers. The schema carries
-    770 types, 111 root query fields and 134 root mutation fields — the Adobe Commerce storefront
-    schema plus a large set of MODIVO extensions: marketplace cart and offer handling, MODIVO club
-    and loyalty, returns and RMA flows, product reviews, DPD and InPost parcel-shop lookup, store
-    pickup places, GDPR consent management, app deep links and CMS content elements, and a wide
-    payment surface (Braintree, PayPal, Klarna, PayU virtual bank accounts, vaulted cards).
-    Authentication is a customer bearer token minted by generateCustomerToken and its social
-    variants; unauthenticated access is limited to catalog, CMS, directory and guest-cart fields.
+    The GraphQL endpoint that powers the MODIVO storefront and mobile applications, exposed at https://modivo.pl/graphql
+    with introspection left open to anonymous callers. The schema carries 770 types, 111 root query fields
+    and 134 root mutation fields — the Adobe Commerce storefront schema plus a large set of MODIVO extensions:
+    marketplace cart and offer handling, MODIVO club and loyalty, returns and RMA flows, product reviews,
+    DPD and InPost parcel-shop lookup, store pickup places, GDPR consent management, app deep links and
+    CMS content elements, and a wide payment surface (Braintree, PayPal, Klarna, PayU virtual bank accounts,
+    vaulted cards). Authentication is a customer bearer token minted by generateCustomerToken and its
+    social variants; unauthenticated access is limited to catalog, CMS, directory and guest-cart fields.
   humanURL: https://modivo.pl/graphql
   baseURL: https://modivo.pl/graphql
   tags:
@@ -132,41 +85,13 @@ apis:
     url: conventions/modivo-conventions.yml
   - type: ToolCrosswalk
     url: mcp/modivo-tool-crosswalk.yml
-- name: eobuwie Commerce REST API
-  description: >-
-    The public REST surface of eobuwie.com.pl, the MODIVO Group's footwear storefront, served by its
-    own Adobe Commerce / Magento 2.4 deployment and self-described at
-    https://eobuwie.com.pl/rest/all/schema?services=all. 43 operations across 35 paths cover the same
-    guest cart, checkout, customer account, directory and product-render surface as MODIVO, plus
-    eobuwie-specific extensions for order placement, the My Returns webhook, and a chatbot order REST
-    API. Included in this profile because eobuwie is a MODIVO Group business line and eobuwie.pl S.A.
-    is the legal entity that was renamed MODIVO in 2022.
-  humanURL: https://eobuwie.com.pl/rest/all/schema?services=all
-  baseURL: https://eobuwie.com.pl/rest/all
-  tags:
-  - E-Commerce
-  - Commerce
-  - Checkout
-  - Retail
-  - Adobe Commerce
-  - Magento
-  properties:
-  - type: OpenAPI
-    url: openapi/modivo-eobuwie-commerce-rest-api-openapi.yml
-  - type: Swagger
-    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
-  - type: APIReference
-    url: https://eobuwie.com.pl/rest/all/schema?services=all
-  - type: Overlay
-    url: overlays/modivo-eobuwie-commerce-rest-api-overlay.yaml
 - name: MODIVO Marketplace Seller API (Mirakl)
   description: >-
-    MODIVO's third-party marketplace runs on a Mirakl tenant at modivo.mirakl.net. Sellers automate
-    offers, stock, prices, orders and tracking numbers through the standard Mirakl Marketplace Seller
-    API on that host. The tenant is closed: the console 302s to Mirakl SSO, /api/documentation and
-    /api/openapi.json both return HTTP 401, and robots.txt disallows /api/. No MODIVO-published
-    contract is available for this surface, so none is recorded here — only the probed evidence that
-    it exists and is gated.
+    MODIVO's third-party marketplace runs on a Mirakl tenant at modivo.mirakl.net. Sellers automate offers,
+    stock, prices, orders and tracking numbers through the standard Mirakl Marketplace Seller API on that
+    host. The tenant is closed: the console 302s to Mirakl SSO, /api/documentation and /api/openapi.json
+    both return HTTP 401, and robots.txt disallows /api/. No MODIVO-published contract is available for
+    this surface, so none is recorded here — only the probed evidence that it exists and is gated.
   humanURL: https://modivo.mirakl.net/
   baseURL: https://modivo.mirakl.net/api
   tags:
@@ -179,7 +104,1073 @@ apis:
     url: https://modivo.mirakl.net/
   - type: Conformance
     url: conformance/modivo-conformance.yml
+- aid: modivo:modivo-catalogproductrenderlistv1-api
+  name: MODIVO Catalog Product Render List V1 API
+  description: Interface which provides product renders information for products.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - catalogProductRenderListV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-catalogproductrenderlistv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-chatbotorderrestapiorderrestapiservicev1-api
+  name: MODIVO Chatbot Order Rest API Order Rest API Service V1 API
+  description: >-
+    The chatbotOrderRestApiOrderRestApiServiceV1 API from MODIVO — 2 operation(s) for chatbotorderrestapiorderrestapiservicev1.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - chatbotOrderRestApiOrderRestApiServiceV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-chatbotorderrestapiorderrestapiservicev1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-checkoutguestpaymentinformationmanagementv1-api
+  name: MODIVO Checkout Guest Payment Information Management V1 API
+  description: Interface for managing guest payment information
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - checkoutGuestPaymentInformationManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-checkoutguestpaymentinformationmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-checkoutguestshippinginformationmanagementv1-api
+  name: MODIVO Checkout Guest Shipping Information Management V1 API
+  description: Interface for managing guest shipping address information
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - checkoutGuestShippingInformationManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-checkoutguestshippinginformationmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-checkoutguesttotalsinformationmanagementv1-api
+  name: MODIVO Checkout Guest Totals Information Management V1 API
+  description: Interface for guest quote totals calculation
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - checkoutGuestTotalsInformationManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-checkoutguesttotalsinformationmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-customeraccountmanagementv1-api
+  name: MODIVO Customer Account Management V1 API
+  description: Interface for managing customers accounts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - customerAccountManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-customeraccountmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-directorycountryinformationacquirerv1-api
+  name: MODIVO Directory Country Information Acquirer V1 API
+  description: Country information acquirer interface
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - directoryCountryInformationAcquirerV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-directorycountryinformationacquirerv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-directorycurrencyinformationacquirerv1-api
+  name: MODIVO Directory Currency Information Acquirer V1 API
+  description: Currency information acquirer interface
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - directoryCurrencyInformationAcquirerV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-directorycurrencyinformationacquirerv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-eobjwthttpservicev1-api
+  name: MODIVO Eob JWT HTTP Service V1 API
+  description: Interface HttpServiceInterface
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - eobJWTHttpServiceV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-eobjwthttpservicev1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-eobmyreturnswebhookwebhookv1-api
+  name: MODIVO Eob My Returns Webhook Webhook V1 API
+  description: >-
+    The eobMyReturnsWebhookWebhookV1 API from MODIVO — 1 operation(s) for eobmyreturnswebhookwebhookv1.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - eobMyReturnsWebhookWebhookV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-eobmyreturnswebhookwebhookv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-eobplaceorderordermanagementv1-api
+  name: MODIVO Eob Place Order Order Management V1 API
+  description: >-
+    The eobPlaceOrderOrderManagementV1 API from MODIVO — 1 operation(s) for eobplaceorderordermanagementv1.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - eobPlaceOrderOrderManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-eobplaceorderordermanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-eobtrustmateintegrationdisplayapiv1-api
+  name: MODIVO Eob Trustmate Integration Display API V1 API
+  description: >-
+    The eobTrustmateIntegrationDisplayApiV1 API from MODIVO — 1 operation(s) for eobtrustmateintegrationdisplayapiv1.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - eobTrustmateIntegrationDisplayApiV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-eobtrustmateintegrationdisplayapiv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-giftmessageguestcartrepositoryv1-api
+  name: MODIVO Gift Message Guest Cart Repository V1 API
+  description: Interface GuestCartRepositoryInterface
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - giftMessageGuestCartRepositoryV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-giftmessageguestcartrepositoryv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-giftmessageguestitemrepositoryv1-api
+  name: MODIVO Gift Message Guest Item Repository V1 API
+  description: Interface GuestItemRepositoryInterface
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - giftMessageGuestItemRepositoryV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-giftmessageguestitemrepositoryv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-integrationadmintokenservicev1-api
+  name: MODIVO Integration Admin Token Service V1 API
+  description: Interface providing token generation for Admins
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - integrationAdminTokenServiceV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-integrationadmintokenservicev1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-integrationcustomertokenservicev1-api
+  name: MODIVO Integration Customer Token Service V1 API
+  description: Interface providing token generation for Customers
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - integrationCustomerTokenServiceV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-integrationcustomertokenservicev1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-inventoryinstorepickupapigetpickuplocationsv1-api
+  name: MODIVO Inventory In Store Pickup API Get Pickup Locations V1 API
+  description: >-
+    Get Pickup Locations filtered by provided Search Request. Pickup Location entities are Immutable object
+    and can not be changed after creation. All modification of Pickup Location must be done through @see
+    \Magento\InventoryApi\Api\SourceRepositoryInterface
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - inventoryInStorePickupApiGetPickupLocationsV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-inventoryinstorepickupapigetpickuplocationsv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-marketplaceplaceorderordermanagementv1-api
+  name: MODIVO Marketplace Place Order Order Management V1 API
+  description: >-
+    The marketplacePlaceOrderOrderManagementV1 API from MODIVO — 1 operation(s) for marketplaceplaceorderordermanagementv1.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - marketplacePlaceOrderOrderManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-marketplaceplaceorderordermanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-modivomyreturnswebhookwebhookv1-api
+  name: MODIVO Modivo My Returns Webhook Webhook V1 API
+  description: >-
+    The modivoMyReturnsWebhookWebhookV1 API from MODIVO — 1 operation(s) for modivomyreturnswebhookwebhookv1.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - modivoMyReturnsWebhookWebhookV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-modivomyreturnswebhookwebhookv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-paymentservicespaypalcompleteorderv1-api
+  name: MODIVO Payment Services Paypal Complete Order V1 API
+  description: >-
+    The paymentServicesPaypalCompleteOrderV1 API from MODIVO — 1 operation(s) for paymentservicespaypalcompleteorderv1.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - paymentServicesPaypalCompleteOrderV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-paymentservicespaypalcompleteorderv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-paymentservicespaypalpaymentconfigrequestv1-api
+  name: MODIVO Payment Services Paypal Payment Config Request V1 API
+  description: >-
+    The paymentServicesPaypalPaymentConfigRequestV1 API from MODIVO — 5 operation(s) for paymentservicespaypalpaymentconfigrequestv1.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - paymentServicesPaypalPaymentConfigRequestV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-paymentservicespaypalpaymentconfigrequestv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-paymentservicespaypalpaymentorderrequestv1-api
+  name: MODIVO Payment Services Paypal Payment Order Request V1 API
+  description: An interface for the REST WebAPI request to create an order
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - paymentServicesPaypalPaymentOrderRequestV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-paymentservicespaypalpaymentorderrequestv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-paymentservicespaypalpaymentsdkrequestv1-api
+  name: MODIVO Payment Services Paypal Payment SDK Request V1 API
+  description: An interface for the REST WebAPI to get payment sdk urls
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - paymentServicesPaypalPaymentSdkRequestV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-paymentservicespaypalpaymentsdkrequestv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-paypalbraintreeauthv1-api
+  name: MODIVO Pay Pal Braintree Auth V1 API
+  description: Interface AuthInterface
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - payPalBraintreeAuthV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-paypalbraintreeauthv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestbillingaddressmanagementv1-api
+  name: MODIVO Quote Guest Billing Address Management V1 API
+  description: Billing address management interface for guest carts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestBillingAddressManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestbillingaddressmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestcartitemrepositoryv1-api
+  name: MODIVO Quote Guest Cart Item Repository V1 API
+  description: Cart Item repository interface for guest carts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestCartItemRepositoryV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestcartitemrepositoryv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestcartmanagementv1-api
+  name: MODIVO Quote Guest Cart Management V1 API
+  description: Cart Management interface for guest carts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestCartManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestcartmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestcartrepositoryv1-api
+  name: MODIVO Quote Guest Cart Repository V1 API
+  description: Cart Repository interface for guest carts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestCartRepositoryV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestcartrepositoryv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestcarttotalmanagementv1-api
+  name: MODIVO Quote Guest Cart Total Management V1 API
+  description: >-
+    Bundled API to collect totals for cart based on shipping/payment methods and additional data.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestCartTotalManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestcarttotalmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestcarttotalrepositoryv1-api
+  name: MODIVO Quote Guest Cart Total Repository V1 API
+  description: Cart totals repository interface for guest carts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestCartTotalRepositoryV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestcarttotalrepositoryv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestcouponmanagementv1-api
+  name: MODIVO Quote Guest Coupon Management V1 API
+  description: Coupon management interface for guest carts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestCouponManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestcouponmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestpaymentmethodmanagementv1-api
+  name: MODIVO Quote Guest Payment Method Management V1 API
+  description: Payment method management interface for guest carts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestPaymentMethodManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestpaymentmethodmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestshipmentestimationv1-api
+  name: MODIVO Quote Guest Shipment Estimation V1 API
+  description: Interface GuestShipmentEstimationInterface
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestShipmentEstimationV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestshipmentestimationv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-quoteguestshippingmethodmanagementv1-api
+  name: MODIVO Quote Guest Shipping Method Management V1 API
+  description: Shipping method management interface for guest carts.
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - quoteGuestShippingMethodManagementV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-quoteguestshippingmethodmanagementv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
+- aid: modivo:modivo-searchv1-api
+  name: MODIVO Search V1 API
+  description: Search API for all requests
+  humanURL: https://modivo.pl/rest/all/schema?services=all
+  baseURL: https://modivo.pl/rest/all
+  tags:
+  - searchV1
+  properties:
+  - type: OpenAPI
+    url: openapi/modivo-searchv1-api-openapi.yml
+  - type: Swagger
+    url: openapi/_original/modivo-rest-schema-swagger.json
+  - type: APIReference
+    url: https://modivo.pl/rest/all/schema?services=all
+  - type: Authentication
+    url: authentication/modivo-authentication.yml
+  - type: Conventions
+    url: conventions/modivo-conventions.yml
+  - type: ErrorCatalog
+    url: errors/modivo-problem-types.yml
+  - type: DataModel
+    url: data-model/modivo-data-model.yml
+  - type: RateLimits
+    url: rate-limits/modivo-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/modivo-webhooks.yml
+  - type: Swagger
+    url: openapi/_original/modivo-eobuwie-rest-schema-swagger.json
+  - type: APIReference
+    url: https://eobuwie.com.pl/rest/all/schema?services=all
 common:
+- type: Overlay
+  url: overlays/modivo-commerce-rest-api-overlay.yaml
+- type: Overlay
+  url: overlays/modivo-eobuwie-commerce-rest-api-overlay.yaml
 - type: Website
   url: https://modivo.pl/
 - type: Company
