@@ -14,6 +14,18 @@ description: >-
   openly introspectable GraphQL endpoint at https://modivo.pl/graphql. Third-party sellers integrate
   through a Mirakl-hosted marketplace tenant, and brands buy sponsored placements through MODIVO Ads,
   the group's retail-media platform spanning MODIVO and eobuwie.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: none
