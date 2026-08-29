@@ -1,0 +1,34 @@
+slug: modivo
+provider: MODIVO
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Retail & Consumer Goods
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: inventoryInStorePickupApiGetPickupLocationsV1
+  spec_file: modivo-inventoryinstorepickupapigetpickuplocationsv1-api-openapi.yml
+  capability_id: BC-2330.20
+  capability_id_l1: BC-2330
+  capability_name: Click-and-Collect Operations Management
+  confidence: 0.8
+  evidence: GET /V1/inventory/in-store-pickup/pickup-locations/ ; inventory-in-store-pickup-api-data-pickup-location-interface
+  reason: Searches in-store pickup locations (by area, filters, product info) for a consumer order — this
+    is the click-and-collect bridge between a digital order and a physical store.
+- tag: quoteGuestCartItemRepositoryV1
+  spec_file: modivo-quoteguestcartitemrepositoryv1-api-openapi.yml
+  capability_id: BC-2320.10
+  capability_id_l1: BC-2320
+  capability_name: Sales Transaction Management
+  confidence: 0.7
+  evidence: POST /V1/guest-carts/{cartId}/items, DELETE /V1/guest-carts/{cartId}/items/{itemId}; schema
+    quote-data-cart-item-interface
+  reason: Add, update and remove line items on a consumer basket — literally basket build within consumer
+    sales transaction capture, here in the e-commerce channel rather than at a till.

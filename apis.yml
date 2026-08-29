@@ -1179,6 +1179,9 @@ apis:
   - type: APIReference
     url: https://eobuwie.com.pl/rest/all/schema?services=all
 common:
+- type: CapabilityMap
+  url: capabilities/modivo-capability-edges.yml
+  name: MODIVO Business Capability Map
 - type: Overlay
   url: overlays/modivo-commerce-rest-api-overlay.yaml
 - type: Overlay
