@@ -1,0 +1,151 @@
+openapi: 3.2.0
+info:
+  title: Modivo Integration Customer Token Service V1 API
+  version: '2.4'
+  x-refined-note:
+  - x-source differs across the merged source definitions and was not carried
+  description: 'Operations tagged integrationCustomerTokenServiceV1 across 2 of this provider''s published API definitions: modivo-commerce-rest-api-openapi.yml, modivo-eobuwie-commerce-rest-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://modivo.pl/rest/all
+- url: https://eobuwie.com.pl/rest/all
+tags:
+- name: integrationCustomerTokenServiceV1
+  description: Interface providing token generation for Customers
+paths:
+  /V1/integration/customer/token:
+    post:
+      tags:
+      - integrationCustomerTokenServiceV1
+      description: Create access token for admin given the customer credentials.
+      operationId: PostV1IntegrationCustomerToken
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              required:
+              - username
+              - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema:
+              required:
+              - username
+              - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+              xml:
+                name: request
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Token created
+            application/xml:
+              schema:
+                type: string
+                description: Token created
+        '400':
+          description: 400 Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        '401':
+          description: 401 Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+    servers:
+    - url: https://modivo.pl/rest/all
+components:
+  schemas:
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      description: Magento integration/customer bearer token supplied in the Authorization header (Bearer <token>).
+x-refined-from:
+- modivo-commerce-rest-api-openapi.yml
+- modivo-eobuwie-commerce-rest-api-openapi.yml

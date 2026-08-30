@@ -1,0 +1,339 @@
+openapi: 3.2.0
+info:
+  title: eobuwie Commerce REST Eob Place Order Order Management V1 API
+  version: '2.4'
+  description: Public REST API surface of eobuwie.com.pl, the MODIVO Group's footwear storefront, served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://eobuwie.com.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, customer account management, product render info, directory data, gift messages, and eobuwie-specific extensions (My Returns webhook, chatbot order REST API). Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  x-source: https://eobuwie.com.pl/rest/all/schema?services=all
+servers:
+- url: https://eobuwie.com.pl/rest/all
+tags:
+- name: eobPlaceOrderOrderManagementV1
+  description: ''
+paths:
+  /V1/orderManagement/placeOrder:
+    post:
+      tags:
+      - eobPlaceOrderOrderManagementV1
+      description: ''
+      operationId: eobPlaceOrderOrderManagementV1PlaceOrderPost
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              required:
+              - order
+              properties:
+                order:
+                  $ref: '#/components/schemas/eob-place-order-data-order-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema:
+              required:
+              - order
+              properties:
+                order:
+                  $ref: '#/components/schemas/eob-place-order-data-order-interface'
+              type: object
+              xml:
+                name: request
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eob-place-order-data-order-response-interface'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/eob-place-order-data-order-response-interface'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+components:
+  schemas:
+    eob-place-order-data-order-suborder-item-interface:
+      type: object
+      description: ''
+      properties:
+        offer_id:
+          type: string
+          description: Offer id
+        final_price:
+          type: string
+          description: Base price
+        base_price:
+          type: string
+          description: Base price
+        price:
+          type: string
+          description: Final price
+        quantity:
+          type: integer
+          description: Quantity
+        sku:
+          type: string
+          description: Sku
+      required:
+      - offer_id
+      - final_price
+      - base_price
+      - price
+      - quantity
+      - sku
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    eob-place-order-data-order-response-interface:
+      type: object
+      description: ''
+      properties:
+        order_number:
+          type: string
+        order_hash:
+          type: string
+        masked_quote_id:
+          type: string
+      required:
+      - order_number
+      - order_hash
+      - masked_quote_id
+    eob-place-order-data-order-billing-address-interface:
+      type: object
+      description: ''
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        full_name:
+          type: string
+        tin:
+          type: string
+        is_company:
+          type: boolean
+        is_vat_ue:
+          type: boolean
+        phone_number:
+          type: string
+        country_code:
+          type: string
+        locality:
+          type: string
+        street:
+          type: string
+        house_number:
+          type: string
+        flat_number:
+          type: string
+        post_code:
+          type: string
+      required:
+      - first_name
+      - last_name
+      - full_name
+      - tin
+      - is_company
+      - is_vat_ue
+      - phone_number
+      - country_code
+      - locality
+      - street
+      - house_number
+      - post_code
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    eob-place-order-data-order-interface:
+      type: object
+      description: ''
+      properties:
+        is_invoice:
+          type: boolean
+        order_total_price:
+          type: string
+        payment:
+          $ref: '#/components/schemas/eob-place-order-data-order-payment-interface'
+        customer:
+          $ref: '#/components/schemas/eob-place-order-data-order-customer-interface'
+        shipping_address:
+          $ref: '#/components/schemas/eob-place-order-data-order-shipping-address-interface'
+        billing_address:
+          $ref: '#/components/schemas/eob-place-order-data-order-billing-address-interface'
+        suborders:
+          type: array
+          items:
+            $ref: '#/components/schemas/eob-place-order-data-order-suborder-interface'
+        is_electronic_document:
+          type: boolean
+      required:
+      - is_invoice
+      - order_total_price
+      - payment
+      - customer
+      - shipping_address
+      - billing_address
+      - suborders
+    eob-place-order-data-order-payment-interface:
+      type: object
+      description: ''
+      properties:
+        currency_code:
+          type: string
+          description: Currency code
+        coupon_code:
+          type: string
+          description: Coupon code
+        method_id:
+          type: string
+          description: Method id
+      required:
+      - currency_code
+      - method_id
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    eob-place-order-data-order-suborder-delivery-method-interface:
+      type: object
+      description: ''
+      properties:
+        id:
+          type: string
+          description: Id
+        pudo_id:
+          type: string
+          description: Pudo id
+      required:
+      - id
+    eob-place-order-data-order-shipping-address-interface:
+      type: object
+      description: ''
+      properties:
+        company_name:
+          type: string
+          description: The company name
+        contact_person_first_name:
+          type: string
+          description: The contact person first name
+        contact_person_last_name:
+          type: string
+          description: The contact person last name
+        address_name:
+          type: string
+          description: The address name
+        phone_number:
+          type: string
+          description: The phone number
+        country_code:
+          type: string
+          description: The country code
+        locality:
+          type: string
+          description: The locality
+        street:
+          type: string
+          description: The street
+        house_number:
+          type: string
+          description: The house number
+        flat_number:
+          type: string
+          description: The flat number
+        post_code:
+          type: string
+          description: The post code
+      required:
+      - contact_person_first_name
+      - contact_person_last_name
+      - address_name
+      - phone_number
+      - country_code
+      - locality
+      - street
+      - house_number
+      - post_code
+    eob-place-order-data-order-customer-interface:
+      type: object
+      description: ''
+      properties:
+        email_address:
+          type: string
+          description: Email
+        external_id:
+          type: string
+          description: External id
+      required:
+      - email_address
+      - external_id
+    eob-place-order-data-order-suborder-interface:
+      type: object
+      description: ''
+      properties:
+        store_id:
+          type: string
+        delivery_method:
+          $ref: '#/components/schemas/eob-place-order-data-order-suborder-delivery-method-interface'
+        shipment_cost:
+          type: string
+        suborder_total_price:
+          type: string
+          description: Total price of sub-order
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/eob-place-order-data-order-suborder-item-interface'
+      required:
+      - store_id
+      - delivery_method
+      - shipment_cost
+      - suborder_total_price
+      - items
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'

@@ -1,0 +1,552 @@
+openapi: 3.2.0
+info:
+  title: MODIVO Commerce REST Payment Services Paypal Payment Config Request V1 API
+  version: '2.4'
+  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, marketplace order placement, customer account management, product render info, search, directory data, gift messages, in-store pickup locations, PayPal/Braintree payment services, and MODIVO-specific extensions (MODIVO My Returns webhook, eobuwie JWT service, Trustmate review integration). Anonymous access is limited to unauthenticated storefront operations; the remainder requires a Magento integration or customer bearer token. Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  x-source: https://modivo.pl/rest/all/schema?services=all
+servers:
+- url: https://modivo.pl/rest/all
+tags:
+- name: paymentServicesPaypalPaymentConfigRequestV1
+  description: ''
+paths:
+  /V1/payments-config/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Config.
+      operationId: GetV1PaymentsconfigLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-payment-config-response-interface'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-payment-config-response-interface'
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+  /V1/payments-config/google-pay/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Google Pay Config.
+      operationId: GetV1PaymentsconfigGooglepayLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-interface'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-interface'
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+  /V1/payments-config/apple-pay/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Apple Pay Config.
+      operationId: GetV1PaymentsconfigApplepayLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-apple-pay-interface'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-apple-pay-interface'
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+  /V1/payments-config/smart-buttons/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Smart Buttons Config.
+      operationId: GetV1PaymentsconfigSmartbuttonsLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-interface'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-interface'
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+  /V1/payments-config/hosted-fields/{location}:
+    get:
+      tags:
+      - paymentServicesPaypalPaymentConfigRequestV1
+      description: Get Hosted Fields Config.
+      operationId: GetV1PaymentsconfigHostedfieldsLocation
+      parameters:
+      - name: location
+        in: path
+        description: sdk location.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-hosted-fields-interface'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/payment-services-paypal-data-payment-config-hosted-fields-interface'
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+components:
+  schemas:
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    payment-services-paypal-data-payment-config-smart-buttons-logo-interface:
+      type: object
+      description: ''
+      properties:
+        type:
+          type: string
+          description: CanDisplayMessage
+      required:
+      - type
+    payment-services-paypal-payment-config-response-interface:
+      type: object
+      description: ''
+      properties:
+        apple_pay:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-apple-pay-interface'
+        google_pay:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-interface'
+        hosted_fields:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-hosted-fields-interface'
+        smart_buttons:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-interface'
+      required:
+      - apple_pay
+      - google_pay
+      - hosted_fields
+      - smart_buttons
+    payment-services-paypal-data-payment-config-smart-buttons-interface:
+      type: object
+      description: ''
+      properties:
+        display_message:
+          type: boolean
+          description: CanDisplayMessage
+        display_venmo:
+          type: boolean
+          description: Venmo
+        message_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-message-styles-interface'
+        button_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-button-styles-interface'
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - display_message
+      - display_venmo
+      - message_styles
+      - button_styles
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    payment-services-paypal-data-payment-config-google-pay-button-styles-interface:
+      type: object
+      description: ''
+      properties:
+        color:
+          type: string
+          description: Color
+        height:
+          type: integer
+          description: Height
+        type:
+          type: string
+          description: Type
+      required:
+      - color
+      - height
+      - type
+    payment-services-paypal-data-payment-config-button-styles-interface:
+      type: object
+      description: ''
+      properties:
+        layout:
+          type: string
+          description: Layout
+        color:
+          type: string
+          description: Color
+        shape:
+          type: string
+          description: Shape
+        label:
+          type: string
+          description: Label
+        tagline:
+          type: boolean
+          description: ShowTagline
+        height:
+          type: integer
+          description: Height
+        use_default_height:
+          type: boolean
+          description: Height
+      required:
+      - layout
+      - color
+      - shape
+      - label
+      - tagline
+      - height
+      - use_default_height
+    payment-services-paypal-data-payment-config-apple-pay-interface:
+      type: object
+      description: ''
+      properties:
+        button_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-button-styles-interface'
+        payment_source:
+          type: string
+          description: PaymentSource
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - button_styles
+      - payment_source
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    payment-services-paypal-data-payment-config-google-pay-interface:
+      type: object
+      description: ''
+      properties:
+        button_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-button-styles-interface'
+        payment_source:
+          type: string
+          description: PaymentSource
+        three_d_s:
+          type: string
+          description: ThreeDS
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - button_styles
+      - payment_source
+      - three_d_s
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    payment-services-paypal-data-payment-config-smart-buttons-message-styles-interface:
+      type: object
+      description: ''
+      properties:
+        layout:
+          type: string
+          description: CanDisplayMessage
+        logo:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-logo-interface'
+      required:
+      - layout
+      - logo
+    payment-services-paypal-data-payment-config-sdk-params-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Code
+        value:
+          type: string
+          description: Config
+      required:
+      - name
+      - value
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    payment-services-paypal-data-payment-config-hosted-fields-interface:
+      type: object
+      description: ''
+      properties:
+        payment_source:
+          type: string
+          description: Payment Source
+        three_d_s:
+          type: string
+          description: ThreeDS
+        is_vault_enabled:
+          type: boolean
+          description: HasIsVaultEnabled
+        cc_vault_code:
+          type: string
+          description: CcVaultCode
+        requires_card_details:
+          type: boolean
+          description: RequiresCardDetails
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - payment_source
+      - three_d_s
+      - is_vault_enabled
+      - cc_vault_code
+      - requires_card_details
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      description: Magento integration/customer bearer token supplied in the Authorization header (Bearer <token>).

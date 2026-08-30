@@ -1,0 +1,291 @@
+openapi: 3.2.0
+info:
+  title: MODIVO Commerce REST Search V1 API
+  version: '2.4'
+  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, marketplace order placement, customer account management, product render info, search, directory data, gift messages, in-store pickup locations, PayPal/Braintree payment services, and MODIVO-specific extensions (MODIVO My Returns webhook, eobuwie JWT service, Trustmate review integration). Anonymous access is limited to unauthenticated storefront operations; the remainder requires a Magento integration or customer bearer token. Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  x-source: https://modivo.pl/rest/all/schema?services=all
+servers:
+- url: https://modivo.pl/rest/all
+tags:
+- name: searchV1
+  description: Search API for all requests
+paths:
+  /V1/search:
+    get:
+      tags:
+      - searchV1
+      description: Make Full Text Search and return found Documents
+      operationId: GetV1Search
+      parameters:
+      - name: searchCriteria[requestName]
+        in: query
+        schema:
+          type: string
+      - name: searchCriteria[filterGroups][0][filters][0][field]
+        in: query
+        description: Field
+        schema:
+          type: string
+      - name: searchCriteria[filterGroups][0][filters][0][value]
+        in: query
+        description: Value
+        schema:
+          type: string
+      - name: searchCriteria[filterGroups][0][filters][0][conditionType]
+        in: query
+        description: Condition type
+        schema:
+          type: string
+      - name: searchCriteria[sortOrders][0][field]
+        in: query
+        description: Sorting field.
+        schema:
+          type: string
+      - name: searchCriteria[sortOrders][0][direction]
+        in: query
+        description: Sorting direction.
+        schema:
+          type: string
+      - name: searchCriteria[pageSize]
+        in: query
+        description: Page size.
+        schema:
+          type: integer
+      - name: searchCriteria[currentPage]
+        in: query
+        description: Current page.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/framework-search-search-result-interface'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/framework-search-search-result-interface'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+components:
+  schemas:
+    framework-search-document-interface:
+      type: object
+      description: Interface Search Document
+      properties:
+        id:
+          type: integer
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+      required:
+      - id
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    framework-sort-order:
+      type: object
+      description: Data object for sort order.
+      properties:
+        field:
+          type: string
+          description: Sorting field.
+        direction:
+          type: string
+          description: Sorting direction.
+      required:
+      - field
+      - direction
+    framework-search-filter-group:
+      type: object
+      description: Groups two or more filters together using a logical OR
+      properties:
+        filters:
+          type: array
+          description: A list of filters in this group
+          items:
+            $ref: '#/components/schemas/framework-filter'
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
+        value:
+          type: string
+          description: Attribute value
+      required:
+      - attribute_code
+      - value
+    framework-search-search-criteria-interface:
+      type: object
+      description: Interface SearchCriteriaInterface
+      properties:
+        request_name:
+          type: string
+        filter_groups:
+          type: array
+          description: A list of filter groups.
+          items:
+            $ref: '#/components/schemas/framework-search-filter-group'
+        sort_orders:
+          type: array
+          description: Sort order.
+          items:
+            $ref: '#/components/schemas/framework-sort-order'
+        page_size:
+          type: integer
+          description: Page size.
+        current_page:
+          type: integer
+          description: Current page.
+      required:
+      - request_name
+      - filter_groups
+    framework-search-bucket-interface:
+      type: object
+      description: Interface for facet Bucket
+      properties:
+        name:
+          type: string
+          description: Field name
+        values:
+          type: array
+          description: Field values
+          items:
+            $ref: '#/components/schemas/framework-search-aggregation-value-interface'
+      required:
+      - name
+      - values
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    framework-search-aggregation-interface:
+      type: object
+      description: Interface Aggregation to get faceted data
+      properties:
+        buckets:
+          type: array
+          description: All Document fields
+          items:
+            $ref: '#/components/schemas/framework-search-bucket-interface'
+        bucket_names:
+          type: array
+          description: Document field names
+          items:
+            type: string
+      required:
+      - buckets
+      - bucket_names
+    framework-search-aggregation-value-interface:
+      type: object
+      description: Interface Aggregation Value
+      properties:
+        value:
+          type: string
+          description: Aggregation
+        metrics:
+          type: array
+          description: Metrics
+          items:
+            type: string
+      required:
+      - value
+      - metrics
+    framework-filter:
+      type: object
+      description: Filter which can be used by any methods from service layer.
+      properties:
+        field:
+          type: string
+          description: Field
+        value:
+          type: string
+          description: Value
+        condition_type:
+          type: string
+          description: Condition type
+      required:
+      - field
+      - value
+    framework-search-search-result-interface:
+      type: object
+      description: Interface SearchResultInterface
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/framework-search-document-interface'
+        aggregations:
+          $ref: '#/components/schemas/framework-search-aggregation-interface'
+        search_criteria:
+          $ref: '#/components/schemas/framework-search-search-criteria-interface'
+        total_count:
+          type: integer
+          description: Total count.
+      required:
+      - items
+      - aggregations
+      - search_criteria
+      - total_count
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      description: Magento integration/customer bearer token supplied in the Authorization header (Bearer <token>).

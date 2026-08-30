@@ -1,0 +1,127 @@
+openapi: 3.2.0
+info:
+  title: eobuwie Commerce REST Eob My Returns Webhook Webhook V1 API
+  version: '2.4'
+  description: Public REST API surface of eobuwie.com.pl, the MODIVO Group's footwear storefront, served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://eobuwie.com.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, customer account management, product render info, directory data, gift messages, and eobuwie-specific extensions (My Returns webhook, chatbot order REST API). Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  x-source: https://eobuwie.com.pl/rest/all/schema?services=all
+servers:
+- url: https://eobuwie.com.pl/rest/all
+tags:
+- name: eobMyReturnsWebhookWebhookV1
+  description: ''
+paths:
+  /V1/my-return-webhook/add-return-number-to-order:
+    post:
+      tags:
+      - eobMyReturnsWebhookWebhookV1
+      description: Add return number to order api
+      operationId: eobMyReturnsWebhookWebhookV1AddReturnNumberToOrderPost
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              required:
+              - id
+              - hash
+              properties:
+                id:
+                  type: string
+                hash:
+                  type: string
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema:
+              required:
+              - id
+              - hash
+              properties:
+                id:
+                  type: string
+                hash:
+                  type: string
+              type: object
+              xml:
+                name: request
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+components:
+  schemas:
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'

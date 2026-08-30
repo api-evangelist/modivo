@@ -1,0 +1,483 @@
+openapi: 3.2.0
+info:
+  title: Modivo Quote Guest Cart Total Management V1 API
+  version: '2.4'
+  x-refined-note:
+  - x-source differs across the merged source definitions and was not carried
+  description: 'Operations tagged quoteGuestCartTotalManagementV1 across 2 of this provider''s published API definitions: modivo-commerce-rest-api-openapi.yml, modivo-eobuwie-commerce-rest-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://modivo.pl/rest/all
+- url: https://eobuwie.com.pl/rest/all
+tags:
+- name: quoteGuestCartTotalManagementV1
+  description: Bundled API to collect totals for cart based on shipping/payment methods and additional data.
+paths:
+  /V1/guest-carts/{cartId}/collect-totals:
+    put:
+      tags:
+      - quoteGuestCartTotalManagementV1
+      description: Set shipping/billing methods and additional data for cart and collect totals for guest.
+      operationId: PutV1GuestcartsCartIdCollecttotals
+      parameters:
+      - name: cartId
+        in: path
+        description: The cart ID.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              required:
+              - paymentMethod
+              properties:
+                paymentMethod:
+                  $ref: '#/components/schemas/quote-data-payment-interface'
+                shippingCarrierCode:
+                  type: string
+                  description: The carrier code.
+                shippingMethodCode:
+                  type: string
+                  description: The shipping method code.
+                additionalData:
+                  $ref: '#/components/schemas/quote-data-totals-additional-data-interface'
+              type: object
+              xml:
+                name: request
+          application/xml:
+            schema:
+              required:
+              - paymentMethod
+              properties:
+                paymentMethod:
+                  $ref: '#/components/schemas/quote-data-payment-interface'
+                shippingCarrierCode:
+                  type: string
+                  description: The carrier code.
+                shippingMethodCode:
+                  type: string
+                  description: The shipping method code.
+                additionalData:
+                  $ref: '#/components/schemas/quote-data-totals-additional-data-interface'
+              type: object
+              xml:
+                name: request
+      responses:
+        '200':
+          description: 200 Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote-data-totals-interface'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/quote-data-totals-interface'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/error-response'
+    servers:
+    - url: https://modivo.pl/rest/all
+components:
+  schemas:
+    quote-data-total-segment-interface:
+      type: object
+      description: Interface TotalsInterface
+      properties:
+        code:
+          type: string
+          description: Code
+        title:
+          type: string
+          description: Total title
+        value:
+          type: number
+          description: Total value
+        area:
+          type: string
+          description: Display area code.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-total-segment-extension-interface'
+      required:
+      - code
+      - value
+    quote-data-payment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
+      properties:
+        agreement_ids:
+          type: array
+          items:
+            type: string
+    quote-data-totals-additional-data-interface:
+      type: object
+      description: Additional data for totals collection.
+      properties:
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-additional-data-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+    gift-message-data-message-interface:
+      type: object
+      description: Interface MessageInterface
+      properties:
+        gift_message_id:
+          type: integer
+          description: Gift message ID. Otherwise, null.
+        customer_id:
+          type: integer
+          description: Customer ID. Otherwise, null.
+        sender:
+          type: string
+          description: Sender name.
+        recipient:
+          type: string
+          description: Recipient name.
+        message:
+          type: string
+          description: Message text.
+        extension_attributes:
+          $ref: '#/components/schemas/gift-message-data-message-extension-interface'
+      required:
+      - sender
+      - recipient
+      - message
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    quote-data-totals-item-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    tax-data-grand-total-rates-interface:
+      type: object
+      description: Interface GrandTotalRatesInterface
+      properties:
+        percent:
+          type: string
+          description: Tax percentage value
+        title:
+          type: string
+          description: Rate title
+      required:
+      - percent
+      - title
+    quote-data-total-segment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
+      properties:
+        tax_grandtotal_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
+    quote-data-totals-item-interface:
+      type: object
+      description: Interface TotalsItemInterface
+      properties:
+        item_id:
+          type: integer
+          description: Item id
+        price:
+          type: number
+          description: Item price in quote currency.
+        base_price:
+          type: number
+          description: Item price in base currency.
+        qty:
+          type: number
+          description: Item quantity.
+        row_total:
+          type: number
+          description: Row total in quote currency.
+        base_row_total:
+          type: number
+          description: Row total in base currency.
+        row_total_with_discount:
+          type: number
+          description: Row total with discount in quote currency. Otherwise, null.
+        tax_amount:
+          type: number
+          description: Tax amount in quote currency. Otherwise, null.
+        base_tax_amount:
+          type: number
+          description: Tax amount in base currency. Otherwise, null.
+        tax_percent:
+          type: number
+          description: Tax percent. Otherwise, null.
+        discount_amount:
+          type: number
+          description: Discount amount in quote currency. Otherwise, null.
+        base_discount_amount:
+          type: number
+          description: Discount amount in base currency. Otherwise, null.
+        discount_percent:
+          type: number
+          description: Discount percent. Otherwise, null.
+        price_incl_tax:
+          type: number
+          description: Price including tax in quote currency. Otherwise, null.
+        base_price_incl_tax:
+          type: number
+          description: Price including tax in base currency. Otherwise, null.
+        row_total_incl_tax:
+          type: number
+          description: Row total including tax in quote currency. Otherwise, null.
+        base_row_total_incl_tax:
+          type: number
+          description: Row total including tax in base currency. Otherwise, null.
+        options:
+          type: string
+          description: Item price in quote currency.
+        weee_tax_applied_amount:
+          type: number
+          description: Item weee tax applied amount in quote currency.
+        weee_tax_applied:
+          type: string
+          description: Item weee tax applied in quote currency.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-item-extension-interface'
+        name:
+          type: string
+          description: Product name. Otherwise, null.
+      required:
+      - item_id
+      - price
+      - base_price
+      - qty
+      - row_total
+      - base_row_total
+      - options
+      - weee_tax_applied_amount
+      - weee_tax_applied
+    gift-message-data-message-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\GiftMessage\Api\Data\MessageInterface
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          type: string
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
+        value:
+          type: string
+          description: Attribute value
+      required:
+      - attribute_code
+      - value
+    quote-data-totals-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
+      properties:
+        coupon_label:
+          type: string
+    quote-data-payment-interface:
+      type: object
+      description: Interface PaymentInterface
+      properties:
+        po_number:
+          type: string
+          description: Purchase order number
+        method:
+          type: string
+          description: Payment method code
+        additional_data:
+          type: array
+          description: Payment additional details
+          items:
+            type: string
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-payment-extension-interface'
+      required:
+      - method
+    quote-data-totals-additional-data-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsAdditionalDataInterface
+      properties:
+        gift_messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/gift-message-data-message-interface'
+    quote-data-totals-interface:
+      type: object
+      description: Interface TotalsInterface
+      properties:
+        grand_total:
+          type: number
+          description: Grand total in quote currency
+        base_grand_total:
+          type: number
+          description: Grand total in base currency
+        subtotal:
+          type: number
+          description: Subtotal in quote currency
+        base_subtotal:
+          type: number
+          description: Subtotal in base currency
+        discount_amount:
+          type: number
+          description: Discount amount in quote currency
+        base_discount_amount:
+          type: number
+          description: Discount amount in base currency
+        subtotal_with_discount:
+          type: number
+          description: Subtotal in quote currency with applied discount
+        base_subtotal_with_discount:
+          type: number
+          description: Subtotal in base currency with applied discount
+        shipping_amount:
+          type: number
+          description: Shipping amount in quote currency
+        base_shipping_amount:
+          type: number
+          description: Shipping amount in base currency
+        shipping_discount_amount:
+          type: number
+          description: Shipping discount amount in quote currency
+        base_shipping_discount_amount:
+          type: number
+          description: Shipping discount amount in base currency
+        tax_amount:
+          type: number
+          description: Tax amount in quote currency
+        base_tax_amount:
+          type: number
+          description: Tax amount in base currency
+        weee_tax_applied_amount:
+          type: number
+          description: Item weee tax applied amount in quote currency.
+        shipping_tax_amount:
+          type: number
+          description: Shipping tax amount in quote currency
+        base_shipping_tax_amount:
+          type: number
+          description: Shipping tax amount in base currency
+        subtotal_incl_tax:
+          type: number
+          description: Subtotal including tax in quote currency
+        base_subtotal_incl_tax:
+          type: number
+          description: Subtotal including tax in base currency
+        shipping_incl_tax:
+          type: number
+          description: Shipping including tax in quote currency
+        base_shipping_incl_tax:
+          type: number
+          description: Shipping including tax in base currency
+        base_currency_code:
+          type: string
+          description: Base currency code
+        quote_currency_code:
+          type: string
+          description: Quote currency code
+        coupon_code:
+          type: string
+          description: Applied coupon code
+        items_qty:
+          type: integer
+          description: Items qty
+        items:
+          type: array
+          description: Totals by items
+          items:
+            $ref: '#/components/schemas/quote-data-totals-item-interface'
+        total_segments:
+          type: array
+          description: Dynamically calculated totals
+          items:
+            $ref: '#/components/schemas/quote-data-total-segment-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-extension-interface'
+      required:
+      - weee_tax_applied_amount
+      - total_segments
+    tax-data-grand-total-details-interface:
+      type: object
+      description: Interface GrandTotalDetailsInterface
+      properties:
+        amount:
+          type: number
+          description: Tax amount value
+        rates:
+          type: array
+          description: Tax rates info
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-rates-interface'
+        group_id:
+          type: integer
+          description: Group identifier
+      required:
+      - amount
+      - rates
+      - group_id
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      description: Magento integration/customer bearer token supplied in the Authorization header (Bearer <token>).
+x-refined-from:
+- modivo-commerce-rest-api-openapi.yml
+- modivo-eobuwie-commerce-rest-api-openapi.yml
