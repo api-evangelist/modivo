@@ -1154,6 +1154,8 @@ apis:
   humanURL: https://modivo.pl/rest/all/schema?services=all
   baseURL: https://modivo.pl/rest/all
   tags:
+  - Search (v1)
+  tags_raw:
   - searchV1
   properties:
   - type: OpenAPI
