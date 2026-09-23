@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: MODIVO Commerce REST Inventory In Store Pickup API Get Pickup Locations V1 API
+  title: MODIVO Commerce REST Inventory In Store Pickup API Get…
   version: '2.4'
-  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, marketplace order placement, customer account management, product render info, search, directory data, gift messages, in-store pickup locations, PayPal/Braintree payment services, and MODIVO-specific extensions (MODIVO My Returns webhook, eobuwie JWT service, Trustmate review integration). Anonymous access is limited to unauthenticated storefront operations; the remainder requires a Magento integration or customer bearer token. Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all.
   x-source: https://modivo.pl/rest/all/schema?services=all
 servers:
 - url: https://modivo.pl/rest/all
@@ -161,6 +161,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 inventory instorepickup pickuplocations
+      x-summary-source: derived
 components:
   schemas:
     inventory-in-store-pickup-api-data-search-request-area-interface:
@@ -176,28 +178,6 @@ components:
       required:
       - radius
       - search_term
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    framework-sort-order:
-      type: object
-      description: Data object for sort order.
-      properties:
-        field:
-          type: string
-          description: Sorting field.
-        direction:
-          type: string
-          description: Sorting direction.
-      required:
-      - field
-      - direction
     inventory-in-store-pickup-api-data-search-request-interface:
       type: object
       description: 'Endpoint used to search Pickup Locations by different parameters: - by attribute filters fields @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequest\FiltersInterface - by distance to the address @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequest\AreaInterface Also, endpoint supports paging and sort orders.'
@@ -229,29 +209,17 @@ components:
       - current_page
       - scope_type
       - scope_code
-    inventory-in-store-pickup-api-data-search-request-product-info-extension-interface:
+    inventory-in-store-pickup-api-data-search-request-product-info-interface:
       type: object
-      description: ExtensionInterface class for @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequest\ProductInfoInterface
-    inventory-in-store-pickup-api-data-search-request-filters-interface:
-      type: object
-      description: Filter to filter by Fields. Each field may be filtered with different condition type. Supported condition types restricted by @see \Magento\Framework\Api\SearchCriteriaInterface
+      description: Product Info Data Transfer Object.
       properties:
-        country:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
-        postcode:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
-        region:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
-        region_id:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
-        city:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
-        street:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
-        name:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
-        pickup_location_code:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        sku:
+          type: string
+          description: Product SKU.
+        extension_attributes:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-product-info-extension-interface'
+      required:
+      - sku
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -265,6 +233,22 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
+    inventory-in-store-pickup-api-data-pickup-location-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\InventoryInStorePickupApi\Api\Data\PickupLocationInterface
+    inventory-in-store-pickup-api-data-search-request-filter-interface:
+      type: object
+      description: Filter for Pickup Location search.
+      properties:
+        value:
+          type: string
+          description: Value.
+        condition_type:
+          type: string
+          description: Condition Type.
+      required:
+      - value
+      - condition_type
     inventory-in-store-pickup-api-data-search-result-interface:
       type: object
       description: Search results for providing pickup locations.
@@ -283,11 +267,6 @@ components:
       - items
       - search_request
       - total_count
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     inventory-in-store-pickup-api-data-pickup-location-interface:
       type: object
       description: Represents sources projection on In-Store Pickup context. Realisation must follow immutable DTO concept. Partial immutability done according to restriction of current Extension Attributes implementation.
@@ -341,6 +320,19 @@ components:
           $ref: '#/components/schemas/inventory-in-store-pickup-api-data-pickup-location-extension-interface'
       required:
       - pickup_location_code
+    framework-sort-order:
+      type: object
+      description: Data object for sort order.
+      properties:
+        field:
+          type: string
+          description: Sorting field.
+        direction:
+          type: string
+          description: Sorting direction.
+      required:
+      - field
+      - direction
     inventory-in-store-pickup-api-data-search-request-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequestInterface
@@ -349,30 +341,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-product-info-interface'
-    inventory-in-store-pickup-api-data-search-request-filter-interface:
+    inventory-in-store-pickup-api-data-search-request-filters-interface:
       type: object
-      description: Filter for Pickup Location search.
+      description: Filter to filter by Fields. Each field may be filtered with different condition type. Supported condition types restricted by @see \Magento\Framework\Api\SearchCriteriaInterface
       properties:
-        value:
-          type: string
-          description: Value.
-        condition_type:
-          type: string
-          description: Condition Type.
-      required:
-      - value
-      - condition_type
-    inventory-in-store-pickup-api-data-search-request-product-info-interface:
-      type: object
-      description: Product Info Data Transfer Object.
-      properties:
-        sku:
-          type: string
-          description: Product SKU.
-        extension_attributes:
-          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-product-info-extension-interface'
-      required:
-      - sku
+        country:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        postcode:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        region:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        region_id:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        city:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        street:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        name:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
+        pickup_location_code:
+          $ref: '#/components/schemas/inventory-in-store-pickup-api-data-search-request-filter-interface'
     error-response:
       type: object
       properties:
@@ -391,14 +379,28 @@ components:
           description: Stack trace
       required:
       - message
-    inventory-in-store-pickup-api-data-pickup-location-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\InventoryInStorePickupApi\Api\Data\PickupLocationInterface
     error-parameters:
       type: array
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    inventory-in-store-pickup-api-data-search-request-product-info-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\InventoryInStorePickupApi\Api\Data\SearchRequest\ProductInfoInterface
   securitySchemes:
     api_key:
       type: apiKey

@@ -83,87 +83,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Put V1 guestcarts cart id collecttotals
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    quote-data-total-segment-interface:
-      type: object
-      description: Interface TotalsInterface
-      properties:
-        code:
-          type: string
-          description: Code
-        title:
-          type: string
-          description: Total title
-        value:
-          type: number
-          description: Total value
-        area:
-          type: string
-          description: Display area code.
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-total-segment-extension-interface'
-      required:
-      - code
-      - value
-    quote-data-payment-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
-      properties:
-        agreement_ids:
-          type: array
-          items:
-            type: string
-    quote-data-totals-additional-data-interface:
-      type: object
-      description: Additional data for totals collection.
-      properties:
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-totals-additional-data-extension-interface'
-        custom_attributes:
-          type: array
-          description: Custom attributes values.
-          items:
-            $ref: '#/components/schemas/framework-attribute-interface'
-    gift-message-data-message-interface:
-      type: object
-      description: Interface MessageInterface
-      properties:
-        gift_message_id:
-          type: integer
-          description: Gift message ID. Otherwise, null.
-        customer_id:
-          type: integer
-          description: Customer ID. Otherwise, null.
-        sender:
-          type: string
-          description: Sender name.
-        recipient:
-          type: string
-          description: Recipient name.
-        message:
-          type: string
-          description: Message text.
-        extension_attributes:
-          $ref: '#/components/schemas/gift-message-data-message-extension-interface'
-      required:
-      - sender
-      - recipient
-      - message
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    quote-data-totals-item-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -177,55 +102,6 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    tax-data-grand-total-rates-interface:
-      type: object
-      description: Interface GrandTotalRatesInterface
-      properties:
-        percent:
-          type: string
-          description: Tax percentage value
-        title:
-          type: string
-          description: Rate title
-      required:
-      - percent
-      - title
-    quote-data-total-segment-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
-      properties:
-        tax_grandtotal_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
     quote-data-totals-item-interface:
       type: object
       description: Interface TotalsItemInterface
@@ -305,6 +181,14 @@ components:
       - options
       - weee_tax_applied_amount
       - weee_tax_applied
+    quote-data-payment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
+      properties:
+        agreement_ids:
+          type: array
+          items:
+            type: string
     gift-message-data-message-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\GiftMessage\Api\Data\MessageInterface
@@ -313,25 +197,90 @@ components:
           type: string
         entity_type:
           type: string
-    framework-attribute-interface:
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
       type: object
-      description: Interface for custom attribute value.
+      description: Error details
       properties:
-        attribute_code:
+        message:
           type: string
-          description: Attribute code
-        value:
-          type: string
-          description: Attribute value
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    tax-data-grand-total-details-interface:
+      type: object
+      description: Interface GrandTotalDetailsInterface
+      properties:
+        amount:
+          type: number
+          description: Tax amount value
+        rates:
+          type: array
+          description: Tax rates info
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-rates-interface'
+        group_id:
+          type: integer
+          description: Group identifier
       required:
-      - attribute_code
-      - value
-    quote-data-totals-extension-interface:
+      - amount
+      - rates
+      - group_id
+    error-response:
       type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
       properties:
-        coupon_label:
+        message:
           type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    gift-message-data-message-interface:
+      type: object
+      description: Interface MessageInterface
+      properties:
+        gift_message_id:
+          type: integer
+          description: Gift message ID. Otherwise, null.
+        customer_id:
+          type: integer
+          description: Customer ID. Otherwise, null.
+        sender:
+          type: string
+          description: Sender name.
+        recipient:
+          type: string
+          description: Recipient name.
+        message:
+          type: string
+          description: Message text.
+        extension_attributes:
+          $ref: '#/components/schemas/gift-message-data-message-extension-interface'
+      required:
+      - sender
+      - recipient
+      - message
+    quote-data-total-segment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
+      properties:
+        tax_grandtotal_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
     quote-data-payment-interface:
       type: object
       description: Interface PaymentInterface
@@ -351,14 +300,19 @@ components:
           $ref: '#/components/schemas/quote-data-payment-extension-interface'
       required:
       - method
-    quote-data-totals-additional-data-extension-interface:
+    tax-data-grand-total-rates-interface:
       type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsAdditionalDataInterface
+      description: Interface GrandTotalRatesInterface
       properties:
-        gift_messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/gift-message-data-message-interface'
+        percent:
+          type: string
+          description: Tax percentage value
+        title:
+          type: string
+          description: Rate title
+      required:
+      - percent
+      - title
     quote-data-totals-interface:
       type: object
       description: Interface TotalsInterface
@@ -453,25 +407,73 @@ components:
       required:
       - weee_tax_applied_amount
       - total_segments
-    tax-data-grand-total-details-interface:
+    quote-data-totals-item-extension-interface:
       type: object
-      description: Interface GrandTotalDetailsInterface
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
+    quote-data-totals-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
       properties:
-        amount:
-          type: number
-          description: Tax amount value
-        rates:
+        coupon_label:
+          type: string
+    quote-data-totals-additional-data-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsAdditionalDataInterface
+      properties:
+        gift_messages:
           type: array
-          description: Tax rates info
           items:
-            $ref: '#/components/schemas/tax-data-grand-total-rates-interface'
-        group_id:
-          type: integer
-          description: Group identifier
+            $ref: '#/components/schemas/gift-message-data-message-interface'
+    quote-data-total-segment-interface:
+      type: object
+      description: Interface TotalsInterface
+      properties:
+        code:
+          type: string
+          description: Code
+        title:
+          type: string
+          description: Total title
+        value:
+          type: number
+          description: Total value
+        area:
+          type: string
+          description: Display area code.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-total-segment-extension-interface'
       required:
-      - amount
-      - rates
-      - group_id
+      - code
+      - value
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
+        value:
+          type: string
+          description: Attribute value
+      required:
+      - attribute_code
+      - value
+    quote-data-totals-additional-data-interface:
+      type: object
+      description: Additional data for totals collection.
+      properties:
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-additional-data-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
   securitySchemes:
     api_key:
       type: apiKey

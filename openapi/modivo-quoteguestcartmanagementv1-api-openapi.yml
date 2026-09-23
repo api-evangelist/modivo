@@ -48,6 +48,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Post V1 guestcarts
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
   /V1/guest-carts/{cartId}/order:
@@ -112,19 +114,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Put V1 guestcarts cart id order
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -138,11 +133,6 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     quote-data-payment-interface:
       type: object
       description: Interface PaymentInterface
@@ -193,6 +183,20 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
   securitySchemes:
     api_key:
       type: apiKey

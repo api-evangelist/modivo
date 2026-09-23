@@ -53,6 +53,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 guestcarts cart id selectedpaymentmethod
+      x-summary-source: derived
     put:
       tags:
       - quoteGuestPaymentMethodManagementV1
@@ -118,13 +120,15 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Put V1 guestcarts cart id selectedpaymentmethod
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
   /V1/guest-carts/{cartId}/payment-methods:
     get:
       tags:
       - quoteGuestPaymentMethodManagementV1
-      description: List available payment methods for a specified shopping cart. This call returns an array of objects, but detailed information about each object’s attributes might not be included.  See https://developer.adobe.com/commerce/webapi/rest/attributes#GuestPaymentMethodManagementInterface to determine which call to use to get detailed information about all attributes for an object.
+      description: List available payment methods for a specified shopping cart. This call returns an array of objects, but detailed information about each object’s attributes might not be included. See https://developer.adobe.com/commerce/webapi/rest/attributes#GuestPaymentMethodManagementInterface to determine which call to use to get detailed information about all attributes for an object.
       operationId: GetV1GuestcartsCartIdPaymentmethods
       parameters:
       - name: cartId
@@ -167,19 +171,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 guestcarts cart id paymentmethods
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -193,11 +190,6 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     quote-data-payment-interface:
       type: object
       description: Interface PaymentInterface
@@ -261,6 +253,20 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
   securitySchemes:
     api_key:
       type: apiKey

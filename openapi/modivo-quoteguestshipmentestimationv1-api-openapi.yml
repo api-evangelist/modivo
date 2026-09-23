@@ -81,6 +81,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Post V1 guestcarts cart id estimateshippingmethods
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
@@ -88,6 +90,87 @@ components:
     quote-data-shipping-method-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ShippingMethodInterface
+    quote-data-address-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\AddressInterface
+      properties:
+        pickup_location_code:
+          type: string
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/sales-rule-data-rule-discount-interface'
+        address_title:
+          type: string
+        customer_address_type:
+          type: string
+        buy_as:
+          type: string
+        address_is_active:
+          type: string
+        address_house_number:
+          type: string
+        address_local_number:
+          type: string
+        address_avatar_id:
+          type: string
+    sales-rule-data-discount-data-interface:
+      type: object
+      description: Discount Data Interface
+      properties:
+        amount:
+          type: number
+          description: Amount
+        base_amount:
+          type: number
+          description: Base Amount
+        original_amount:
+          type: number
+          description: Original Amount
+        base_original_amount:
+          type: number
+          description: Base Original Amount
+      required:
+      - amount
+      - base_amount
+      - original_amount
+      - base_original_amount
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
     error-errors-item:
       type: object
       description: Error details
@@ -110,69 +193,11 @@ components:
       required:
       - attribute_code
       - value
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    error-errors:
+    error-parameters:
       type: array
-      description: Errors list
+      description: Error parameters list
       items:
-        $ref: '#/components/schemas/error-errors-item'
-    quote-data-shipping-method-interface:
-      type: object
-      description: Interface ShippingMethodInterface
-      properties:
-        carrier_code:
-          type: string
-          description: Shipping carrier code.
-        method_code:
-          type: string
-          description: Shipping method code.
-        carrier_title:
-          type: string
-          description: Shipping carrier title. Otherwise, null.
-        method_title:
-          type: string
-          description: Shipping method title. Otherwise, null.
-        amount:
-          type: number
-          description: Shipping amount in store currency.
-        base_amount:
-          type: number
-          description: Shipping amount in base currency.
-        available:
-          type: boolean
-          description: The value of the availability flag for the current shipping method.
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-shipping-method-extension-interface'
-        error_message:
-          type: string
-          description: Shipping Error message.
-        price_excl_tax:
-          type: number
-          description: Shipping price excl tax.
-        price_incl_tax:
-          type: number
-          description: Shipping price incl tax.
-      required:
-      - carrier_code
-      - method_code
-      - amount
-      - base_amount
-      - available
-      - error_message
-      - price_excl_tax
-      - price_incl_tax
+        $ref: '#/components/schemas/error-parameters-item'
     quote-data-address-interface:
       type: object
       description: Interface AddressInterface
@@ -264,30 +289,51 @@ components:
       - firstname
       - lastname
       - email
-    quote-data-address-extension-interface:
+    quote-data-shipping-method-interface:
       type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\AddressInterface
+      description: Interface ShippingMethodInterface
       properties:
-        pickup_location_code:
+        carrier_code:
           type: string
-        discounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/sales-rule-data-rule-discount-interface'
-        address_title:
+          description: Shipping carrier code.
+        method_code:
           type: string
-        customer_address_type:
+          description: Shipping method code.
+        carrier_title:
           type: string
-        buy_as:
+          description: Shipping carrier title. Otherwise, null.
+        method_title:
           type: string
-        address_is_active:
+          description: Shipping method title. Otherwise, null.
+        amount:
+          type: number
+          description: Shipping amount in store currency.
+        base_amount:
+          type: number
+          description: Shipping amount in base currency.
+        available:
+          type: boolean
+          description: The value of the availability flag for the current shipping method.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-shipping-method-extension-interface'
+        error_message:
           type: string
-        address_house_number:
-          type: string
-        address_local_number:
-          type: string
-        address_avatar_id:
-          type: string
+          description: Shipping Error message.
+        price_excl_tax:
+          type: number
+          description: Shipping price excl tax.
+        price_incl_tax:
+          type: number
+          description: Shipping price incl tax.
+      required:
+      - carrier_code
+      - method_code
+      - amount
+      - base_amount
+      - available
+      - error_message
+      - price_excl_tax
+      - price_incl_tax
     sales-rule-data-rule-discount-interface:
       type: object
       description: Rule discount Interface
@@ -304,50 +350,6 @@ components:
       - discount_data
       - rule_label
       - rule_i_d
-    sales-rule-data-discount-data-interface:
-      type: object
-      description: Discount Data Interface
-      properties:
-        amount:
-          type: number
-          description: Amount
-        base_amount:
-          type: number
-          description: Base Amount
-        original_amount:
-          type: number
-          description: Original Amount
-        base_original_amount:
-          type: number
-          description: Base Original Amount
-      required:
-      - amount
-      - base_amount
-      - original_amount
-      - base_original_amount
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
     quote-data-address-extension-interface_2:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\AddressInterface

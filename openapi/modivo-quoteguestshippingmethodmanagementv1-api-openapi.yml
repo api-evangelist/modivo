@@ -59,6 +59,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 guestcarts cart id shippingmethods
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
@@ -66,15 +68,6 @@ components:
     quote-data-shipping-method-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ShippingMethodInterface
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -88,6 +81,38 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
     error-errors:
       type: array
       description: Errors list
@@ -138,29 +163,6 @@ components:
       - error_message
       - price_excl_tax
       - price_incl_tax
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
   securitySchemes:
     api_key:
       type: apiKey

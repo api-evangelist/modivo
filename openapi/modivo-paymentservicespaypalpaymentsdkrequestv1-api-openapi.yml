@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: MODIVO Commerce REST Payment Services Paypal Payment SDK Request V1 API
+  title: MODIVO Commerce REST Payment Services Paypal Payment SDK…
   version: '2.4'
-  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, marketplace order placement, customer account management, product render info, search, directory data, gift messages, in-store pickup locations, PayPal/Braintree payment services, and MODIVO-specific extensions (MODIVO My Returns webhook, eobuwie JWT service, Trustmate review integration). Anonymous access is limited to unauthenticated storefront operations; the remainder requires a Magento integration or customer bearer token. Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all.
   x-source: https://modivo.pl/rest/all/schema?services=all
 servers:
 - url: https://modivo.pl/rest/all
@@ -45,6 +45,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 paymentssdk location
+      x-summary-source: derived
   /V1/payments-sdk/{location}/{methodCode}:
     get:
       tags:
@@ -81,17 +83,36 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 paymentssdk location method code
+      x-summary-source: derived
 components:
   schemas:
-    error-errors-item:
+    error-parameters-item:
       type: object
-      description: Error details
+      description: Error parameters item
       properties:
-        message:
+        resources:
           type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    payment-services-paypal-data-payment-config-sdk-params-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Code
+        value:
+          type: string
+          description: Config
+      required:
+      - name
+      - value
     payment-services-paypal-data-payment-sdk-params-interface:
       type: object
       description: ''
@@ -107,37 +128,6 @@ components:
       required:
       - code
       - params
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    payment-services-paypal-data-payment-config-sdk-params-interface:
-      type: object
-      description: ''
-      properties:
-        name:
-          type: string
-          description: Code
-        value:
-          type: string
-          description: Config
-      required:
-      - name
-      - value
     error-response:
       type: object
       properties:
@@ -161,6 +151,20 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
   securitySchemes:
     api_key:
       type: apiKey

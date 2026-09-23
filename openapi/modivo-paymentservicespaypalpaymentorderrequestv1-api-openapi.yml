@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: MODIVO Commerce REST Payment Services Paypal Payment Order Request V1 API
+  title: MODIVO Commerce REST Payment Services Paypal Payment Order…
   version: '2.4'
-  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, marketplace order placement, customer account management, product render info, search, directory data, gift messages, in-store pickup locations, PayPal/Braintree payment services, and MODIVO-specific extensions (MODIVO My Returns webhook, eobuwie JWT service, Trustmate review integration). Anonymous access is limited to unauthenticated storefront operations; the remainder requires a Magento integration or customer bearer token. Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all.
   x-source: https://modivo.pl/rest/all/schema?services=all
 servers:
 - url: https://modivo.pl/rest/all
@@ -95,6 +95,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Post V1 guestcarts cart id paymentorder
+      x-summary-source: derived
   /V1/guest-carts/{cartId}/payment-order/{id}:
     get:
       tags:
@@ -140,6 +142,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 guestcarts cart id paymentorder id
+      x-summary-source: derived
     post:
       tags:
       - paymentServicesPaypalPaymentOrderRequestV1
@@ -184,8 +188,59 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Post V1 guestcarts cart id paymentorder id
+      x-summary-source: derived
 components:
   schemas:
+    payment-services-paypal-data-payment-order-details-interface:
+      type: object
+      description: Interface PaymentOrderDetailsInterface
+      properties:
+        payment_source_details:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-source-details-interface'
+        id:
+          type: string
+          description: Payment order id
+        mp_order_id:
+          type: string
+          description: Payment order mpOrderId
+        status:
+          type: string
+          description: Payment order status
+        amount:
+          type: number
+          description: Payment order amount
+        currency_code:
+          type: string
+          description: Payment order currency code
+      required:
+      - payment_source_details
+      - id
+      - mp_order_id
+      - status
+      - amount
+      - currency_code
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    payment-services-paypal-data-payment-source-details-interface:
+      type: object
+      description: ''
+      properties:
+        card:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-details-interface'
+      required:
+      - card
     error-errors-item:
       type: object
       description: Error details
@@ -220,60 +275,6 @@ components:
       - status
       - amount
       - currency_code
-    payment-services-paypal-data-payment-source-details-interface:
-      type: object
-      description: ''
-      properties:
-        card:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-details-interface'
-      required:
-      - card
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    payment-services-paypal-data-payment-order-details-interface:
-      type: object
-      description: Interface PaymentOrderDetailsInterface
-      properties:
-        payment_source_details:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-source-details-interface'
-        id:
-          type: string
-          description: Payment order id
-        mp_order_id:
-          type: string
-          description: Payment order mpOrderId
-        status:
-          type: string
-          description: Payment order status
-        amount:
-          type: number
-          description: Payment order amount
-        currency_code:
-          type: string
-          description: Payment order currency code
-      required:
-      - payment_source_details
-      - id
-      - mp_order_id
-      - status
-      - amount
-      - currency_code
     payment-services-paypal-data-payment-card-details-interface:
       type: object
       description: ''
@@ -298,15 +299,6 @@ components:
       - card_expiry_month
       - card_expiry_year
       - bin_details
-    payment-services-paypal-data-payment-card-bin-details-interface:
-      type: object
-      description: ''
-      properties:
-        bin:
-          type: string
-          description: Bin
-      required:
-      - bin
     error-response:
       type: object
       properties:
@@ -330,6 +322,20 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    payment-services-paypal-data-payment-card-bin-details-interface:
+      type: object
+      description: ''
+      properties:
+        bin:
+          type: string
+          description: Bin
+      required:
+      - bin
   securitySchemes:
     api_key:
       type: apiKey

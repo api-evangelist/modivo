@@ -55,6 +55,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 guestcarts cart id coupons
+      x-summary-source: derived
     delete:
       tags:
       - quoteGuestCouponManagementV1
@@ -95,6 +97,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Delete V1 guestcarts cart id coupons
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
   /V1/guest-carts/{cartId}/coupons/{couponCode}:
@@ -144,24 +148,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Put V1 guestcarts cart id coupons coupon code
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -198,6 +190,20 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
   securitySchemes:
     api_key:
       type: apiKey

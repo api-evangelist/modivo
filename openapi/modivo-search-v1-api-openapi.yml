@@ -2,18 +2,18 @@ openapi: 3.2.0
 info:
   title: MODIVO Commerce REST Search V1 API
   version: '2.4'
-  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, marketplace order placement, customer account management, product render info, search, directory data, gift messages, in-store pickup locations, PayPal/Braintree payment services, and MODIVO-specific extensions (MODIVO My Returns webhook, eobuwie JWT service, Trustmate review integration). Anonymous access is limited to unauthenticated storefront operations; the remainder requires a Magento integration or customer bearer token. Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  description: Public REST API surface of the MODIVO storefront (modivo.pl), served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://modivo.pl/rest/all/schema?services=all.
   x-source: https://modivo.pl/rest/all/schema?services=all
 servers:
 - url: https://modivo.pl/rest/all
 tags:
-- name: searchV1
+- name: search V1
   description: Search API for all requests
 paths:
   /V1/search:
     get:
       tags:
-      - searchV1
+      - search V1
       description: Make Full Text Search and return found Documents
       operationId: GetV1Search
       parameters:
@@ -75,30 +75,44 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Get V1 search
+      x-summary-source: derived
 components:
   schemas:
-    framework-search-document-interface:
+    error-parameters-item:
       type: object
-      description: Interface Search Document
+      description: Error parameters item
       properties:
-        id:
-          type: integer
-        custom_attributes:
-          type: array
-          description: Custom attributes values.
-          items:
-            $ref: '#/components/schemas/framework-attribute-interface'
-      required:
-      - id
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
+        resources:
           type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    framework-filter:
+      type: object
+      description: Filter which can be used by any methods from service layer.
+      properties:
+        field:
+          type: string
+          description: Field
+        value:
+          type: string
+          description: Value
+        condition_type:
+          type: string
+          description: Condition type
+      required:
+      - field
+      - value
     framework-sort-order:
       type: object
       description: Data object for sort order.
@@ -121,77 +135,6 @@ components:
           description: A list of filters in this group
           items:
             $ref: '#/components/schemas/framework-filter'
-    framework-attribute-interface:
-      type: object
-      description: Interface for custom attribute value.
-      properties:
-        attribute_code:
-          type: string
-          description: Attribute code
-        value:
-          type: string
-          description: Attribute value
-      required:
-      - attribute_code
-      - value
-    framework-search-search-criteria-interface:
-      type: object
-      description: Interface SearchCriteriaInterface
-      properties:
-        request_name:
-          type: string
-        filter_groups:
-          type: array
-          description: A list of filter groups.
-          items:
-            $ref: '#/components/schemas/framework-search-filter-group'
-        sort_orders:
-          type: array
-          description: Sort order.
-          items:
-            $ref: '#/components/schemas/framework-sort-order'
-        page_size:
-          type: integer
-          description: Page size.
-        current_page:
-          type: integer
-          description: Current page.
-      required:
-      - request_name
-      - filter_groups
-    framework-search-bucket-interface:
-      type: object
-      description: Interface for facet Bucket
-      properties:
-        name:
-          type: string
-          description: Field name
-        values:
-          type: array
-          description: Field values
-          items:
-            $ref: '#/components/schemas/framework-search-aggregation-value-interface'
-      required:
-      - name
-      - values
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     framework-search-aggregation-interface:
       type: object
       description: Interface Aggregation to get faceted data
@@ -224,22 +167,77 @@ components:
       required:
       - value
       - metrics
-    framework-filter:
+    framework-search-search-criteria-interface:
       type: object
-      description: Filter which can be used by any methods from service layer.
+      description: Interface SearchCriteriaInterface
       properties:
-        field:
+        request_name:
           type: string
-          description: Field
+        filter_groups:
+          type: array
+          description: A list of filter groups.
+          items:
+            $ref: '#/components/schemas/framework-search-filter-group'
+        sort_orders:
+          type: array
+          description: Sort order.
+          items:
+            $ref: '#/components/schemas/framework-sort-order'
+        page_size:
+          type: integer
+          description: Page size.
+        current_page:
+          type: integer
+          description: Current page.
+      required:
+      - request_name
+      - filter_groups
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
         value:
           type: string
-          description: Value
-        condition_type:
-          type: string
-          description: Condition type
+          description: Attribute value
       required:
-      - field
+      - attribute_code
       - value
+    framework-search-bucket-interface:
+      type: object
+      description: Interface for facet Bucket
+      properties:
+        name:
+          type: string
+          description: Field name
+        values:
+          type: array
+          description: Field values
+          items:
+            $ref: '#/components/schemas/framework-search-aggregation-value-interface'
+      required:
+      - name
+      - values
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
     framework-search-search-result-interface:
       type: object
       description: Interface SearchResultInterface
@@ -260,24 +258,28 @@ components:
       - aggregations
       - search_criteria
       - total_count
-    error-response:
+    error-errors-item:
       type: object
+      description: Error details
       properties:
         message:
           type: string
           description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
         parameters:
           $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
+    framework-search-document-interface:
+      type: object
+      description: Interface Search Document
+      properties:
+        id:
+          type: integer
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
       required:
-      - message
+      - id
     error-parameters:
       type: array
       description: Error parameters list

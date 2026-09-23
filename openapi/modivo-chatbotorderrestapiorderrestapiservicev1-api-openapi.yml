@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: eobuwie Commerce REST Chatbot Order Rest API Order Rest API Service V1 API
+  title: eobuwie Commerce REST Chatbot Order Rest API Order Rest API…
   version: '2.4'
-  description: Public REST API surface of eobuwie.com.pl, the MODIVO Group's footwear storefront, served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://eobuwie.com.pl/rest/all/schema?services=all. Covers guest cart and checkout, guest order placement, customer account management, product render info, directory data, gift messages, and eobuwie-specific extensions (My Returns webhook, chatbot order REST API). Mechanically converted from the provider's own Swagger 2.0 document; the verbatim original is in openapi/_original/.
+  description: Public REST API surface of eobuwie.com.pl, the MODIVO Group's footwear storefront, served by its Adobe Commerce / Magento 2.4 deployment and self-described at https://eobuwie.com.pl/rest/all/schema?services=all.
   x-source: https://eobuwie.com.pl/rest/all/schema?services=all
 servers:
 - url: https://eobuwie.com.pl/rest/all
@@ -58,6 +58,8 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Chatbot order rest api order rest api service V1 get status post
+      x-summary-source: derived
   /V1/chatbot/order/request-cancellation:
     post:
       tags:
@@ -106,33 +108,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Chatbot order rest api order rest api service V1 request cancellation post
+      x-summary-source: derived
 components:
   schemas:
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    chatbot-order-rest-api-data-order-auth-input-interface:
-      type: object
-      description: ''
-      properties:
-        order_email:
-          type: string
-        order_number:
-          type: string
-      required:
-      - order_email
-      - order_number
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -165,6 +144,17 @@ components:
       - is_instore
       - status
       - suborders_status
+    chatbot-order-rest-api-data-order-auth-input-interface:
+      type: object
+      description: ''
+      properties:
+        order_email:
+          type: string
+        order_number:
+          type: string
+      required:
+      - order_email
+      - order_number
     error-response:
       type: object
       properties:
@@ -188,3 +178,17 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'

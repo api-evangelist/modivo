@@ -66,77 +66,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
+      summary: Post V1 guestcarts cart id totalsinformation
+      x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    quote-data-total-segment-interface:
-      type: object
-      description: Interface TotalsInterface
-      properties:
-        code:
-          type: string
-          description: Code
-        title:
-          type: string
-          description: Total title
-        value:
-          type: number
-          description: Total value
-        area:
-          type: string
-          description: Display area code.
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-total-segment-extension-interface'
-      required:
-      - code
-      - value
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    quote-data-totals-item-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    sales-rule-data-rule-discount-interface:
-      type: object
-      description: Rule discount Interface
-      properties:
-        discount_data:
-          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
-        rule_label:
-          type: string
-          description: Rule Label
-        rule_i_d:
-          type: integer
-          description: Rule ID
-      required:
-      - discount_data
-      - rule_label
-      - rule_i_d
     sales-rule-data-discount-data-interface:
       type: object
       description: Discount Data Interface
@@ -158,53 +93,19 @@ components:
       - base_amount
       - original_amount
       - base_original_amount
-    error-response:
+    error-parameters-item:
       type: object
+      description: Error parameters item
       properties:
-        message:
+        resources:
           type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
+          description: ACL resource
+        fieldName:
           type: string
-          description: Stack trace
-      required:
-      - message
-    checkout-data-totals-information-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Checkout\Api\Data\TotalsInformationInterface
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    tax-data-grand-total-rates-interface:
-      type: object
-      description: Interface GrandTotalRatesInterface
-      properties:
-        percent:
+          description: Missing or invalid field name
+        fieldValue:
           type: string
-          description: Tax percentage value
-        title:
-          type: string
-          description: Rate title
-      required:
-      - percent
-      - title
-    quote-data-total-segment-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
-      properties:
-        tax_grandtotal_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
+          description: Incorrect field value
     quote-data-totals-item-interface:
       type: object
       description: Interface TotalsItemInterface
@@ -284,46 +185,41 @@ components:
       - options
       - weee_tax_applied_amount
       - weee_tax_applied
-    checkout-data-totals-information-interface:
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
       type: object
-      description: Interface TotalsInformationInterface
+      description: Error details
       properties:
-        address:
-          $ref: '#/components/schemas/quote-data-address-interface'
-        shipping_method_code:
+        message:
           type: string
-          description: Shipping method code
-        shipping_carrier_code:
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    checkout-data-totals-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Checkout\Api\Data\TotalsInformationInterface
+    error-response:
+      type: object
+      properties:
+        message:
           type: string
-          description: Carrier code
-        extension_attributes:
-          $ref: '#/components/schemas/checkout-data-totals-information-extension-interface'
-        custom_attributes:
-          type: array
-          description: Custom attributes values.
-          items:
-            $ref: '#/components/schemas/framework-attribute-interface'
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
       required:
-      - address
-    framework-attribute-interface:
-      type: object
-      description: Interface for custom attribute value.
-      properties:
-        attribute_code:
-          type: string
-          description: Attribute code
-        value:
-          type: string
-          description: Attribute value
-      required:
-      - attribute_code
-      - value
-    quote-data-totals-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
-      properties:
-        coupon_label:
-          type: string
+      - message
     quote-data-address-interface:
       type: object
       description: Interface AddressInterface
@@ -415,6 +311,22 @@ components:
       - firstname
       - lastname
       - email
+    sales-rule-data-rule-discount-interface:
+      type: object
+      description: Rule discount Interface
+      properties:
+        discount_data:
+          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
+        rule_label:
+          type: string
+          description: Rule Label
+        rule_i_d:
+          type: integer
+          description: Rule ID
+      required:
+      - discount_data
+      - rule_label
+      - rule_i_d
     quote-data-address-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\AddressInterface
@@ -439,6 +351,61 @@ components:
           type: string
         address_avatar_id:
           type: string
+    quote-data-total-segment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
+      properties:
+        tax_grandtotal_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
+    tax-data-grand-total-rates-interface:
+      type: object
+      description: Interface GrandTotalRatesInterface
+      properties:
+        percent:
+          type: string
+          description: Tax percentage value
+        title:
+          type: string
+          description: Rate title
+      required:
+      - percent
+      - title
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
+        value:
+          type: string
+          description: Attribute value
+      required:
+      - attribute_code
+      - value
+    checkout-data-totals-information-interface:
+      type: object
+      description: Interface TotalsInformationInterface
+      properties:
+        address:
+          $ref: '#/components/schemas/quote-data-address-interface'
+        shipping_method_code:
+          type: string
+          description: Shipping method code
+        shipping_carrier_code:
+          type: string
+          description: Carrier code
+        extension_attributes:
+          $ref: '#/components/schemas/checkout-data-totals-information-extension-interface'
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+      required:
+      - address
     quote-data-totals-interface:
       type: object
       description: Interface TotalsInterface
@@ -533,6 +500,33 @@ components:
       required:
       - weee_tax_applied_amount
       - total_segments
+    quote-data-totals-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
+      properties:
+        coupon_label:
+          type: string
+    quote-data-total-segment-interface:
+      type: object
+      description: Interface TotalsInterface
+      properties:
+        code:
+          type: string
+          description: Code
+        title:
+          type: string
+          description: Total title
+        value:
+          type: number
+          description: Total value
+        area:
+          type: string
+          description: Display area code.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-total-segment-extension-interface'
+      required:
+      - code
+      - value
     tax-data-grand-total-details-interface:
       type: object
       description: Interface GrandTotalDetailsInterface
@@ -552,6 +546,14 @@ components:
       - amount
       - rates
       - group_id
+    quote-data-totals-item-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
     sales-rule-data-rule-discount-interface_2:
       type: object
       description: Rule discount Interface
