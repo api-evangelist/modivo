@@ -62,20 +62,29 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    eob-place-order-data-order-response-interface:
+    eob-place-order-data-order-suborder-interface:
       type: object
       description: ''
       properties:
-        order_number:
+        store_id:
           type: string
-        order_hash:
+        delivery_method:
+          $ref: '#/components/schemas/eob-place-order-data-order-suborder-delivery-method-interface'
+        shipment_cost:
           type: string
-        masked_quote_id:
+        suborder_total_price:
           type: string
+          description: Total price of sub-order
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/eob-place-order-data-order-suborder-item-interface'
       required:
-      - order_number
-      - order_hash
-      - masked_quote_id
+      - store_id
+      - delivery_method
+      - shipment_cost
+      - suborder_total_price
+      - items
     eob-place-order-data-order-suborder-delivery-method-interface:
       type: object
       description: ''
@@ -106,29 +115,6 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    eob-place-order-data-order-suborder-interface:
-      type: object
-      description: ''
-      properties:
-        store_id:
-          type: string
-        delivery_method:
-          $ref: '#/components/schemas/eob-place-order-data-order-suborder-delivery-method-interface'
-        shipment_cost:
-          type: string
-        suborder_total_price:
-          type: string
-          description: Total price of sub-order
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/eob-place-order-data-order-suborder-item-interface'
-      required:
-      - store_id
-      - delivery_method
-      - shipment_cost
-      - suborder_total_price
-      - items
     eob-place-order-data-order-payment-interface:
       type: object
       description: ''
@@ -145,19 +131,6 @@ components:
       required:
       - currency_code
       - method_id
-    eob-place-order-data-order-customer-interface:
-      type: object
-      description: ''
-      properties:
-        email_address:
-          type: string
-          description: Email
-        external_id:
-          type: string
-          description: External id
-      required:
-      - email_address
-      - external_id
     eob-place-order-data-order-billing-address-interface:
       type: object
       description: ''
@@ -201,6 +174,66 @@ components:
       - street
       - house_number
       - post_code
+    eob-place-order-data-order-suborder-item-interface:
+      type: object
+      description: ''
+      properties:
+        offer_id:
+          type: string
+          description: Offer id
+        final_price:
+          type: string
+          description: Base price
+        base_price:
+          type: string
+          description: Base price
+        price:
+          type: string
+          description: Final price
+        quantity:
+          type: integer
+          description: Quantity
+        sku:
+          type: string
+          description: Sku
+      required:
+      - offer_id
+      - final_price
+      - base_price
+      - price
+      - quantity
+      - sku
+    eob-place-order-data-order-customer-interface:
+      type: object
+      description: ''
+      properties:
+        email_address:
+          type: string
+          description: Email
+        external_id:
+          type: string
+          description: External id
+      required:
+      - email_address
+      - external_id
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
     eob-place-order-data-order-shipping-address-interface:
       type: object
       description: ''
@@ -278,58 +311,6 @@ components:
       - shipping_address
       - billing_address
       - suborders
-    eob-place-order-data-order-suborder-item-interface:
-      type: object
-      description: ''
-      properties:
-        offer_id:
-          type: string
-          description: Offer id
-        final_price:
-          type: string
-          description: Base price
-        base_price:
-          type: string
-          description: Base price
-        price:
-          type: string
-          description: Final price
-        quantity:
-          type: integer
-          description: Quantity
-        sku:
-          type: string
-          description: Sku
-      required:
-      - offer_id
-      - final_price
-      - base_price
-      - price
-      - quantity
-      - sku
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
     error-errors-item:
       type: object
       description: Error details
@@ -339,3 +320,22 @@ components:
           description: Error message
         parameters:
           $ref: '#/components/schemas/error-parameters'
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    eob-place-order-data-order-response-interface:
+      type: object
+      description: ''
+      properties:
+        order_number:
+          type: string
+        order_hash:
+          type: string
+        masked_quote_id:
+          type: string
+      required:
+      - order_number
+      - order_hash
+      - masked_quote_id

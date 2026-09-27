@@ -154,6 +154,11 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -185,16 +190,6 @@ components:
           description: Stack trace
       required:
       - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     error-errors-item:
       type: object
       description: Error details
@@ -204,6 +199,11 @@ components:
           description: Error message
         parameters:
           $ref: '#/components/schemas/error-parameters'
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
   securitySchemes:
     api_key:
       type: apiKey

@@ -192,6 +192,11 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
     payment-services-paypal-data-payment-order-details-interface:
       type: object
       description: Interface PaymentOrderDetailsInterface
@@ -233,23 +238,15 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    payment-services-paypal-data-payment-source-details-interface:
+    payment-services-paypal-data-payment-card-bin-details-interface:
       type: object
       description: ''
       properties:
-        card:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-details-interface'
-      required:
-      - card
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
+        bin:
           type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+          description: Bin
+      required:
+      - bin
     payment-services-paypal-data-payment-order-interface:
       type: object
       description: Interface PaymentOrderInterface
@@ -317,25 +314,28 @@ components:
           description: Stack trace
       required:
       - message
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     error-parameters:
       type: array
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    payment-services-paypal-data-payment-card-bin-details-interface:
+    payment-services-paypal-data-payment-source-details-interface:
       type: object
       description: ''
       properties:
-        bin:
-          type: string
-          description: Bin
+        card:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-details-interface'
       required:
-      - bin
+      - card
   securitySchemes:
     api_key:
       type: apiKey

@@ -91,6 +91,11 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -104,25 +109,14 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    directory-data-region-information-interface:
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    directory-data-country-information-extension-interface:
       type: object
-      description: Region Information interface.
-      properties:
-        id:
-          type: string
-          description: Region id
-        code:
-          type: string
-          description: Region code
-        name:
-          type: string
-          description: Region name
-        extension_attributes:
-          $ref: '#/components/schemas/directory-data-region-information-extension-interface'
-      required:
-      - id
-      - code
-      - name
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CountryInformationInterface
     directory-data-country-information-interface:
       type: object
       description: Country Information interface.
@@ -155,9 +149,6 @@ components:
       - three_letter_abbreviation
       - full_name_locale
       - full_name_english
-    directory-data-country-information-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CountryInformationInterface
     error-response:
       type: object
       properties:
@@ -176,16 +167,6 @@ components:
           description: Stack trace
       required:
       - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     error-errors-item:
       type: object
       description: Error details
@@ -195,6 +176,25 @@ components:
           description: Error message
         parameters:
           $ref: '#/components/schemas/error-parameters'
+    directory-data-region-information-interface:
+      type: object
+      description: Region Information interface.
+      properties:
+        id:
+          type: string
+          description: Region id
+        code:
+          type: string
+          description: Region code
+        name:
+          type: string
+          description: Region name
+        extension_attributes:
+          $ref: '#/components/schemas/directory-data-region-information-extension-interface'
+      required:
+      - id
+      - code
+      - name
     directory-data-region-information-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Directory\Api\Data\RegionInformationInterface

@@ -112,6 +112,11 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -125,25 +130,6 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    chatbot-order-rest-api-data-order-status-output-interface:
-      type: object
-      description: ''
-      properties:
-        is_internal:
-          type: boolean
-        is_instore:
-          type: boolean
-        status:
-          type: string
-        suborders_status:
-          type: array
-          items:
-            type: string
-      required:
-      - is_internal
-      - is_instore
-      - status
-      - suborders_status
     chatbot-order-rest-api-data-order-auth-input-interface:
       type: object
       description: ''
@@ -173,16 +159,6 @@ components:
           description: Stack trace
       required:
       - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     error-errors-item:
       type: object
       description: Error details
@@ -192,3 +168,27 @@ components:
           description: Error message
         parameters:
           $ref: '#/components/schemas/error-parameters'
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    chatbot-order-rest-api-data-order-status-output-interface:
+      type: object
+      description: ''
+      properties:
+        is_internal:
+          type: boolean
+        is_instore:
+          type: boolean
+        status:
+          type: string
+        suborders_status:
+          type: array
+          items:
+            type: string
+      required:
+      - is_internal
+      - is_instore
+      - status
+      - suborders_status

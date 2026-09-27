@@ -87,32 +87,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    payment-services-paypal-data-payment-config-sdk-params-interface:
-      type: object
-      description: ''
-      properties:
-        name:
-          type: string
-          description: Code
-        value:
-          type: string
-          description: Config
-      required:
-      - name
-      - value
     payment-services-paypal-data-payment-sdk-params-interface:
       type: object
       description: ''
@@ -128,6 +102,24 @@ components:
       required:
       - code
       - params
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
     error-response:
       type: object
       properties:
@@ -146,16 +138,19 @@ components:
           description: Stack trace
       required:
       - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
+    payment-services-paypal-data-payment-config-sdk-params-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Code
+        value:
+          type: string
+          description: Config
+      required:
+      - name
+      - value
     error-errors-item:
       type: object
       description: Error details
@@ -165,6 +160,11 @@ components:
           description: Error message
         parameters:
           $ref: '#/components/schemas/error-parameters'
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
   securitySchemes:
     api_key:
       type: apiKey

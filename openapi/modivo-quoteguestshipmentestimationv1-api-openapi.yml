@@ -87,9 +87,129 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
+    sales-rule-data-discount-data-interface:
+      type: object
+      description: Discount Data Interface
+      properties:
+        amount:
+          type: number
+          description: Amount
+        base_amount:
+          type: number
+          description: Base Amount
+        original_amount:
+          type: number
+          description: Original Amount
+        base_original_amount:
+          type: number
+          description: Base Original Amount
+      required:
+      - amount
+      - base_amount
+      - original_amount
+      - base_original_amount
     quote-data-shipping-method-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ShippingMethodInterface
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    quote-data-shipping-method-interface:
+      type: object
+      description: Interface ShippingMethodInterface
+      properties:
+        carrier_code:
+          type: string
+          description: Shipping carrier code.
+        method_code:
+          type: string
+          description: Shipping method code.
+        carrier_title:
+          type: string
+          description: Shipping carrier title. Otherwise, null.
+        method_title:
+          type: string
+          description: Shipping method title. Otherwise, null.
+        amount:
+          type: number
+          description: Shipping amount in store currency.
+        base_amount:
+          type: number
+          description: Shipping amount in base currency.
+        available:
+          type: boolean
+          description: The value of the availability flag for the current shipping method.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-shipping-method-extension-interface'
+        error_message:
+          type: string
+          description: Shipping Error message.
+        price_excl_tax:
+          type: number
+          description: Shipping price excl tax.
+        price_incl_tax:
+          type: number
+          description: Shipping price incl tax.
+      required:
+      - carrier_code
+      - method_code
+      - amount
+      - base_amount
+      - available
+      - error_message
+      - price_excl_tax
+      - price_incl_tax
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
+        value:
+          type: string
+          description: Attribute value
+      required:
+      - attribute_code
+      - value
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
     quote-data-address-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\AddressInterface
@@ -114,90 +234,6 @@ components:
           type: string
         address_avatar_id:
           type: string
-    sales-rule-data-discount-data-interface:
-      type: object
-      description: Discount Data Interface
-      properties:
-        amount:
-          type: number
-          description: Amount
-        base_amount:
-          type: number
-          description: Base Amount
-        original_amount:
-          type: number
-          description: Original Amount
-        base_original_amount:
-          type: number
-          description: Base Original Amount
-      required:
-      - amount
-      - base_amount
-      - original_amount
-      - base_original_amount
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    framework-attribute-interface:
-      type: object
-      description: Interface for custom attribute value.
-      properties:
-        attribute_code:
-          type: string
-          description: Attribute code
-        value:
-          type: string
-          description: Attribute value
-      required:
-      - attribute_code
-      - value
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
     quote-data-address-interface:
       type: object
       description: Interface AddressInterface
@@ -289,51 +325,15 @@ components:
       - firstname
       - lastname
       - email
-    quote-data-shipping-method-interface:
+    error-errors-item:
       type: object
-      description: Interface ShippingMethodInterface
+      description: Error details
       properties:
-        carrier_code:
+        message:
           type: string
-          description: Shipping carrier code.
-        method_code:
-          type: string
-          description: Shipping method code.
-        carrier_title:
-          type: string
-          description: Shipping carrier title. Otherwise, null.
-        method_title:
-          type: string
-          description: Shipping method title. Otherwise, null.
-        amount:
-          type: number
-          description: Shipping amount in store currency.
-        base_amount:
-          type: number
-          description: Shipping amount in base currency.
-        available:
-          type: boolean
-          description: The value of the availability flag for the current shipping method.
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-shipping-method-extension-interface'
-        error_message:
-          type: string
-          description: Shipping Error message.
-        price_excl_tax:
-          type: number
-          description: Shipping price excl tax.
-        price_incl_tax:
-          type: number
-          description: Shipping price incl tax.
-      required:
-      - carrier_code
-      - method_code
-      - amount
-      - base_amount
-      - available
-      - error_message
-      - price_excl_tax
-      - price_incl_tax
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     sales-rule-data-rule-discount-interface:
       type: object
       description: Rule discount Interface
