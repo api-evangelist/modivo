@@ -43,9 +43,9 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    directory-data-currency-information-extension-interface:
+    directory-data-exchange-rate-extension-interface:
       type: object
-      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CurrencyInformationInterface
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\ExchangeRateInterface
     directory-data-exchange-rate-interface:
       type: object
       description: Exchange Rate interface.
@@ -61,11 +61,15 @@ components:
       required:
       - currency_to
       - rate
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -79,33 +83,6 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
     directory-data-currency-information-interface:
       type: object
       description: Currency Information interface.
@@ -141,14 +118,37 @@ components:
       - default_display_currency_symbol
       - available_currency_codes
       - exchange_rates
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
     error-parameters:
       type: array
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
-    directory-data-exchange-rate-extension-interface:
+    directory-data-currency-information-extension-interface:
       type: object
-      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\ExchangeRateInterface
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CurrencyInformationInterface
   securitySchemes:
     api_key:
       type: apiKey

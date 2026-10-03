@@ -192,11 +192,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     payment-services-paypal-data-payment-order-details-interface:
       type: object
       description: Interface PaymentOrderDetailsInterface
@@ -225,6 +220,47 @@ components:
       - status
       - amount
       - currency_code
+    payment-services-paypal-data-payment-source-details-interface:
+      type: object
+      description: ''
+      properties:
+        card:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-details-interface'
+      required:
+      - card
+    payment-services-paypal-data-payment-card-details-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Name
+        last_digits:
+          type: string
+          description: Last digits
+        card_expiry_month:
+          type: string
+          description: Card expiry month
+        card_expiry_year:
+          type: string
+          description: Card expiry year
+        bin_details:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-bin-details-interface'
+      required:
+      - name
+      - last_digits
+      - card_expiry_month
+      - card_expiry_year
+      - bin_details
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -238,15 +274,34 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    payment-services-paypal-data-payment-card-bin-details-interface:
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    error-response:
       type: object
-      description: ''
       properties:
-        bin:
+        message:
           type: string
-          description: Bin
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
       required:
-      - bin
+      - message
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
     payment-services-paypal-data-payment-order-interface:
       type: object
       description: Interface PaymentOrderInterface
@@ -272,70 +327,15 @@ components:
       - status
       - amount
       - currency_code
-    payment-services-paypal-data-payment-card-details-interface:
+    payment-services-paypal-data-payment-card-bin-details-interface:
       type: object
       description: ''
       properties:
-        name:
+        bin:
           type: string
-          description: Name
-        last_digits:
-          type: string
-          description: Last digits
-        card_expiry_month:
-          type: string
-          description: Card expiry month
-        card_expiry_year:
-          type: string
-          description: Card expiry year
-        bin_details:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-bin-details-interface'
+          description: Bin
       required:
-      - name
-      - last_digits
-      - card_expiry_month
-      - card_expiry_year
-      - bin_details
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    payment-services-paypal-data-payment-source-details-interface:
-      type: object
-      description: ''
-      properties:
-        card:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-card-details-interface'
-      required:
-      - card
+      - bin
   securitySchemes:
     api_key:
       type: apiKey

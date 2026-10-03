@@ -177,11 +177,19 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
+    quote-data-payment-method-interface:
+      type: object
+      description: Interface PaymentMethodInterface
+      properties:
+        code:
+          type: string
+          description: Payment method code
+        title:
+          type: string
+          description: Payment method title
+      required:
+      - code
+      - title
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -195,6 +203,15 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     quote-data-payment-interface:
       type: object
       description: Interface PaymentInterface
@@ -214,19 +231,19 @@ components:
           $ref: '#/components/schemas/quote-data-payment-extension-interface'
       required:
       - method
-    quote-data-payment-method-interface:
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    quote-data-payment-extension-interface:
       type: object
-      description: Interface PaymentMethodInterface
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
       properties:
-        code:
-          type: string
-          description: Payment method code
-        title:
-          type: string
-          description: Payment method title
-      required:
-      - code
-      - title
+        agreement_ids:
+          type: array
+          items:
+            type: string
     error-response:
       type: object
       properties:
@@ -245,23 +262,6 @@ components:
           description: Stack trace
       required:
       - message
-    quote-data-payment-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
-      properties:
-        agreement_ids:
-          type: array
-          items:
-            type: string
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
     error-parameters:
       type: array
       description: Error parameters list

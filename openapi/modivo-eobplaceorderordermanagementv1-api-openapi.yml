@@ -62,75 +62,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    eob-place-order-data-order-suborder-interface:
-      type: object
-      description: ''
-      properties:
-        store_id:
-          type: string
-        delivery_method:
-          $ref: '#/components/schemas/eob-place-order-data-order-suborder-delivery-method-interface'
-        shipment_cost:
-          type: string
-        suborder_total_price:
-          type: string
-          description: Total price of sub-order
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/eob-place-order-data-order-suborder-item-interface'
-      required:
-      - store_id
-      - delivery_method
-      - shipment_cost
-      - suborder_total_price
-      - items
-    eob-place-order-data-order-suborder-delivery-method-interface:
-      type: object
-      description: ''
-      properties:
-        id:
-          type: string
-          description: Id
-        pudo_id:
-          type: string
-          description: Pudo id
-      required:
-      - id
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    eob-place-order-data-order-payment-interface:
-      type: object
-      description: ''
-      properties:
-        currency_code:
-          type: string
-          description: Currency code
-        coupon_code:
-          type: string
-          description: Coupon code
-        method_id:
-          type: string
-          description: Method id
-      required:
-      - currency_code
-      - method_id
     eob-place-order-data-order-billing-address-interface:
       type: object
       description: ''
@@ -174,6 +105,141 @@ components:
       - street
       - house_number
       - post_code
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    eob-place-order-data-order-response-interface:
+      type: object
+      description: ''
+      properties:
+        order_number:
+          type: string
+        order_hash:
+          type: string
+        masked_quote_id:
+          type: string
+      required:
+      - order_number
+      - order_hash
+      - masked_quote_id
+    eob-place-order-data-order-payment-interface:
+      type: object
+      description: ''
+      properties:
+        currency_code:
+          type: string
+          description: Currency code
+        coupon_code:
+          type: string
+          description: Coupon code
+        method_id:
+          type: string
+          description: Method id
+      required:
+      - currency_code
+      - method_id
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    eob-place-order-data-order-customer-interface:
+      type: object
+      description: ''
+      properties:
+        email_address:
+          type: string
+          description: Email
+        external_id:
+          type: string
+          description: External id
+      required:
+      - email_address
+      - external_id
+    eob-place-order-data-order-suborder-interface:
+      type: object
+      description: ''
+      properties:
+        store_id:
+          type: string
+        delivery_method:
+          $ref: '#/components/schemas/eob-place-order-data-order-suborder-delivery-method-interface'
+        shipment_cost:
+          type: string
+        suborder_total_price:
+          type: string
+          description: Total price of sub-order
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/eob-place-order-data-order-suborder-item-interface'
+      required:
+      - store_id
+      - delivery_method
+      - shipment_cost
+      - suborder_total_price
+      - items
+    eob-place-order-data-order-interface:
+      type: object
+      description: ''
+      properties:
+        is_invoice:
+          type: boolean
+        order_total_price:
+          type: string
+        payment:
+          $ref: '#/components/schemas/eob-place-order-data-order-payment-interface'
+        customer:
+          $ref: '#/components/schemas/eob-place-order-data-order-customer-interface'
+        shipping_address:
+          $ref: '#/components/schemas/eob-place-order-data-order-shipping-address-interface'
+        billing_address:
+          $ref: '#/components/schemas/eob-place-order-data-order-billing-address-interface'
+        suborders:
+          type: array
+          items:
+            $ref: '#/components/schemas/eob-place-order-data-order-suborder-interface'
+        is_electronic_document:
+          type: boolean
+      required:
+      - is_invoice
+      - order_total_price
+      - payment
+      - customer
+      - shipping_address
+      - billing_address
+      - suborders
+    eob-place-order-data-order-suborder-delivery-method-interface:
+      type: object
+      description: ''
+      properties:
+        id:
+          type: string
+          description: Id
+        pudo_id:
+          type: string
+          description: Pudo id
+      required:
+      - id
     eob-place-order-data-order-suborder-item-interface:
       type: object
       description: ''
@@ -203,19 +269,6 @@ components:
       - price
       - quantity
       - sku
-    eob-place-order-data-order-customer-interface:
-      type: object
-      description: ''
-      properties:
-        email_address:
-          type: string
-          description: Email
-        external_id:
-          type: string
-          description: External id
-      required:
-      - email_address
-      - external_id
     error-response:
       type: object
       properties:
@@ -234,6 +287,11 @@ components:
           description: Stack trace
       required:
       - message
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
     eob-place-order-data-order-shipping-address-interface:
       type: object
       description: ''
@@ -281,61 +339,3 @@ components:
       - street
       - house_number
       - post_code
-    eob-place-order-data-order-interface:
-      type: object
-      description: ''
-      properties:
-        is_invoice:
-          type: boolean
-        order_total_price:
-          type: string
-        payment:
-          $ref: '#/components/schemas/eob-place-order-data-order-payment-interface'
-        customer:
-          $ref: '#/components/schemas/eob-place-order-data-order-customer-interface'
-        shipping_address:
-          $ref: '#/components/schemas/eob-place-order-data-order-shipping-address-interface'
-        billing_address:
-          $ref: '#/components/schemas/eob-place-order-data-order-billing-address-interface'
-        suborders:
-          type: array
-          items:
-            $ref: '#/components/schemas/eob-place-order-data-order-suborder-interface'
-        is_electronic_document:
-          type: boolean
-      required:
-      - is_invoice
-      - order_total_price
-      - payment
-      - customer
-      - shipping_address
-      - billing_address
-      - suborders
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    eob-place-order-data-order-response-interface:
-      type: object
-      description: ''
-      properties:
-        order_number:
-          type: string
-        order_hash:
-          type: string
-        masked_quote_id:
-          type: string
-      required:
-      - order_number
-      - order_hash
-      - masked_quote_id

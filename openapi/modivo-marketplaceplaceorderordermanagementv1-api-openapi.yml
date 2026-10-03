@@ -62,6 +62,210 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    marketplace-order-create-data-order-shipping-address-interface:
+      type: object
+      description: ''
+      properties:
+        company_name:
+          type: string
+          description: The company name
+        contact_person_first_name:
+          type: string
+          description: The contact person first name
+        contact_person_last_name:
+          type: string
+          description: The contact person last name
+        address_name:
+          type: string
+          description: The address name
+        phone_number:
+          type: string
+          description: The phone number
+        country_code:
+          type: string
+          description: The country code
+        locality:
+          type: string
+          description: The locality
+        street:
+          type: string
+          description: The street
+        house_number:
+          type: string
+          description: The house number
+        flat_number:
+          type: string
+          description: The flat number
+        post_code:
+          type: string
+          description: The post code
+        post:
+          type: string
+          description: The post
+      required:
+      - contact_person_first_name
+      - contact_person_last_name
+      - address_name
+      - phone_number
+      - country_code
+      - locality
+      - street
+      - house_number
+      - post_code
+      - post
+    marketplace-order-create-data-order-suborder-note-interface:
+      type: object
+      description: ''
+      properties:
+        body:
+          type: string
+          description: Body
+        created_at:
+          type: string
+          description: Created at
+      required:
+      - body
+    marketplace-place-order-data-order-interface:
+      type: object
+      description: ''
+      properties:
+        is_electronic_document:
+          type: boolean
+        suborders:
+          type: array
+          description: Suborders
+          items:
+            $ref: '#/components/schemas/marketplace-place-order-data-order-suborder-interface'
+        default_store_id:
+          type: string
+          description: Store eg. MOD-PL WEB
+        ecommerce_id:
+          type: string
+          description: Ecommerce id
+        prefix:
+          type: string
+          description: Prefix
+        is_invoice:
+          type: boolean
+          description: Is invoice
+        order_total_price:
+          type: string
+          description: Total price of order
+        payment:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-payment-interface'
+        customer:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-customer-interface'
+        shipping_address:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-shipping-address-interface'
+        billing_address:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-billing-address-interface'
+        attributes:
+          type: array
+          description: Attributes
+          items:
+            $ref: '#/components/schemas/stanley-order-create-data-attribute-interface'
+        created_at:
+          type: string
+          description: Created at
+        order_source_ip:
+          type: string
+          description: Order source ip
+      required:
+      - suborders
+      - default_store_id
+      - ecommerce_id
+      - is_invoice
+      - order_total_price
+      - payment
+      - customer
+      - shipping_address
+      - billing_address
+    marketplace-place-order-data-order-response-interface:
+      type: object
+      description: ''
+      properties:
+        order_number:
+          type: string
+        order_hash:
+          type: string
+        masked_quote_id:
+          type: string
+      required:
+      - order_number
+      - order_hash
+      - masked_quote_id
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    marketplace-place-order-data-order-suborder-item-interface:
+      type: object
+      description: ''
+      properties:
+        price:
+          type: string
+        offer_id:
+          type: string
+          description: Offer id
+        base_price:
+          type: string
+          description: Base price
+        final_price:
+          type: string
+          description: Final price
+        quantity:
+          type: integer
+          description: Quantity
+        sku:
+          type: string
+          description: Sku
+      required:
+      - price
+      - offer_id
+      - base_price
+      - final_price
+      - quantity
+      - sku
+    marketplace-order-create-data-order-customer-interface:
+      type: object
+      description: ''
+      properties:
+        email_address:
+          type: string
+          description: Email
+        external_id:
+          type: string
+          description: External id
+        avatar_id:
+          type: string
+          description: Avatar id
+      required:
+      - email_address
+      - external_id
+      - avatar_id
     marketplace-order-create-data-order-billing-address-interface:
       type: object
       description: ''
@@ -122,109 +326,28 @@ components:
       - house_number
       - post_code
       - post
-    marketplace-place-order-data-order-suborder-item-interface:
+    marketplace-order-create-data-order-payment-interface:
       type: object
       description: ''
       properties:
-        price:
+        continue_url:
           type: string
-        offer_id:
+          description: Continue url
+        currency_code:
           type: string
-          description: Offer id
-        base_price:
+          description: Currency code
+        coupon_code:
           type: string
-          description: Base price
-        final_price:
+          description: Coupon code
+        method_id:
           type: string
-          description: Final price
-        quantity:
-          type: integer
-          description: Quantity
-        sku:
-          type: string
-          description: Sku
+          description: Method id
+        bank_transfer_details:
+          $ref: '#/components/schemas/marketplace-order-create-data-order-payment-bank-transfer-details-interface'
       required:
-      - price
-      - offer_id
-      - base_price
-      - final_price
-      - quantity
-      - sku
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    marketplace-order-create-data-order-suborder-delivery-method-interface:
-      type: object
-      description: ''
-      properties:
-        id:
-          type: string
-          description: Id
-        pudo_id:
-          type: string
-          description: Pudo id
-        submethods_of_delivery:
-          type: array
-          description: Selected options ids
-          items:
-            type: string
-      required:
-      - id
-      - submethods_of_delivery
-    marketplace-order-create-data-order-suborder-note-interface:
-      type: object
-      description: ''
-      properties:
-        body:
-          type: string
-          description: Body
-        created_at:
-          type: string
-          description: Created at
-      required:
-      - body
-    marketplace-place-order-data-order-response-interface:
-      type: object
-      description: ''
-      properties:
-        order_number:
-          type: string
-        order_hash:
-          type: string
-        masked_quote_id:
-          type: string
-      required:
-      - order_number
-      - order_hash
-      - masked_quote_id
-    marketplace-order-create-data-order-payment-bank-transfer-details-interface:
-      type: object
-      description: ''
-      properties:
-        account_number:
-          type: string
-          description: Account number
-        cbt_account_number:
-          type: string
-          description: Cbt account number
-      required:
-      - account_number
-      - cbt_account_number
+      - continue_url
+      - currency_code
+      - method_id
     error-response:
       type: object
       properties:
@@ -243,61 +366,42 @@ components:
           description: Stack trace
       required:
       - message
-    marketplace-place-order-data-order-interface:
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    marketplace-order-create-data-order-suborder-delivery-method-interface:
       type: object
       description: ''
       properties:
-        is_electronic_document:
-          type: boolean
-        suborders:
+        id:
+          type: string
+          description: Id
+        pudo_id:
+          type: string
+          description: Pudo id
+        submethods_of_delivery:
           type: array
-          description: Suborders
+          description: Selected options ids
           items:
-            $ref: '#/components/schemas/marketplace-place-order-data-order-suborder-interface'
-        default_store_id:
-          type: string
-          description: Store eg. MOD-PL WEB
-        ecommerce_id:
-          type: string
-          description: Ecommerce id
-        prefix:
-          type: string
-          description: Prefix
-        is_invoice:
-          type: boolean
-          description: Is invoice
-        order_total_price:
-          type: string
-          description: Total price of order
-        payment:
-          $ref: '#/components/schemas/marketplace-order-create-data-order-payment-interface'
-        customer:
-          $ref: '#/components/schemas/marketplace-order-create-data-order-customer-interface'
-        shipping_address:
-          $ref: '#/components/schemas/marketplace-order-create-data-order-shipping-address-interface'
-        billing_address:
-          $ref: '#/components/schemas/marketplace-order-create-data-order-billing-address-interface'
-        attributes:
-          type: array
-          description: Attributes
-          items:
-            $ref: '#/components/schemas/stanley-order-create-data-attribute-interface'
-        created_at:
-          type: string
-          description: Created at
-        order_source_ip:
-          type: string
-          description: Order source ip
+            type: string
       required:
-      - suborders
-      - default_store_id
-      - ecommerce_id
-      - is_invoice
-      - order_total_price
-      - payment
-      - customer
-      - shipping_address
-      - billing_address
+      - id
+      - submethods_of_delivery
+    stanley-order-create-data-attribute-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Name.
+        value:
+          type: string
+          description: Value.
+      required:
+      - name
+      - value
     marketplace-place-order-data-order-suborder-interface:
       type: object
       description: ''
@@ -328,123 +432,19 @@ components:
       - delivery_method
       - shipment_cost
       - suborder_total_price
-    marketplace-order-create-data-order-customer-interface:
+    marketplace-order-create-data-order-payment-bank-transfer-details-interface:
       type: object
       description: ''
       properties:
-        email_address:
+        account_number:
           type: string
-          description: Email
-        external_id:
+          description: Account number
+        cbt_account_number:
           type: string
-          description: External id
-        avatar_id:
-          type: string
-          description: Avatar id
+          description: Cbt account number
       required:
-      - email_address
-      - external_id
-      - avatar_id
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    stanley-order-create-data-attribute-interface:
-      type: object
-      description: ''
-      properties:
-        name:
-          type: string
-          description: Name.
-        value:
-          type: string
-          description: Value.
-      required:
-      - name
-      - value
-    marketplace-order-create-data-order-shipping-address-interface:
-      type: object
-      description: ''
-      properties:
-        company_name:
-          type: string
-          description: The company name
-        contact_person_first_name:
-          type: string
-          description: The contact person first name
-        contact_person_last_name:
-          type: string
-          description: The contact person last name
-        address_name:
-          type: string
-          description: The address name
-        phone_number:
-          type: string
-          description: The phone number
-        country_code:
-          type: string
-          description: The country code
-        locality:
-          type: string
-          description: The locality
-        street:
-          type: string
-          description: The street
-        house_number:
-          type: string
-          description: The house number
-        flat_number:
-          type: string
-          description: The flat number
-        post_code:
-          type: string
-          description: The post code
-        post:
-          type: string
-          description: The post
-      required:
-      - contact_person_first_name
-      - contact_person_last_name
-      - address_name
-      - phone_number
-      - country_code
-      - locality
-      - street
-      - house_number
-      - post_code
-      - post
-    marketplace-order-create-data-order-payment-interface:
-      type: object
-      description: ''
-      properties:
-        continue_url:
-          type: string
-          description: Continue url
-        currency_code:
-          type: string
-          description: Currency code
-        coupon_code:
-          type: string
-          description: Coupon code
-        method_id:
-          type: string
-          description: Method id
-        bank_transfer_details:
-          $ref: '#/components/schemas/marketplace-order-create-data-order-payment-bank-transfer-details-interface'
-      required:
-      - continue_url
-      - currency_code
-      - method_id
+      - account_number
+      - cbt_account_number
   securitySchemes:
     api_key:
       type: apiKey
