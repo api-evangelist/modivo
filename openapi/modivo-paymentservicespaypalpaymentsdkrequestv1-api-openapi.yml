@@ -87,19 +87,19 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    payment-services-paypal-data-payment-config-sdk-params-interface:
+    error-parameters-item:
       type: object
-      description: ''
+      description: Error parameters item
       properties:
-        name:
+        resources:
           type: string
-          description: Code
-        value:
+          description: ACL resource
+        fieldName:
           type: string
-          description: Config
-      required:
-      - name
-      - value
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
     payment-services-paypal-data-payment-sdk-params-interface:
       type: object
       description: ''
@@ -115,6 +115,19 @@ components:
       required:
       - code
       - params
+    payment-services-paypal-data-payment-config-sdk-params-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Code
+        value:
+          type: string
+          description: Config
+      required:
+      - name
+      - value
     error-errors-item:
       type: object
       description: Error details
@@ -124,24 +137,6 @@ components:
           description: Error message
         parameters:
           $ref: '#/components/schemas/error-parameters'
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     error-response:
       type: object
       properties:
@@ -165,6 +160,11 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
   securitySchemes:
     api_key:
       type: apiKey

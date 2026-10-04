@@ -112,44 +112,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    chatbot-order-rest-api-data-order-auth-input-interface:
-      type: object
-      description: ''
-      properties:
-        order_email:
-          type: string
-        order_number:
-          type: string
-      required:
-      - order_email
-      - order_number
     chatbot-order-rest-api-data-order-status-output-interface:
       type: object
       description: ''
@@ -169,6 +131,39 @@ components:
       - is_instore
       - status
       - suborders_status
+    chatbot-order-rest-api-data-order-auth-input-interface:
+      type: object
+      description: ''
+      properties:
+        order_email:
+          type: string
+        order_number:
+          type: string
+      required:
+      - order_email
+      - order_number
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     error-response:
       type: object
       properties:
@@ -192,3 +187,8 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'

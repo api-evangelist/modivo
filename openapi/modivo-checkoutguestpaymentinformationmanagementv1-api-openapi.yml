@@ -204,103 +204,6 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    quote-data-payment-method-interface:
-      type: object
-      description: Interface PaymentMethodInterface
-      properties:
-        code:
-          type: string
-          description: Payment method code
-        title:
-          type: string
-          description: Payment method title
-      required:
-      - code
-      - title
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    quote-data-totals-item-interface:
-      type: object
-      description: Interface TotalsItemInterface
-      properties:
-        item_id:
-          type: integer
-          description: Item id
-        price:
-          type: number
-          description: Item price in quote currency.
-        base_price:
-          type: number
-          description: Item price in base currency.
-        qty:
-          type: number
-          description: Item quantity.
-        row_total:
-          type: number
-          description: Row total in quote currency.
-        base_row_total:
-          type: number
-          description: Row total in base currency.
-        row_total_with_discount:
-          type: number
-          description: Row total with discount in quote currency. Otherwise, null.
-        tax_amount:
-          type: number
-          description: Tax amount in quote currency. Otherwise, null.
-        base_tax_amount:
-          type: number
-          description: Tax amount in base currency. Otherwise, null.
-        tax_percent:
-          type: number
-          description: Tax percent. Otherwise, null.
-        discount_amount:
-          type: number
-          description: Discount amount in quote currency. Otherwise, null.
-        base_discount_amount:
-          type: number
-          description: Discount amount in base currency. Otherwise, null.
-        discount_percent:
-          type: number
-          description: Discount percent. Otherwise, null.
-        price_incl_tax:
-          type: number
-          description: Price including tax in quote currency. Otherwise, null.
-        base_price_incl_tax:
-          type: number
-          description: Price including tax in base currency. Otherwise, null.
-        row_total_incl_tax:
-          type: number
-          description: Row total including tax in quote currency. Otherwise, null.
-        base_row_total_incl_tax:
-          type: number
-          description: Row total including tax in base currency. Otherwise, null.
-        options:
-          type: string
-          description: Item price in quote currency.
-        weee_tax_applied_amount:
-          type: number
-          description: Item weee tax applied amount in quote currency.
-        weee_tax_applied:
-          type: string
-          description: Item weee tax applied in quote currency.
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-totals-item-extension-interface'
-        name:
-          type: string
-          description: Product name. Otherwise, null.
-      required:
-      - item_id
-      - price
-      - base_price
-      - qty
-      - row_total
-      - base_row_total
-      - options
-      - weee_tax_applied_amount
-      - weee_tax_applied
     quote-data-address-interface:
       type: object
       description: Interface AddressInterface
@@ -392,74 +295,19 @@ components:
       - firstname
       - lastname
       - email
-    quote-data-total-segment-interface:
+    framework-attribute-interface:
       type: object
-      description: Interface TotalsInterface
+      description: Interface for custom attribute value.
       properties:
-        code:
+        attribute_code:
           type: string
-          description: Code
-        title:
-          type: string
-          description: Total title
+          description: Attribute code
         value:
-          type: number
-          description: Total value
-        area:
           type: string
-          description: Display area code.
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-total-segment-extension-interface'
+          description: Attribute value
       required:
-      - code
+      - attribute_code
       - value
-    quote-data-totals-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
-      properties:
-        coupon_label:
-          type: string
-    tax-data-grand-total-rates-interface:
-      type: object
-      description: Interface GrandTotalRatesInterface
-      properties:
-        percent:
-          type: string
-          description: Tax percentage value
-        title:
-          type: string
-          description: Rate title
-      required:
-      - percent
-      - title
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    checkout-data-payment-details-interface:
-      type: object
-      description: Interface PaymentDetailsInterface
-      properties:
-        payment_methods:
-          type: array
-          items:
-            $ref: '#/components/schemas/quote-data-payment-method-interface'
-        totals:
-          $ref: '#/components/schemas/quote-data-totals-interface'
-        extension_attributes:
-          $ref: '#/components/schemas/checkout-data-payment-details-extension-interface'
-      required:
-      - payment_methods
-      - totals
-    quote-data-total-segment-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
-      properties:
-        tax_grandtotal_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
     error-errors-item:
       type: object
       description: Error details
@@ -469,19 +317,6 @@ components:
           description: Error message
         parameters:
           $ref: '#/components/schemas/error-parameters'
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
     quote-data-address-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\AddressInterface
@@ -506,6 +341,61 @@ components:
           type: string
         address_avatar_id:
           type: string
+    tax-data-grand-total-rates-interface:
+      type: object
+      description: Interface GrandTotalRatesInterface
+      properties:
+        percent:
+          type: string
+          description: Tax percentage value
+        title:
+          type: string
+          description: Rate title
+      required:
+      - percent
+      - title
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    quote-data-payment-method-interface:
+      type: object
+      description: Interface PaymentMethodInterface
+      properties:
+        code:
+          type: string
+          description: Payment method code
+        title:
+          type: string
+          description: Payment method title
+      required:
+      - code
+      - title
+    checkout-data-payment-details-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Checkout\Api\Data\PaymentDetailsInterface
+    quote-data-payment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
+      properties:
+        agreement_ids:
+          type: array
+          items:
+            type: string
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
     error-response:
       type: object
       properties:
@@ -524,108 +414,9 @@ components:
           description: Stack trace
       required:
       - message
-    sales-rule-data-discount-data-interface:
-      type: object
-      description: Discount Data Interface
-      properties:
-        amount:
-          type: number
-          description: Amount
-        base_amount:
-          type: number
-          description: Base Amount
-        original_amount:
-          type: number
-          description: Original Amount
-        base_original_amount:
-          type: number
-          description: Base Original Amount
-      required:
-      - amount
-      - base_amount
-      - original_amount
-      - base_original_amount
     quote-data-totals-item-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
-    sales-rule-data-rule-discount-interface:
-      type: object
-      description: Rule discount Interface
-      properties:
-        discount_data:
-          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
-        rule_label:
-          type: string
-          description: Rule Label
-        rule_i_d:
-          type: integer
-          description: Rule ID
-      required:
-      - discount_data
-      - rule_label
-      - rule_i_d
-    checkout-data-payment-details-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Checkout\Api\Data\PaymentDetailsInterface
-    quote-data-payment-interface:
-      type: object
-      description: Interface PaymentInterface
-      properties:
-        po_number:
-          type: string
-          description: Purchase order number
-        method:
-          type: string
-          description: Payment method code
-        additional_data:
-          type: array
-          description: Payment additional details
-          items:
-            type: string
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-payment-extension-interface'
-      required:
-      - method
-    quote-data-payment-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
-      properties:
-        agreement_ids:
-          type: array
-          items:
-            type: string
-    framework-attribute-interface:
-      type: object
-      description: Interface for custom attribute value.
-      properties:
-        attribute_code:
-          type: string
-          description: Attribute code
-        value:
-          type: string
-          description: Attribute value
-      required:
-      - attribute_code
-      - value
-    tax-data-grand-total-details-interface:
-      type: object
-      description: Interface GrandTotalDetailsInterface
-      properties:
-        amount:
-          type: number
-          description: Tax amount value
-        rates:
-          type: array
-          description: Tax rates info
-          items:
-            $ref: '#/components/schemas/tax-data-grand-total-rates-interface'
-        group_id:
-          type: integer
-          description: Group identifier
-      required:
-      - amount
-      - rates
-      - group_id
     quote-data-totals-interface:
       type: object
       description: Interface TotalsInterface
@@ -720,6 +511,215 @@ components:
       required:
       - weee_tax_applied_amount
       - total_segments
+    quote-data-total-segment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
+      properties:
+        tax_grandtotal_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
+    quote-data-payment-interface:
+      type: object
+      description: Interface PaymentInterface
+      properties:
+        po_number:
+          type: string
+          description: Purchase order number
+        method:
+          type: string
+          description: Payment method code
+        additional_data:
+          type: array
+          description: Payment additional details
+          items:
+            type: string
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-payment-extension-interface'
+      required:
+      - method
+    tax-data-grand-total-details-interface:
+      type: object
+      description: Interface GrandTotalDetailsInterface
+      properties:
+        amount:
+          type: number
+          description: Tax amount value
+        rates:
+          type: array
+          description: Tax rates info
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-rates-interface'
+        group_id:
+          type: integer
+          description: Group identifier
+      required:
+      - amount
+      - rates
+      - group_id
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    sales-rule-data-rule-discount-interface:
+      type: object
+      description: Rule discount Interface
+      properties:
+        discount_data:
+          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
+        rule_label:
+          type: string
+          description: Rule Label
+        rule_i_d:
+          type: integer
+          description: Rule ID
+      required:
+      - discount_data
+      - rule_label
+      - rule_i_d
+    quote-data-totals-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
+      properties:
+        coupon_label:
+          type: string
+    sales-rule-data-discount-data-interface:
+      type: object
+      description: Discount Data Interface
+      properties:
+        amount:
+          type: number
+          description: Amount
+        base_amount:
+          type: number
+          description: Base Amount
+        original_amount:
+          type: number
+          description: Original Amount
+        base_original_amount:
+          type: number
+          description: Base Original Amount
+      required:
+      - amount
+      - base_amount
+      - original_amount
+      - base_original_amount
+    checkout-data-payment-details-interface:
+      type: object
+      description: Interface PaymentDetailsInterface
+      properties:
+        payment_methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/quote-data-payment-method-interface'
+        totals:
+          $ref: '#/components/schemas/quote-data-totals-interface'
+        extension_attributes:
+          $ref: '#/components/schemas/checkout-data-payment-details-extension-interface'
+      required:
+      - payment_methods
+      - totals
+    quote-data-total-segment-interface:
+      type: object
+      description: Interface TotalsInterface
+      properties:
+        code:
+          type: string
+          description: Code
+        title:
+          type: string
+          description: Total title
+        value:
+          type: number
+          description: Total value
+        area:
+          type: string
+          description: Display area code.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-total-segment-extension-interface'
+      required:
+      - code
+      - value
+    quote-data-totals-item-interface:
+      type: object
+      description: Interface TotalsItemInterface
+      properties:
+        item_id:
+          type: integer
+          description: Item id
+        price:
+          type: number
+          description: Item price in quote currency.
+        base_price:
+          type: number
+          description: Item price in base currency.
+        qty:
+          type: number
+          description: Item quantity.
+        row_total:
+          type: number
+          description: Row total in quote currency.
+        base_row_total:
+          type: number
+          description: Row total in base currency.
+        row_total_with_discount:
+          type: number
+          description: Row total with discount in quote currency. Otherwise, null.
+        tax_amount:
+          type: number
+          description: Tax amount in quote currency. Otherwise, null.
+        base_tax_amount:
+          type: number
+          description: Tax amount in base currency. Otherwise, null.
+        tax_percent:
+          type: number
+          description: Tax percent. Otherwise, null.
+        discount_amount:
+          type: number
+          description: Discount amount in quote currency. Otherwise, null.
+        base_discount_amount:
+          type: number
+          description: Discount amount in base currency. Otherwise, null.
+        discount_percent:
+          type: number
+          description: Discount percent. Otherwise, null.
+        price_incl_tax:
+          type: number
+          description: Price including tax in quote currency. Otherwise, null.
+        base_price_incl_tax:
+          type: number
+          description: Price including tax in base currency. Otherwise, null.
+        row_total_incl_tax:
+          type: number
+          description: Row total including tax in quote currency. Otherwise, null.
+        base_row_total_incl_tax:
+          type: number
+          description: Row total including tax in base currency. Otherwise, null.
+        options:
+          type: string
+          description: Item price in quote currency.
+        weee_tax_applied_amount:
+          type: number
+          description: Item weee tax applied amount in quote currency.
+        weee_tax_applied:
+          type: string
+          description: Item weee tax applied in quote currency.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-item-extension-interface'
+        name:
+          type: string
+          description: Product name. Otherwise, null.
+      required:
+      - item_id
+      - price
+      - base_price
+      - qty
+      - row_total
+      - base_row_total
+      - options
+      - weee_tax_applied_amount
+      - weee_tax_applied
     quote-data-address-extension-interface_2:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\AddressInterface

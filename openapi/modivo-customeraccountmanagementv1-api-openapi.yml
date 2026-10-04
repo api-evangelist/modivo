@@ -361,55 +361,6 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    customer-data-region-interface:
-      type: object
-      description: Customer address region interface.
-      properties:
-        region_code:
-          type: string
-          description: Region code
-        region:
-          type: string
-          description: Region
-        region_id:
-          type: integer
-          description: Region id
-        extension_attributes:
-          $ref: '#/components/schemas/customer-data-region-extension-interface'
-      required:
-      - region_code
-      - region
-      - region_id
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    customer-data-region-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\RegionInterface
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     customer-data-address-interface:
       type: object
       description: Customer address interface.
@@ -479,6 +430,67 @@ components:
           description: Custom attributes values.
           items:
             $ref: '#/components/schemas/framework-attribute-interface'
+    customer-data-region-interface:
+      type: object
+      description: Customer address region interface.
+      properties:
+        region_code:
+          type: string
+          description: Region code
+        region:
+          type: string
+          description: Region
+        region_id:
+          type: integer
+          description: Region id
+        extension_attributes:
+          $ref: '#/components/schemas/customer-data-region-extension-interface'
+      required:
+      - region_code
+      - region
+      - region_id
+    customer-data-customer-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\CustomerInterface
+      properties:
+        is_subscribed:
+          type: boolean
+        assistance_allowed:
+          type: integer
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
+    customer-data-region-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\RegionInterface
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
+        value:
+          type: string
+          description: Attribute value
+      required:
+      - attribute_code
+      - value
     customer-data-customer-interface:
       type: object
       description: Customer entity interface for API handling.
@@ -559,27 +571,15 @@ components:
       - email
       - firstname
       - lastname
-    framework-attribute-interface:
+    error-errors-item:
       type: object
-      description: Interface for custom attribute value.
+      description: Error details
       properties:
-        attribute_code:
+        message:
           type: string
-          description: Attribute code
-        value:
-          type: string
-          description: Attribute value
-      required:
-      - attribute_code
-      - value
-    customer-data-customer-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\CustomerInterface
-      properties:
-        is_subscribed:
-          type: boolean
-        assistance_allowed:
-          type: integer
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     error-response:
       type: object
       properties:

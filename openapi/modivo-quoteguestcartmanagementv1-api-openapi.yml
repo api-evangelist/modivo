@@ -120,15 +120,14 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    error-errors-item:
+    quote-data-payment-extension-interface:
       type: object
-      description: Error details
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
       properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+        agreement_ids:
+          type: array
+          items:
+            type: string
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -161,19 +160,15 @@ components:
           $ref: '#/components/schemas/quote-data-payment-extension-interface'
       required:
       - method
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    quote-data-payment-extension-interface:
+    error-errors-item:
       type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\PaymentInterface
+      description: Error details
       properties:
-        agreement_ids:
-          type: array
-          items:
-            type: string
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     error-response:
       type: object
       properties:
@@ -197,6 +192,11 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
   securitySchemes:
     api_key:
       type: apiKey

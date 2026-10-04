@@ -249,25 +249,32 @@ paths:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
     quote-data-product-option-interface:
       type: object
       description: Product option interface
       properties:
         extension_attributes:
           $ref: '#/components/schemas/quote-data-product-option-extension-interface'
-    grouped-product-data-grouped-options-extension-interface:
+    error-errors-item:
       type: object
-      description: ExtensionInterface class for @see \Magento\GroupedProduct\Api\Data\GroupedOptionsInterface
-    error-parameters:
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    configurable-product-data-configurable-item-option-value-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface
+    error-errors:
       type: array
-      description: Error parameters list
+      description: Errors list
       items:
-        $ref: '#/components/schemas/error-parameters-item'
+        $ref: '#/components/schemas/error-errors-item'
+    bundle-data-bundle-option-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Bundle\Api\Data\BundleOptionInterface
     framework-data-image-content-interface:
       type: object
       description: Image Content data interface
@@ -285,15 +292,20 @@ components:
       - base64_encoded_data
       - type
       - name
-    error-errors-item:
+    configurable-product-data-configurable-item-option-value-interface:
       type: object
-      description: Error details
+      description: Interface ConfigurableItemOptionValueInterface
       properties:
-        message:
+        option_id:
           type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+          description: Option SKU
+        option_value:
+          type: integer
+          description: Item id
+        extension_attributes:
+          $ref: '#/components/schemas/configurable-product-data-configurable-item-option-value-extension-interface'
+      required:
+      - option_id
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -307,6 +319,93 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
+    grouped-product-data-grouped-options-interface:
+      type: object
+      description: Represents `product item id with qty` of a grouped product.
+      properties:
+        id:
+          type: integer
+          description: Associated product id
+        qty:
+          type: integer
+          description: Associated product qty
+        extension_attributes:
+          $ref: '#/components/schemas/grouped-product-data-grouped-options-extension-interface'
+    grouped-product-data-grouped-options-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\GroupedProduct\Api\Data\GroupedOptionsInterface
+    downloadable-data-downloadable-option-interface:
+      type: object
+      description: Downloadable Option
+      properties:
+        downloadable_links:
+          type: array
+          description: The list of downloadable links
+          items:
+            type: integer
+      required:
+      - downloadable_links
+    quote-data-product-option-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ProductOptionInterface
+      properties:
+        custom_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/catalog-data-custom-option-interface'
+        configurable_item_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/configurable-product-data-configurable-item-option-value-interface'
+        bundle_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/bundle-data-bundle-option-interface'
+        downloadable_option:
+          $ref: '#/components/schemas/downloadable-data-downloadable-option-interface'
+        grouped_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/grouped-product-data-grouped-options-interface'
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    sales-rule-data-rule-discount-interface:
+      type: object
+      description: Rule discount Interface
+      properties:
+        discount_data:
+          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
+        rule_label:
+          type: string
+          description: Rule Label
+        rule_i_d:
+          type: integer
+          description: Rule ID
+      required:
+      - discount_data
+      - rule_label
+      - rule_i_d
     quote-data-cart-item-interface:
       type: object
       description: Interface CartItemInterface
@@ -339,50 +438,6 @@ components:
       required:
       - qty
       - quote_id
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
-    grouped-product-data-grouped-options-interface:
-      type: object
-      description: Represents `product item id with qty` of a grouped product.
-      properties:
-        id:
-          type: integer
-          description: Associated product id
-        qty:
-          type: integer
-          description: Associated product qty
-        extension_attributes:
-          $ref: '#/components/schemas/grouped-product-data-grouped-options-extension-interface'
-    configurable-product-data-configurable-item-option-value-interface:
-      type: object
-      description: Interface ConfigurableItemOptionValueInterface
-      properties:
-        option_id:
-          type: string
-          description: Option SKU
-        option_value:
-          type: integer
-          description: Item id
-        extension_attributes:
-          $ref: '#/components/schemas/configurable-product-data-configurable-item-option-value-extension-interface'
-      required:
-      - option_id
     sales-rule-data-discount-data-interface:
       type: object
       description: Discount Data Interface
@@ -427,34 +482,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/sales-rule-data-rule-discount-interface'
-    bundle-data-bundle-option-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Bundle\Api\Data\BundleOptionInterface
     catalog-data-custom-option-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Catalog\Api\Data\CustomOptionInterface
       properties:
         file_info:
           $ref: '#/components/schemas/framework-data-image-content-interface'
-    configurable-product-data-configurable-item-option-value-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface
-    sales-rule-data-rule-discount-interface:
-      type: object
-      description: Rule discount Interface
-      properties:
-        discount_data:
-          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
-        rule_label:
-          type: string
-          description: Rule Label
-        rule_i_d:
-          type: integer
-          description: Rule ID
-      required:
-      - discount_data
-      - rule_label
-      - rule_i_d
     bundle-data-bundle-option-interface:
       type: object
       description: Interface BundleOptionInterface
@@ -476,39 +509,6 @@ components:
       - option_id
       - option_qty
       - option_selections
-    downloadable-data-downloadable-option-interface:
-      type: object
-      description: Downloadable Option
-      properties:
-        downloadable_links:
-          type: array
-          description: The list of downloadable links
-          items:
-            type: integer
-      required:
-      - downloadable_links
-    quote-data-product-option-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ProductOptionInterface
-      properties:
-        custom_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/catalog-data-custom-option-interface'
-        configurable_item_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/configurable-product-data-configurable-item-option-value-interface'
-        bundle_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/bundle-data-bundle-option-interface'
-        downloadable_option:
-          $ref: '#/components/schemas/downloadable-data-downloadable-option-interface'
-        grouped_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/grouped-product-data-grouped-options-interface'
     eob-esizeme-data-quote-item-link-interface:
       type: object
       description: ''
@@ -527,32 +527,6 @@ components:
           type: string
       required:
       - data
-    quote-data-cart-item-extension-interface_2:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\CartItemInterface
-      properties:
-        discounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/sales-rule-data-rule-discount-interface_2'
-        quote_item_esizeme_info:
-          $ref: '#/components/schemas/eob-esizeme-data-quote-item-link-interface'
-    sales-rule-data-rule-discount-interface_2:
-      type: object
-      description: Rule discount Interface
-      properties:
-        discount_data:
-          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
-        rule_label:
-          type: string
-          description: Rule Label
-        rule_id:
-          type: integer
-          description: Rule ID
-      required:
-      - discount_data
-      - rule_label
-      - rule_id
     quote-data-product-option-extension-interface_2:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\ProductOptionInterface
@@ -571,6 +545,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/configurable-product-data-configurable-item-option-value-interface'
+    sales-rule-data-rule-discount-interface_2:
+      type: object
+      description: Rule discount Interface
+      properties:
+        discount_data:
+          $ref: '#/components/schemas/sales-rule-data-discount-data-interface'
+        rule_label:
+          type: string
+          description: Rule Label
+        rule_id:
+          type: integer
+          description: Rule ID
+      required:
+      - discount_data
+      - rule_label
+      - rule_id
+    quote-data-cart-item-extension-interface_2:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\CartItemInterface
+      properties:
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/sales-rule-data-rule-discount-interface_2'
+        quote_item_esizeme_info:
+          $ref: '#/components/schemas/eob-esizeme-data-quote-item-link-interface'
   securitySchemes:
     api_key:
       type: apiKey
