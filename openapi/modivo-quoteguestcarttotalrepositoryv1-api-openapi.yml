@@ -53,21 +53,136 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 guestcarts cart id totals
+      summary: Get V1Guestcarts cart id totals
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    quote-data-totals-item-extension-interface:
+    quote-data-totals-item-interface:
       type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
+      description: Interface TotalsItemInterface
+      properties:
+        item_id:
+          type: integer
+          description: Item id
+        price:
+          type: number
+          description: Item price in quote currency.
+        base_price:
+          type: number
+          description: Item price in base currency.
+        qty:
+          type: number
+          description: Item quantity.
+        row_total:
+          type: number
+          description: Row total in quote currency.
+        base_row_total:
+          type: number
+          description: Row total in base currency.
+        row_total_with_discount:
+          type: number
+          description: Row total with discount in quote currency. Otherwise, null.
+        tax_amount:
+          type: number
+          description: Tax amount in quote currency. Otherwise, null.
+        base_tax_amount:
+          type: number
+          description: Tax amount in base currency. Otherwise, null.
+        tax_percent:
+          type: number
+          description: Tax percent. Otherwise, null.
+        discount_amount:
+          type: number
+          description: Discount amount in quote currency. Otherwise, null.
+        base_discount_amount:
+          type: number
+          description: Discount amount in base currency. Otherwise, null.
+        discount_percent:
+          type: number
+          description: Discount percent. Otherwise, null.
+        price_incl_tax:
+          type: number
+          description: Price including tax in quote currency. Otherwise, null.
+        base_price_incl_tax:
+          type: number
+          description: Price including tax in base currency. Otherwise, null.
+        row_total_incl_tax:
+          type: number
+          description: Row total including tax in quote currency. Otherwise, null.
+        base_row_total_incl_tax:
+          type: number
+          description: Row total including tax in base currency. Otherwise, null.
+        options:
+          type: string
+          description: Item price in quote currency.
+        weee_tax_applied_amount:
+          type: number
+          description: Item weee tax applied amount in quote currency.
+        weee_tax_applied:
+          type: string
+          description: Item weee tax applied in quote currency.
+        extension_attributes:
+          $ref: '#/components/schemas/quote-data-totals-item-extension-interface'
+        name:
+          type: string
+          description: Product name. Otherwise, null.
+      required:
+      - item_id
+      - price
+      - base_price
+      - qty
+      - row_total
+      - base_row_total
+      - options
+      - weee_tax_applied_amount
+      - weee_tax_applied
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    tax-data-grand-total-details-interface:
+      type: object
+      description: Interface GrandTotalDetailsInterface
+      properties:
+        amount:
+          type: number
+          description: Tax amount value
+        rates:
+          type: array
+          description: Tax rates info
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-rates-interface'
+        group_id:
+          type: integer
+          description: Group identifier
+      required:
+      - amount
+      - rates
+      - group_id
     quote-data-totals-extension-interface:
       type: object
       description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsInterface
       properties:
         coupon_label:
           type: string
+    quote-data-totals-item-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalsItemInterface
+    quote-data-total-segment-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
+      properties:
+        tax_grandtotal_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
     quote-data-totals-interface:
       type: object
       description: Interface TotalsInterface
@@ -162,19 +277,6 @@ components:
       required:
       - weee_tax_applied_amount
       - total_segments
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    quote-data-total-segment-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Quote\Api\Data\TotalSegmentInterface
-      properties:
-        tax_grandtotal_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/tax-data-grand-total-details-interface'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -188,34 +290,24 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    tax-data-grand-total-details-interface:
+    tax-data-grand-total-rates-interface:
       type: object
-      description: Interface GrandTotalDetailsInterface
+      description: Interface GrandTotalRatesInterface
       properties:
-        amount:
-          type: number
-          description: Tax amount value
-        rates:
-          type: array
-          description: Tax rates info
-          items:
-            $ref: '#/components/schemas/tax-data-grand-total-rates-interface'
-        group_id:
-          type: integer
-          description: Group identifier
-      required:
-      - amount
-      - rates
-      - group_id
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
+        percent:
           type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+          description: Tax percentage value
+        title:
+          type: string
+          description: Rate title
+      required:
+      - percent
+      - title
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
     quote-data-total-segment-interface:
       type: object
       description: Interface TotalsInterface
@@ -237,98 +329,6 @@ components:
       required:
       - code
       - value
-    quote-data-totals-item-interface:
-      type: object
-      description: Interface TotalsItemInterface
-      properties:
-        item_id:
-          type: integer
-          description: Item id
-        price:
-          type: number
-          description: Item price in quote currency.
-        base_price:
-          type: number
-          description: Item price in base currency.
-        qty:
-          type: number
-          description: Item quantity.
-        row_total:
-          type: number
-          description: Row total in quote currency.
-        base_row_total:
-          type: number
-          description: Row total in base currency.
-        row_total_with_discount:
-          type: number
-          description: Row total with discount in quote currency. Otherwise, null.
-        tax_amount:
-          type: number
-          description: Tax amount in quote currency. Otherwise, null.
-        base_tax_amount:
-          type: number
-          description: Tax amount in base currency. Otherwise, null.
-        tax_percent:
-          type: number
-          description: Tax percent. Otherwise, null.
-        discount_amount:
-          type: number
-          description: Discount amount in quote currency. Otherwise, null.
-        base_discount_amount:
-          type: number
-          description: Discount amount in base currency. Otherwise, null.
-        discount_percent:
-          type: number
-          description: Discount percent. Otherwise, null.
-        price_incl_tax:
-          type: number
-          description: Price including tax in quote currency. Otherwise, null.
-        base_price_incl_tax:
-          type: number
-          description: Price including tax in base currency. Otherwise, null.
-        row_total_incl_tax:
-          type: number
-          description: Row total including tax in quote currency. Otherwise, null.
-        base_row_total_incl_tax:
-          type: number
-          description: Row total including tax in base currency. Otherwise, null.
-        options:
-          type: string
-          description: Item price in quote currency.
-        weee_tax_applied_amount:
-          type: number
-          description: Item weee tax applied amount in quote currency.
-        weee_tax_applied:
-          type: string
-          description: Item weee tax applied in quote currency.
-        extension_attributes:
-          $ref: '#/components/schemas/quote-data-totals-item-extension-interface'
-        name:
-          type: string
-          description: Product name. Otherwise, null.
-      required:
-      - item_id
-      - price
-      - base_price
-      - qty
-      - row_total
-      - base_row_total
-      - options
-      - weee_tax_applied_amount
-      - weee_tax_applied
-    tax-data-grand-total-rates-interface:
-      type: object
-      description: Interface GrandTotalRatesInterface
-      properties:
-        percent:
-          type: string
-          description: Tax percentage value
-        title:
-          type: string
-          description: Rate title
-      required:
-      - percent
-      - title
     error-errors:
       type: array
       description: Errors list

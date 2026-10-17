@@ -51,7 +51,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 paymentsconfig location
+      summary: Get V1Paymentsconfig location
       x-summary-source: derived
   /V1/payments-config/google-pay/{location}:
     get:
@@ -94,7 +94,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 paymentsconfig googlepay location
+      summary: Get V1Paymentsconfig googlepay location
       x-summary-source: derived
   /V1/payments-config/apple-pay/{location}:
     get:
@@ -137,7 +137,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 paymentsconfig applepay location
+      summary: Get V1Paymentsconfig applepay location
       x-summary-source: derived
   /V1/payments-config/smart-buttons/{location}:
     get:
@@ -180,7 +180,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 paymentsconfig smartbuttons location
+      summary: Get V1Paymentsconfig smartbuttons location
       x-summary-source: derived
   /V1/payments-config/hosted-fields/{location}:
     get:
@@ -223,48 +223,19 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 paymentsconfig hostedfields location
+      summary: Get V1Paymentsconfig hostedfields location
       x-summary-source: derived
 components:
   schemas:
-    payment-services-paypal-payment-config-response-interface:
-      type: object
-      description: ''
-      properties:
-        apple_pay:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-apple-pay-interface'
-        google_pay:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-interface'
-        hosted_fields:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-hosted-fields-interface'
-        smart_buttons:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-interface'
-      required:
-      - apple_pay
-      - google_pay
-      - hosted_fields
-      - smart_buttons
-    payment-services-paypal-data-payment-config-smart-buttons-logo-interface:
-      type: object
-      description: ''
-      properties:
-        type:
-          type: string
-          description: CanDisplayMessage
-      required:
-      - type
-    payment-services-paypal-data-payment-config-google-pay-interface:
+    payment-services-paypal-data-payment-config-apple-pay-interface:
       type: object
       description: ''
       properties:
         button_styles:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-button-styles-interface'
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-button-styles-interface'
         payment_source:
           type: string
           description: PaymentSource
-        three_d_s:
-          type: string
-          description: ThreeDS
         code:
           type: string
           description: Code
@@ -288,71 +259,21 @@ components:
       required:
       - button_styles
       - payment_source
-      - three_d_s
       - code
       - sdk_params
       - is_visible
       - sort_order
       - payment_intent
       - title
-    payment-services-paypal-data-payment-config-smart-buttons-interface:
+    error-errors-item:
       type: object
-      description: ''
+      description: Error details
       properties:
-        display_message:
-          type: boolean
-          description: CanDisplayMessage
-        display_venmo:
-          type: boolean
-          description: Venmo
-        message_styles:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-message-styles-interface'
-        button_styles:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-button-styles-interface'
-        code:
+        message:
           type: string
-          description: Code
-        sdk_params:
-          type: array
-          description: SDK params
-          items:
-            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
-        is_visible:
-          type: boolean
-          description: Visible
-        sort_order:
-          type: string
-          description: Sort Order
-        payment_intent:
-          type: string
-          description: Payment intent
-        title:
-          type: string
-          description: Title
-      required:
-      - display_message
-      - display_venmo
-      - message_styles
-      - button_styles
-      - code
-      - sdk_params
-      - is_visible
-      - sort_order
-      - payment_intent
-      - title
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     payment-services-paypal-data-payment-config-hosted-fields-interface:
       type: object
       description: ''
@@ -404,6 +325,99 @@ components:
       - sort_order
       - payment_intent
       - title
+    payment-services-paypal-data-payment-config-smart-buttons-interface:
+      type: object
+      description: ''
+      properties:
+        display_message:
+          type: boolean
+          description: CanDisplayMessage
+        display_venmo:
+          type: boolean
+          description: Venmo
+        message_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-message-styles-interface'
+        button_styles:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-button-styles-interface'
+        code:
+          type: string
+          description: Code
+        sdk_params:
+          type: array
+          description: SDK params
+          items:
+            $ref: '#/components/schemas/payment-services-paypal-data-payment-config-sdk-params-interface'
+        is_visible:
+          type: boolean
+          description: Visible
+        sort_order:
+          type: string
+          description: Sort Order
+        payment_intent:
+          type: string
+          description: Payment intent
+        title:
+          type: string
+          description: Title
+      required:
+      - display_message
+      - display_venmo
+      - message_styles
+      - button_styles
+      - code
+      - sdk_params
+      - is_visible
+      - sort_order
+      - payment_intent
+      - title
+    payment-services-paypal-data-payment-config-google-pay-button-styles-interface:
+      type: object
+      description: ''
+      properties:
+        color:
+          type: string
+          description: Color
+        height:
+          type: integer
+          description: Height
+        type:
+          type: string
+          description: Type
+      required:
+      - color
+      - height
+      - type
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    payment-services-paypal-data-payment-config-sdk-params-interface:
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: Code
+        value:
+          type: string
+          description: Config
+      required:
+      - name
+      - value
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
     payment-services-paypal-data-payment-config-button-styles-interface:
       type: object
       description: ''
@@ -437,19 +451,15 @@ components:
       - tagline
       - height
       - use_default_height
-    payment-services-paypal-data-payment-config-sdk-params-interface:
+    payment-services-paypal-data-payment-config-smart-buttons-logo-interface:
       type: object
       description: ''
       properties:
-        name:
+        type:
           type: string
-          description: Code
-        value:
-          type: string
-          description: Config
+          description: CanDisplayMessage
       required:
-      - name
-      - value
+      - type
     payment-services-paypal-data-payment-config-smart-buttons-message-styles-interface:
       type: object
       description: ''
@@ -462,47 +472,18 @@ components:
       required:
       - layout
       - logo
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    error-response:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          $ref: '#/components/schemas/error-errors'
-        code:
-          type: integer
-          description: Error code
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-        trace:
-          type: string
-          description: Stack trace
-      required:
-      - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    payment-services-paypal-data-payment-config-apple-pay-interface:
+    payment-services-paypal-data-payment-config-google-pay-interface:
       type: object
       description: ''
       properties:
         button_styles:
-          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-button-styles-interface'
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-button-styles-interface'
         payment_source:
           type: string
           description: PaymentSource
+        three_d_s:
+          type: string
+          description: ThreeDS
         code:
           type: string
           description: Code
@@ -526,34 +507,53 @@ components:
       required:
       - button_styles
       - payment_source
+      - three_d_s
       - code
       - sdk_params
       - is_visible
       - sort_order
       - payment_intent
       - title
-    payment-services-paypal-data-payment-config-google-pay-button-styles-interface:
+    payment-services-paypal-payment-config-response-interface:
       type: object
       description: ''
       properties:
-        color:
-          type: string
-          description: Color
-        height:
-          type: integer
-          description: Height
-        type:
-          type: string
-          description: Type
+        apple_pay:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-apple-pay-interface'
+        google_pay:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-google-pay-interface'
+        hosted_fields:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-hosted-fields-interface'
+        smart_buttons:
+          $ref: '#/components/schemas/payment-services-paypal-data-payment-config-smart-buttons-interface'
       required:
-      - color
-      - height
-      - type
+      - apple_pay
+      - google_pay
+      - hosted_fields
+      - smart_buttons
     error-errors:
       type: array
       description: Errors list
       items:
         $ref: '#/components/schemas/error-errors-item'
+    error-response:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          $ref: '#/components/schemas/error-errors'
+        code:
+          type: integer
+          description: Error code
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+        trace:
+          type: string
+          description: Stack trace
+      required:
+      - message
   securitySchemes:
     api_key:
       type: apiKey

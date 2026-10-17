@@ -41,7 +41,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 directory countries
+      summary: Get V1Directory countries
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
@@ -85,12 +85,40 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 directory countries country id
+      summary: Get V1Directory countries country id
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
+    directory-data-region-information-interface:
+      type: object
+      description: Region Information interface.
+      properties:
+        id:
+          type: string
+          description: Region id
+        code:
+          type: string
+          description: Region code
+        name:
+          type: string
+          description: Region name
+        extension_attributes:
+          $ref: '#/components/schemas/directory-data-region-information-extension-interface'
+      required:
+      - id
+      - code
+      - name
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     directory-data-country-information-interface:
       type: object
       description: Country Information interface.
@@ -123,6 +151,9 @@ components:
       - three_letter_abbreviation
       - full_name_locale
       - full_name_english
+    directory-data-region-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\RegionInformationInterface
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -136,40 +167,6 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    directory-data-region-information-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\RegionInformationInterface
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    directory-data-region-information-interface:
-      type: object
-      description: Region Information interface.
-      properties:
-        id:
-          type: string
-          description: Region id
-        code:
-          type: string
-          description: Region code
-        name:
-          type: string
-          description: Region name
-        extension_attributes:
-          $ref: '#/components/schemas/directory-data-region-information-extension-interface'
-      required:
-      - id
-      - code
-      - name
-    directory-data-country-information-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CountryInformationInterface
     error-parameters:
       type: array
       description: Error parameters list
@@ -180,6 +177,9 @@ components:
       description: Errors list
       items:
         $ref: '#/components/schemas/error-errors-item'
+    directory-data-country-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CountryInformationInterface
     error-response:
       type: object
       properties:

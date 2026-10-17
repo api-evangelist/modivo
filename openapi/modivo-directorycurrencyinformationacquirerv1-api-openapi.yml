@@ -37,15 +37,24 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 directory currency
+      summary: Get V1Directory currency
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
-    directory-data-exchange-rate-extension-interface:
+    error-errors-item:
       type: object
-      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\ExchangeRateInterface
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    directory-data-currency-information-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CurrencyInformationInterface
     directory-data-currency-information-interface:
       type: object
       description: Currency Information interface.
@@ -94,18 +103,6 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
-    directory-data-currency-information-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\CurrencyInformationInterface
     directory-data-exchange-rate-interface:
       type: object
       description: Exchange Rate interface.
@@ -126,6 +123,9 @@ components:
       description: Error parameters list
       items:
         $ref: '#/components/schemas/error-parameters-item'
+    directory-data-exchange-rate-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Directory\Api\Data\ExchangeRateInterface
     error-errors:
       type: array
       description: Errors list

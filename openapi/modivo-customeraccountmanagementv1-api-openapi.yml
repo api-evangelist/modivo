@@ -77,7 +77,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Post V1 customers
+      summary: Post V1Customers
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
@@ -138,7 +138,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 customers customer id password reset link token reset password link token
+      summary: Get V1Customers customer id password reset link token reset password link token
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
@@ -211,7 +211,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Put V1 customers password
+      summary: Put V1Customers password
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
@@ -288,7 +288,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Post V1 customers reset password
+      summary: Post V1Customers reset password
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
@@ -355,12 +355,56 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Post V1 customers is email available
+      summary: Post V1Customers is email available
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
+    customer-data-region-interface:
+      type: object
+      description: Customer address region interface.
+      properties:
+        region_code:
+          type: string
+          description: Region code
+        region:
+          type: string
+          description: Region
+        region_id:
+          type: integer
+          description: Region id
+        extension_attributes:
+          $ref: '#/components/schemas/customer-data-region-extension-interface'
+      required:
+      - region_code
+      - region
+      - region_id
+    framework-attribute-interface:
+      type: object
+      description: Interface for custom attribute value.
+      properties:
+        attribute_code:
+          type: string
+          description: Attribute code
+        value:
+          type: string
+          description: Attribute value
+      required:
+      - attribute_code
+      - value
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    customer-data-region-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\RegionInterface
     customer-data-address-interface:
       type: object
       description: Customer address interface.
@@ -430,41 +474,6 @@ components:
           description: Custom attributes values.
           items:
             $ref: '#/components/schemas/framework-attribute-interface'
-    customer-data-region-interface:
-      type: object
-      description: Customer address region interface.
-      properties:
-        region_code:
-          type: string
-          description: Region code
-        region:
-          type: string
-          description: Region
-        region_id:
-          type: integer
-          description: Region id
-        extension_attributes:
-          $ref: '#/components/schemas/customer-data-region-extension-interface'
-      required:
-      - region_code
-      - region
-      - region_id
-    customer-data-customer-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\CustomerInterface
-      properties:
-        is_subscribed:
-          type: boolean
-        assistance_allowed:
-          type: integer
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
-    customer-data-region-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\RegionInterface
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -478,19 +487,11 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    framework-attribute-interface:
-      type: object
-      description: Interface for custom attribute value.
-      properties:
-        attribute_code:
-          type: string
-          description: Attribute code
-        value:
-          type: string
-          description: Attribute value
-      required:
-      - attribute_code
-      - value
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
     customer-data-customer-interface:
       type: object
       description: Customer entity interface for API handling.
@@ -571,15 +572,22 @@ components:
       - email
       - firstname
       - lastname
-    error-errors-item:
+    customer-data-customer-extension-interface:
       type: object
-      description: Error details
+      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\CustomerInterface
       properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+        is_subscribed:
+          type: boolean
+        assistance_allowed:
+          type: integer
+    customer-data-address-extension-interface:
+      type: object
+      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\AddressInterface
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
     error-response:
       type: object
       properties:
@@ -598,14 +606,6 @@ components:
           description: Stack trace
       required:
       - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    customer-data-address-extension-interface:
-      type: object
-      description: ExtensionInterface class for @see \Magento\Customer\Api\Data\AddressInterface
     customer-data-customer-interface_2:
       type: object
       description: Customer interface.

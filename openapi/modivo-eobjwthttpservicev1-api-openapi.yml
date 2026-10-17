@@ -44,23 +44,19 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Post V1 jwt obtain
+      summary: Post V1Jwt obtain
       x-summary-source: derived
 components:
   schemas:
-    eob-jw-tdata-token-data-interface:
+    error-errors-item:
       type: object
-      description: ''
+      description: Error details
       properties:
-        token:
+        message:
           type: string
-          description: JWT Token.
-        expires_in:
-          type: integer
-          description: Expires in in seconds.
-      required:
-      - token
-      - expires_in
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -74,15 +70,29 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    error-errors-item:
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    eob-jw-tdata-token-data-interface:
       type: object
-      description: Error details
+      description: ''
       properties:
-        message:
+        token:
           type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+          description: JWT Token.
+        expires_in:
+          type: integer
+          description: Expires in in seconds.
+      required:
+      - token
+      - expires_in
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
     error-response:
       type: object
       properties:
@@ -101,16 +111,6 @@ components:
           description: Stack trace
       required:
       - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
   securitySchemes:
     api_key:
       type: apiKey

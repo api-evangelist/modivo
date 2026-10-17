@@ -75,123 +75,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 search
+      summary: Get V1Search
       x-summary-source: derived
 components:
   schemas:
-    framework-search-search-result-interface:
-      type: object
-      description: Interface SearchResultInterface
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/framework-search-document-interface'
-        aggregations:
-          $ref: '#/components/schemas/framework-search-aggregation-interface'
-        search_criteria:
-          $ref: '#/components/schemas/framework-search-search-criteria-interface'
-        total_count:
-          type: integer
-          description: Total count.
-      required:
-      - items
-      - aggregations
-      - search_criteria
-      - total_count
-    framework-sort-order:
-      type: object
-      description: Data object for sort order.
-      properties:
-        field:
-          type: string
-          description: Sorting field.
-        direction:
-          type: string
-          description: Sorting direction.
-      required:
-      - field
-      - direction
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    framework-search-filter-group:
-      type: object
-      description: Groups two or more filters together using a logical OR
-      properties:
-        filters:
-          type: array
-          description: A list of filters in this group
-          items:
-            $ref: '#/components/schemas/framework-filter'
-    framework-search-aggregation-value-interface:
-      type: object
-      description: Interface Aggregation Value
-      properties:
-        value:
-          type: string
-          description: Aggregation
-        metrics:
-          type: array
-          description: Metrics
-          items:
-            type: string
-      required:
-      - value
-      - metrics
-    framework-search-document-interface:
-      type: object
-      description: Interface Search Document
-      properties:
-        id:
-          type: integer
-        custom_attributes:
-          type: array
-          description: Custom attributes values.
-          items:
-            $ref: '#/components/schemas/framework-attribute-interface'
-      required:
-      - id
-    error-parameters-item:
-      type: object
-      description: Error parameters item
-      properties:
-        resources:
-          type: string
-          description: ACL resource
-        fieldName:
-          type: string
-          description: Missing or invalid field name
-        fieldValue:
-          type: string
-          description: Incorrect field value
-    framework-search-search-criteria-interface:
-      type: object
-      description: Interface SearchCriteriaInterface
-      properties:
-        request_name:
-          type: string
-        filter_groups:
-          type: array
-          description: A list of filter groups.
-          items:
-            $ref: '#/components/schemas/framework-search-filter-group'
-        sort_orders:
-          type: array
-          description: Sort order.
-          items:
-            $ref: '#/components/schemas/framework-sort-order'
-        page_size:
-          type: integer
-          description: Page size.
-        current_page:
-          type: integer
-          description: Current page.
-      required:
-      - request_name
-      - filter_groups
     framework-attribute-interface:
       type: object
       description: Interface for custom attribute value.
@@ -205,6 +92,37 @@ components:
       required:
       - attribute_code
       - value
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
+    framework-search-filter-group:
+      type: object
+      description: Groups two or more filters together using a logical OR
+      properties:
+        filters:
+          type: array
+          description: A list of filters in this group
+          items:
+            $ref: '#/components/schemas/framework-filter'
+    framework-search-document-interface:
+      type: object
+      description: Interface Search Document
+      properties:
+        id:
+          type: integer
+        custom_attributes:
+          type: array
+          description: Custom attributes values.
+          items:
+            $ref: '#/components/schemas/framework-attribute-interface'
+      required:
+      - id
     framework-filter:
       type: object
       description: Filter which can be used by any methods from service layer.
@@ -238,15 +156,117 @@ components:
       required:
       - buckets
       - bucket_names
-    error-errors-item:
+    framework-sort-order:
       type: object
-      description: Error details
+      description: Data object for sort order.
       properties:
-        message:
+        field:
           type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+          description: Sorting field.
+        direction:
+          type: string
+          description: Sorting direction.
+      required:
+      - field
+      - direction
+    framework-search-aggregation-value-interface:
+      type: object
+      description: Interface Aggregation Value
+      properties:
+        value:
+          type: string
+          description: Aggregation
+        metrics:
+          type: array
+          description: Metrics
+          items:
+            type: string
+      required:
+      - value
+      - metrics
+    error-parameters-item:
+      type: object
+      description: Error parameters item
+      properties:
+        resources:
+          type: string
+          description: ACL resource
+        fieldName:
+          type: string
+          description: Missing or invalid field name
+        fieldValue:
+          type: string
+          description: Incorrect field value
+    framework-search-bucket-interface:
+      type: object
+      description: Interface for facet Bucket
+      properties:
+        name:
+          type: string
+          description: Field name
+        values:
+          type: array
+          description: Field values
+          items:
+            $ref: '#/components/schemas/framework-search-aggregation-value-interface'
+      required:
+      - name
+      - values
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    framework-search-search-result-interface:
+      type: object
+      description: Interface SearchResultInterface
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/framework-search-document-interface'
+        aggregations:
+          $ref: '#/components/schemas/framework-search-aggregation-interface'
+        search_criteria:
+          $ref: '#/components/schemas/framework-search-search-criteria-interface'
+        total_count:
+          type: integer
+          description: Total count.
+      required:
+      - items
+      - aggregations
+      - search_criteria
+      - total_count
+    framework-search-search-criteria-interface:
+      type: object
+      description: Interface SearchCriteriaInterface
+      properties:
+        request_name:
+          type: string
+        filter_groups:
+          type: array
+          description: A list of filter groups.
+          items:
+            $ref: '#/components/schemas/framework-search-filter-group'
+        sort_orders:
+          type: array
+          description: Sort order.
+          items:
+            $ref: '#/components/schemas/framework-sort-order'
+        page_size:
+          type: integer
+          description: Page size.
+        current_page:
+          type: integer
+          description: Current page.
+      required:
+      - request_name
+      - filter_groups
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
     error-response:
       type: object
       properties:
@@ -265,26 +285,6 @@ components:
           description: Stack trace
       required:
       - message
-    framework-search-bucket-interface:
-      type: object
-      description: Interface for facet Bucket
-      properties:
-        name:
-          type: string
-          description: Field name
-        values:
-          type: array
-          description: Field values
-          items:
-            $ref: '#/components/schemas/framework-search-aggregation-value-interface'
-      required:
-      - name
-      - values
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
   securitySchemes:
     api_key:
       type: apiKey

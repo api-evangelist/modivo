@@ -55,7 +55,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Get V1 guestcarts cart id coupons
+      summary: Get V1Guestcarts cart id coupons
       x-summary-source: derived
     delete:
       tags:
@@ -97,7 +97,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Delete V1 guestcarts cart id coupons
+      summary: Delete V1Guestcarts cart id coupons
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
@@ -148,12 +148,21 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/error-response'
-      summary: Put V1 guestcarts cart id coupons coupon code
+      summary: Put V1Guestcarts cart id coupons coupon code
       x-summary-source: derived
     servers:
     - url: https://modivo.pl/rest/all
 components:
   schemas:
+    error-errors-item:
+      type: object
+      description: Error details
+      properties:
+        message:
+          type: string
+          description: Error message
+        parameters:
+          $ref: '#/components/schemas/error-parameters'
     error-parameters-item:
       type: object
       description: Error parameters item
@@ -167,15 +176,16 @@ components:
         fieldValue:
           type: string
           description: Incorrect field value
-    error-errors-item:
-      type: object
-      description: Error details
-      properties:
-        message:
-          type: string
-          description: Error message
-        parameters:
-          $ref: '#/components/schemas/error-parameters'
+    error-parameters:
+      type: array
+      description: Error parameters list
+      items:
+        $ref: '#/components/schemas/error-parameters-item'
+    error-errors:
+      type: array
+      description: Errors list
+      items:
+        $ref: '#/components/schemas/error-errors-item'
     error-response:
       type: object
       properties:
@@ -194,16 +204,6 @@ components:
           description: Stack trace
       required:
       - message
-    error-parameters:
-      type: array
-      description: Error parameters list
-      items:
-        $ref: '#/components/schemas/error-parameters-item'
-    error-errors:
-      type: array
-      description: Errors list
-      items:
-        $ref: '#/components/schemas/error-errors-item'
   securitySchemes:
     api_key:
       type: apiKey
